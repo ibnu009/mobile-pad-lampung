@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:pad_lampung/core/theme/app_primary_theme.dart';
 import 'package:pad_lampung/presentation/components/appbar/custom_generic_appbar.dart';
 import 'package:pad_lampung/presentation/components/button/primary_button.dart';
-import 'package:pad_lampung/presentation/pages/transaction/post_transaction_page.dart';
+import 'package:pad_lampung/presentation/pages/transaction/parking/post_transaction_page.dart';
 
 import '../../components/dropdown/dropdown_value.dart';
 import '../../components/dropdown/generic_dropdown.dart';

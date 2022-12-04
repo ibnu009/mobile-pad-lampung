@@ -3,7 +3,7 @@ import 'package:pad_lampung/core/theme/app_primary_theme.dart';
 import 'package:pad_lampung/presentation/components/dropdown/dropdown_value.dart';
 import 'package:pad_lampung/presentation/components/dropdown/generic_dropdown.dart';
 
-import '../../../components/modal/bottom_modal.dart';
+import '../../../../components/modal/bottom_modal.dart';
 
 const String prevPage = "prevPage";
 const String firstPage = "firstPage";
@@ -72,7 +72,7 @@ class _ListHolderWidgetState extends State<ListHolderWidget>
                             isScrollControlled: true,
                             enableDrag: true,
                             context: context,
-                            builder: (builder) => HomeBottomModal());
+                            builder: (builder) => const HomeBottomModal());
                       },
                       child: const Padding(
                         padding: EdgeInsets.all(12.0),

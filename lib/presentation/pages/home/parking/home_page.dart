@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:pad_lampung/core/theme/app_primary_theme.dart';
 import 'package:pad_lampung/presentation/components/appbar/custom_generic_appbar.dart';
-import 'package:pad_lampung/presentation/pages/home/widget/data_holder_widget.dart';
-import 'package:pad_lampung/presentation/pages/home/widget/list_holder_widget.dart';
+import 'package:pad_lampung/presentation/pages/home/parking/widget/data_holder_widget.dart';
+import 'package:pad_lampung/presentation/pages/home/parking/widget/list_holder_widget.dart';
 
-import 'widget/location_holder_widget.dart';
+import '../parking/widget/location_holder_widget.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);

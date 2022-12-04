@@ -5,13 +5,14 @@ import 'package:pad_lampung/presentation/components/button/primary_button.dart';
 import 'package:pad_lampung/presentation/components/input/generic_text_input.dart';
 import 'package:pad_lampung/presentation/components/input/generic_text_input_with_obscure.dart';
 import 'package:pad_lampung/presentation/pages/auth/forgot_password_page.dart';
-import 'package:pad_lampung/presentation/pages/home/home_page.dart';
+import 'package:pad_lampung/presentation/pages/home/parking/home_page.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../bloc/auth/login_bloc.dart';
 import '../../bloc/auth/login_event.dart';
 import '../../bloc/auth/login_state.dart';
 import '../../components/dialog/dialog_component.dart';
+import '../home/ticket/home_page.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
@@ -148,18 +149,18 @@ class LoginPageState extends State<LoginPage> {
   Future<void> _handleSubmitLogin(BuildContext ctx) async {
       // context
       //     .read<LoginBloc>()
-      //     .add(LoginUser(email: 'abera@gmail.com', password: 'JZPyWK'));
+      //     .add(LoginUser(email: 'alvin@gmai.com', password: 'jb460Y'));
 
-      // Navigator.push(context, CupertinoPageRoute(builder: (c) => const HomePage()));
+      Navigator.push(context, CupertinoPageRoute(builder: (c) => const HomePageTicket()));
 
-    if (_formKey.currentState!.validate()) {
-      String? email = _emailInputController?.value.text ?? "";
-      String password = _passwordInputController?.value.text ?? "";
-      // String hashedPassword = password.convertToSha256();
-
-      context
-          .read<LoginBloc>()
-          .add(LoginUser(email: email, password: password));
-    }
+    // if (_formKey.currentState!.validate()) {
+    //   String? email = _emailInputController?.value.text ?? "";
+    //   String password = _passwordInputController?.value.text ?? "";
+    //   // String hashedPassword = password.convertToSha256();
+    //
+    //   context
+    //       .read<LoginBloc>()
+    //       .add(LoginUser(email: email, password: password));
+    // }
   }
 }

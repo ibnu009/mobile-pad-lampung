@@ -3,11 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pad_lampung/core/theme/app_primary_theme.dart';
 import 'package:pad_lampung/presentation/components/appbar/custom_generic_appbar.dart';
-import 'package:pad_lampung/presentation/pages/transaction/widget/scanner_widget.dart';
+import 'package:pad_lampung/presentation/pages/transaction/parking/widget/scanner_widget.dart';
 
-import '../../bloc/park/park_bloc.dart';
-import '../../bloc/park/park_state.dart';
-import '../../components/dialog/dialog_component.dart';
+import '../../../bloc/park/park_bloc.dart';
+import '../../../bloc/park/park_state.dart';
+import '../../../components/dialog/dialog_component.dart';
 import 'checkin_transaction_page.dart';
 
 const int itemLength = 2;

@@ -4,16 +4,16 @@ import 'package:pad_lampung/core/theme/app_primary_theme.dart';
 import 'package:pad_lampung/presentation/bloc/park/park_event.dart';
 import 'package:pad_lampung/presentation/components/appbar/custom_generic_appbar.dart';
 import 'package:pad_lampung/presentation/components/button/primary_button.dart';
-import 'package:pad_lampung/presentation/pages/transaction/post_transaction_page.dart';
+import 'package:pad_lampung/presentation/pages/transaction/parking/post_transaction_page.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pad_lampung/presentation/utils/extension/int_ext.dart';
 import 'package:pad_lampung/presentation/utils/extension/string_ext.dart';
 
-import '../../bloc/park/park_bloc.dart';
-import '../../bloc/park/park_state.dart';
-import '../../components/dialog/dialog_component.dart';
-import '../../components/dropdown/dropdown_value.dart';
-import '../../components/dropdown/generic_dropdown.dart';
+import '../../../bloc/park/park_bloc.dart';
+import '../../../bloc/park/park_state.dart';
+import '../../../components/dialog/dialog_component.dart';
+import '../../../components/dropdown/dropdown_value.dart';
+import '../../../components/dropdown/generic_dropdown.dart';
 
 class VehicleCheckOutPage extends StatefulWidget {
   final String parkingId;

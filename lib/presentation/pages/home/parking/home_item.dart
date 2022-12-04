@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:pad_lampung/core/theme/app_primary_theme.dart';
-import 'package:pad_lampung/presentation/pages/transaction/transaction_page.dart';
+import 'package:pad_lampung/presentation/pages/transaction/parking/transaction_page.dart';
 
 class HomeItem extends StatelessWidget {
   final String name;

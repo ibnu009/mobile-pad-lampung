@@ -9,10 +9,10 @@ import 'package:pad_lampung/presentation/bloc/park/park_event.dart';
 import 'package:pad_lampung/presentation/components/button/primary_button.dart';
 import 'package:pad_lampung/presentation/components/input/generic_text_input_no_border.dart';
 import 'package:pad_lampung/presentation/pages/detail/add_vehicle_page.dart';
-import 'package:pad_lampung/presentation/pages/transaction/vehicle_checkout_page.dart';
+import 'package:pad_lampung/presentation/pages/transaction/parking/vehicle_checkout_page.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 
-import '../../../bloc/park/park_bloc.dart';
+import '../../../../bloc/park/park_bloc.dart';
 
 class ScannerWidget extends StatefulWidget {
   final bool isKendaraanKeluar;

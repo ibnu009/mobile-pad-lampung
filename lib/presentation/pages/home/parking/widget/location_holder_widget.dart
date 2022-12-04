@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:pad_lampung/presentation/components/button/icon_primary_button.dart';
-import 'package:pad_lampung/presentation/pages/transaction/transaction_page.dart';
+import 'package:pad_lampung/presentation/pages/transaction/parking/transaction_page.dart';
 
 class LocationHolder extends StatelessWidget {
   final String location, date;
