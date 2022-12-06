@@ -13,6 +13,7 @@ class GenericTextInputNoBorder extends StatelessWidget {
   final Icon? suffixIcon;
   final bool? isOptional;
   final double? radius, verticalMargin, horizontalMargin;
+  final Color? fillColor;
 
   const GenericTextInputNoBorder(
       {Key? key,
@@ -22,16 +23,13 @@ class GenericTextInputNoBorder extends StatelessWidget {
       required this.inputType,
       this.onSubmitted,
       this.maxLength,
-      this.prefixIcon, this.isOptional, this.suffixIcon, this.radius, this.verticalMargin, this.horizontalMargin})
+      this.prefixIcon, this.isOptional, this.suffixIcon, this.radius, this.verticalMargin, this.horizontalMargin, this.fillColor})
       : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(radius ?? 8),
-      ),
+
       margin: EdgeInsets.symmetric(vertical: verticalMargin ?? 16, horizontal: horizontalMargin ?? 16),
       padding: EdgeInsets.symmetric(vertical: verticalMargin ?? 8),
       child: TextFormField(
@@ -65,8 +63,20 @@ class GenericTextInputNoBorder extends StatelessWidget {
         decoration: InputDecoration(
           suffixIcon: suffixIcon,
           prefixIcon: prefixIcon,
-          fillColor: Colors.white,
-          border: InputBorder.none,
+          fillColor: fillColor ?? Colors.white,
+          focusedBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(8.0),
+            borderSide: const BorderSide(
+              color: Colors.transparent,
+            ),
+          ),
+          contentPadding: const EdgeInsets.symmetric(vertical: 6, horizontal: 6),
+          enabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(8.0),
+            borderSide: const BorderSide(
+              color: Colors.transparent,
+            ),
+          ),
           filled: true,
           hintText: hintText,
           hintStyle: const TextStyle(fontSize: 16, color: Colors.grey),

@@ -34,6 +34,7 @@ class AppTheme {
   static const Color borderColor = Color(0xFFCECECE);
   static const Color canvasColor = Color(0xFFEEEEF5);
   static const Color neutralColor = Color(0xFFF4EFF4);
+  static const Color inputFieldColor = Color(0xFFF0F0FF);
 
   static TextStyle get primaryTextStyle => GoogleFonts.getFont(
     poppins,

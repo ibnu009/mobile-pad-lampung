@@ -1,29 +1,33 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:pad_lampung/core/theme/app_primary_theme.dart';
-import 'package:pad_lampung/presentation/components/button/primary_button.dart';
 import 'package:pad_lampung/presentation/components/dropdown/dropdown_value.dart';
 import 'package:pad_lampung/presentation/components/dropdown/generic_dropdown.dart';
-import 'package:pad_lampung/presentation/pages/booking/ticket/online_ticket_booking_page.dart';
+import 'package:pad_lampung/presentation/components/input/generic_text_input_no_border.dart';
+import 'package:pad_lampung/presentation/pages/booking/ticket/scan_online_booking_ticket_page.dart';
 
+import '../../../../components/button/icon_primary_button.dart';
+import '../../../../components/button/primary_button.dart';
 import '../../../../components/modal/bottom_modal.dart';
-import '../../../transaction/ticket/transaction_ticket_page.dart';
 
 const String prevPage = "prevPage";
 const String firstPage = "firstPage";
 const String nextPage = "nextPage";
 const String lastPage = "lastPage";
 
-class ListHolderWidget extends StatefulWidget {
-  const ListHolderWidget({Key? key}) : super(key: key);
+class ListBookingOnlineHolderWidget extends StatefulWidget {
+  const ListBookingOnlineHolderWidget({Key? key}) : super(key: key);
 
   @override
-  State<ListHolderWidget> createState() => _ListHolderWidgetState();
+  State<ListBookingOnlineHolderWidget> createState() =>
+      _ListHolderWidgetState();
 }
 
-class _ListHolderWidgetState extends State<ListHolderWidget>
+class _ListHolderWidgetState extends State<ListBookingOnlineHolderWidget>
     with TickerProviderStateMixin {
   String selectedItem = initialDataShown;
+
+  TextEditingController searchController = TextEditingController();
 
   late AnimationController controller;
 
@@ -51,8 +55,41 @@ class _ListHolderWidgetState extends State<ListHolderWidget>
           ),
           child: Column(
             children: [
+              SizedBox(
+                height: 16,
+              ),
               Padding(
-                padding: const EdgeInsets.all(16),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 16.0, vertical: 6),
+                child: Row(
+                  children: [
+                    Expanded(
+                        flex: 1,
+                        child: Text(
+                          'Data Ticketing',
+                          style: AppTheme.subTitle,
+                        )),
+                    Expanded(
+                        flex: 1,
+                        child: IconPrimaryButton(
+                          context: context,
+                          isEnabled: true,
+                          onPressed: () {
+                            Navigator.push(
+                                context,
+                                CupertinoPageRoute(
+                                    builder: (context) =>
+                                        ScanOnlineBookingTicketPage()));
+                          },
+                          height: 43,
+                          text: 'Pindai Tiket',
+                          icon: Icons.qr_code_scanner_rounded,
+                        )),
+                  ],
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16),
                 child: Row(
                   children: [
                     const Text('Show'),
@@ -66,15 +103,18 @@ class _ListHolderWidgetState extends State<ListHolderWidget>
                         });
                       },
                     ),
-                    const Spacer(),
-                    PrimaryButton(
-                        context: context,
-                        isEnabled: true,
-                        onPressed: () {
-                          Navigator.push(context, CupertinoPageRoute(builder: (c) => const OnlineTicketBookingPage()));
-                        },
-                        height: 40,
-                        text: 'Pesanan Online')
+                    const SizedBox(
+                      width: 8,
+                    ),
+                    Expanded(
+                      child: GenericTextInputNoBorder(
+                          fillColor: AppTheme.inputFieldColor,
+                          suffixIcon: const Icon(Icons.search),
+                          horizontalMargin: 0,
+                          hintText: 'Cari',
+                          controller: searchController,
+                          inputType: TextInputType.text),
+                    )
                   ],
                 ),
               ),
