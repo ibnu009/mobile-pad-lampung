@@ -3,37 +3,43 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:pad_lampung/core/theme/app_primary_theme.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 
-const String bikeType = "bikeType";
-const String carType = "carType";
-const String busType = "busType";
-
 class DataHolderWidget extends StatelessWidget {
   DataHolderWidget({Key? key}) : super(key: key);
 
   final List<ChartData> chartData = [
-    ChartData('David', 25, const Color.fromRGBO(9, 0, 136, 1)),
-    ChartData('Steve', 38, const Color.fromRGBO(147, 0, 119, 1)),
-    ChartData('Jack', 34, const Color.fromRGBO(228, 0, 124, 1)),
-    ChartData('Others', 52, const Color.fromRGBO(255, 189, 57, 1))
+    ChartData('Tiket', 300, AppTheme.lightGrey),
+    ChartData('Tiket Terjual', 1200, AppTheme.primaryColor),
   ];
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-        margin: const EdgeInsets.symmetric(horizontal: 12),
-        padding: const EdgeInsets.only(left: 8),
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(8),
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Container(
+            margin: const EdgeInsets.symmetric(horizontal: 12),
+            padding: const EdgeInsets.only(left: 8),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(8),
+            ),
+            child: Column(
+              children: [
+                buildPieChart(1200),
+                buildCounter(1200),
+              ],
+            )),
+        Container(
+          margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
+          padding: const EdgeInsets.only(left: 8),
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(8),
+          ),
+          child: buildCounterToilet(1200),
         ),
-        child: Column(
-          children: [
-            buildPieChart(124),
-            buildCounter(bikeType, 0, 100),
-            buildCounter(carType, 0, 100),
-            buildCounter(busType, 0, 100),
-          ],
-        ));
+      ],
+    );
   }
 
   Widget buildPieChart(int total) {
@@ -46,7 +52,7 @@ class DataHolderWidget extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                'Data Parkir',
+                'Data Ticketing',
                 style: AppTheme.subTitle,
               ),
               const SizedBox(
@@ -56,7 +62,7 @@ class DataHolderWidget extends StatelessWidget {
                 '$total',
                 style: AppTheme.subTitle.copyWith(fontSize: 26),
               ),
-              const Text('Total Kendaraan'),
+              const Text('Total Pengunjung'),
             ],
           ),
         ),
@@ -66,6 +72,7 @@ class DataHolderWidget extends StatelessWidget {
           height: 100,
           child: SfCircularChart(series: <CircularSeries>[
             // Renders doughnut chart
+
             DoughnutSeries<ChartData, String>(
                 dataSource: chartData,
                 pointColorMapper: (ChartData data, _) => data.color,
@@ -77,43 +84,30 @@ class DataHolderWidget extends StatelessWidget {
     );
   }
 
-  Widget buildCounter(String type, int currentCounter, int total) {
+  Widget buildCounter(int currentCounter) {
     return ListTile(
-      leading: SvgPicture.asset(getSvgBasedOnType(type), semanticsLabel: 'A red up arrow'),
-      title: Text(getTitleBasedOnType(type)),
-      subtitle: Text(getSubTitleBasedOnType(type), style: TextStyle(fontSize: 12),),
-      trailing: Text("$currentCounter/$total Unit"),
+      leading: SvgPicture.asset("assets/icons/ticket_icon.svg",
+          semanticsLabel: 'A red up arrow'),
+      title: Text('Tiket'),
+      subtitle: Text(
+        'Masuk pantai Ketapang',
+        style: TextStyle(fontSize: 13),
+      ),
+      trailing: Text("$currentCounter Orang", style: AppTheme.smallTitle),
     );
   }
 
-  String getSvgBasedOnType(String type) {
-    if (type == bikeType) {
-      return "assets/icons/bicycle_icon.svg";
-    }
-    if (type == carType) {
-      return "assets/icons/car_icon.svg";
-    }
-    return "assets/icons/bus_icon.svg";
-  }
-
-  String getTitleBasedOnType(String type) {
-    if (type == bikeType) {
-      return "Sepeda Motor";
-    }
-    if (type == carType) {
-      return "Mobil";
-    }
-    return "Bus";
-  }
-
-  String getSubTitleBasedOnType(String type) {
-    if (type == bikeType) {
-      return "Kendaran Roda 2";
-    }
-    if (type == carType) {
-      return "Kendaran Roda 4";
-    }
-    return "Kendaran Roda 6 Atau Lebih";
+  Widget buildCounterToilet(int currentCounter) {
+    return ListTile(
+      leading: SvgPicture.asset("assets/icons/toilet_icon.svg",
+          semanticsLabel: 'A red up arrow'),
+      title: Text('Toilet'),
+      subtitle: Text(
+        'Fasilitas',
+        style: TextStyle(fontSize: 13),
+      ),
+      trailing: Text("$currentCounter Orang", style: AppTheme.smallTitle,),
+    );
   }
 }
 

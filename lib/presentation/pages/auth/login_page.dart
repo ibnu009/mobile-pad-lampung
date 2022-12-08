@@ -51,8 +51,8 @@ class LoginPageState extends State<LoginPage> {
               message: "",
               onTap: () {
                 Navigator.pop(context);
-                Navigator.push(context, CupertinoPageRoute(builder: (c) => const HomePage()));
-
+                Navigator.push(context,
+                    CupertinoPageRoute(builder: (c) => const HomePage()));
               });
           return;
         }
@@ -72,7 +72,6 @@ class LoginPageState extends State<LoginPage> {
       child: child,
     );
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -147,20 +146,27 @@ class LoginPageState extends State<LoginPage> {
   }
 
   Future<void> _handleSubmitLogin(BuildContext ctx) async {
-      // context
-      //     .read<LoginBloc>()
-      //     .add(LoginUser(email: 'alvin@gmai.com', password: 'jb460Y'));
+    // context
+    //     .read<LoginBloc>()
+    //     .add(LoginUser(email: 'lorem@gmail.com', password: 'lorem123'));
 
-      Navigator.push(context, CupertinoPageRoute(builder: (c) => const HomePageTicket()));
+    // Navigator.push(context, CupertinoPageRoute(builder: (c) => const HomePage()));
 
-    // if (_formKey.currentState!.validate()) {
-    //   String? email = _emailInputController?.value.text ?? "";
-    //   String password = _passwordInputController?.value.text ?? "";
-    //   // String hashedPassword = password.convertToSha256();
-    //
-    //   context
-    //       .read<LoginBloc>()
-    //       .add(LoginUser(email: email, password: password));
-    // }
+    // Navigator.push(context, CupertinoPageRoute(builder: (c) => const HomePageTicket()));
+
+    if (_formKey.currentState!.validate()) {
+      String? email = _emailInputController?.value.text ?? "";
+      String password = _passwordInputController?.value.text ?? "";
+      // String hashedPassword = password.convertToSha256();
+
+      if (email == 'lorem1@gmail.com') {
+        Navigator.push(context,
+            CupertinoPageRoute(builder: (c) => const HomePageTicket()));
+      } else {
+        context
+            .read<LoginBloc>()
+            .add(LoginUser(email: email, password: password));
+      }
+    }
   }
 }

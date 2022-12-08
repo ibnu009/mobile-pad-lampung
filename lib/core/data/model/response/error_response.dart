@@ -7,7 +7,8 @@ class ErrorResponse {
 
   String? error;
 
+
   factory ErrorResponse.fromJson(Map<String, dynamic> json) => ErrorResponse(
-    error: json["error"] ?? null,
+    error: json["message"] ?? null,
   );
 }

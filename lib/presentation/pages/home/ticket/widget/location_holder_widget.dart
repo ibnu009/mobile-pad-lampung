@@ -2,11 +2,12 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:pad_lampung/presentation/components/button/icon_primary_button.dart';
 import 'package:pad_lampung/presentation/pages/transaction/parking/transaction_page.dart';
+import 'package:pad_lampung/presentation/pages/transaction/ticket/transaction_ticket_page.dart';
 
-class LocationHolder extends StatelessWidget {
+class LocationTicketHolder extends StatelessWidget {
   final String location, date;
 
-  const LocationHolder({Key? key, required this.location, required this.date})
+  const LocationTicketHolder({Key? key, required this.location, required this.date})
       : super(key: key);
 
   @override
@@ -25,7 +26,7 @@ class LocationHolder extends StatelessWidget {
           context: context,
           isEnabled: true,
           onPressed: () {
-            Navigator.push(context, CupertinoPageRoute(builder: (c) => const TransactionPage()));
+            Navigator.push(context, CupertinoPageRoute(builder: (c) => const TransactionTicketPage()));
           },
           text: 'Transaksi',
           width: 115,

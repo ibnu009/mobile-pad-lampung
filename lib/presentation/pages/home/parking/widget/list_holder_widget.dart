@@ -1,13 +1,9 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:pad_lampung/core/theme/app_primary_theme.dart';
-import 'package:pad_lampung/presentation/components/button/primary_button.dart';
 import 'package:pad_lampung/presentation/components/dropdown/dropdown_value.dart';
 import 'package:pad_lampung/presentation/components/dropdown/generic_dropdown.dart';
-import 'package:pad_lampung/presentation/pages/booking/ticket/online_ticket_booking_page.dart';
 
 import '../../../../components/modal/bottom_modal.dart';
-import '../../../transaction/ticket/transaction_ticket_page.dart';
 
 const String prevPage = "prevPage";
 const String firstPage = "firstPage";
@@ -59,7 +55,7 @@ class _ListHolderWidgetState extends State<ListHolderWidget>
                     GenericDropdown(
                       selectedItem: selectedItem,
                       items: dataShownItem,
-                      height: 40,
+                      height: 45,
                       onChanged: (String? value) {
                         setState(() {
                           selectedItem = value ?? initialDataShown;
@@ -67,14 +63,25 @@ class _ListHolderWidgetState extends State<ListHolderWidget>
                       },
                     ),
                     const Spacer(),
-                    PrimaryButton(
-                        context: context,
-                        isEnabled: true,
-                        onPressed: () {
-                          Navigator.push(context, CupertinoPageRoute(builder: (c) => const OnlineTicketBookingPage()));
-                        },
-                        height: 40,
-                        text: 'Pesanan Online')
+                    const Text('Filter'),
+                    InkWell(
+                      onTap: () {
+                        print("pressed");
+                        showModalBottomSheet(
+                            transitionAnimationController: controller,
+                            isScrollControlled: true,
+                            enableDrag: true,
+                            context: context,
+                            builder: (builder) => const HomeBottomModal());
+                      },
+                      child: const Padding(
+                        padding: EdgeInsets.all(12.0),
+                        child: Icon(
+                          Icons.filter_list_rounded,
+                          color: AppTheme.primaryColor,
+                        ),
+                      ),
+                    ),
                   ],
                 ),
               ),
@@ -84,12 +91,14 @@ class _ListHolderWidgetState extends State<ListHolderWidget>
                   TableRow(
                       decoration: BoxDecoration(
                         color: Colors.white,
-                        border: Border.all(color: Colors.black12),
+                        border: Border.all(color: Colors.black38),
                       ),
                       children: [
+                        rowTextHeading('IMAGE'),
+                        rowTextHeading('ID PARKIR'),
                         rowTextHeading('JENIS'),
-                        rowTextHeading('ID PESANAN'),
                         rowTextHeading('MASUK'),
+                        rowTextHeading('KELUAR'),
                       ]),
                   buildDataRow(),
                   buildDataRow(),
@@ -160,32 +169,29 @@ class _ListHolderWidgetState extends State<ListHolderWidget>
   TableRow buildDataRow() {
     return TableRow(children: [
       Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: const Text('TP'),
+        padding: const EdgeInsets.all(8),
+        child: Image.asset('assets/images/default_profile.png'),
       ),
-      Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: const Text('12312323'),
-      ),
-      Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: const Text('01/12/22 | 10:00'),
-      ),
+      const Text('7374279849', textAlign: TextAlign.center),
+      const Text('SM', textAlign: TextAlign.center),
+      const Text('10:00', textAlign: TextAlign.center),
+      const Text('-', textAlign: TextAlign.center),
     ]);
   }
 
   Widget rowText(String text) {
     return Padding(
-      padding: const EdgeInsets.all(8.0),
+      padding: const EdgeInsets.symmetric(vertical: 8.0),
       child: Text(text, textAlign: TextAlign.center),
     );
   }
 
   Widget rowTextHeading(String text) {
     return Padding(
-      padding: const EdgeInsets.all(8.0),
+      padding: const EdgeInsets.symmetric(vertical: 8.0),
       child: Text(
         text,
+        textAlign: TextAlign.center,
         style: const TextStyle(fontWeight: FontWeight.w600),
       ),
     );

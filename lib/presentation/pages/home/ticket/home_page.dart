@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:pad_lampung/core/theme/app_primary_theme.dart';
 import 'package:pad_lampung/presentation/components/appbar/custom_generic_appbar.dart';
-import 'package:pad_lampung/presentation/pages/home/parking/widget/data_holder_widget.dart';
-import 'package:pad_lampung/presentation/pages/home/parking/widget/list_holder_widget.dart';
+import 'package:pad_lampung/presentation/pages/home/ticket/widget/data_holder_widget.dart';
+import 'package:pad_lampung/presentation/pages/home/ticket/widget/list_holder_widget.dart';
+import 'package:pad_lampung/presentation/pages/home/ticket/widget/location_holder_widget.dart';
 
 import '../parking/widget/location_holder_widget.dart';
 
@@ -29,7 +30,7 @@ class _HomePageState extends State<HomePageTicket> {
                   url: '',
                 ),
               ),
-              const LocationHolder(
+              LocationTicketHolder(
                 date: '01 Des 2022',
                 location: 'Dermaga Ketapang',
               ),
