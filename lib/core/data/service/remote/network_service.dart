@@ -33,14 +33,19 @@ abstract class NetworkService {
     try {
       final response = await http.post(Uri.parse(endPoint),
           body: json.encode(body), headers: headers);
+
+      var res = json.decode(response.body);
+
       logger.d(headers);
       logger.d(body);
       logger.d(endPoint);
+      logger.d(res);
+      logger.d(response.body);
 
       print("json encode from server ${json.encode(body)}");
       print("response from server raw ${response.body}");
       print("status from server raw ${response.statusCode}");
-      var res = json.decode(response.body);
+
 
       if (response.statusCode == 200 || response.statusCode == 201){
         return res;

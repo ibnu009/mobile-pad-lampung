@@ -20,6 +20,11 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
         emit(FailedLogin(failure.error ?? ""));
       }, (success) {
         storage.writeSecureData(tokenKey, success.accessToken);
+        storage.writeSecureData(wisataIdKey, success.user.petugas.idTempatWisata.toString());
+        storage.writeSecureData(wisataNameKey, success.user.petugas.tempatWisata.namaTempatWisata);
+        storage.writeSecureData(userTypeKey, success.user.tipeUser.toString());
+        storage.writeSecureData(petugasEmailKey, success.user.email);
+        storage.writeSecureData(userTypeKey, success.user.petugas.noTelp);
         emit(SuccessLogin());
       });
     });

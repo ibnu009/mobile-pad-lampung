@@ -8,6 +8,8 @@ import 'package:pad_lampung/di/application_module.dart' as di;
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'presentation/bloc/auth/login_bloc.dart';
+import 'presentation/bloc/ticket/price/ticket_price_bloc.dart';
+import 'presentation/bloc/ticket/ticket_home_bloc.dart';
 import 'presentation/utils/helper/http_override.dart';
 
 Future<void> main() async {
@@ -28,6 +30,12 @@ class MyApp extends StatelessWidget {
         ),
         BlocProvider(
           create: (_) => di.locator<ParkBloc>(),
+        ),
+        BlocProvider(
+          create: (_) => di.locator<TicketHomeBloc>(),
+        ),
+        BlocProvider(
+          create: (_) => di.locator<TicketPriceBloc>(),
         ),
       ],
       child: MaterialApp(

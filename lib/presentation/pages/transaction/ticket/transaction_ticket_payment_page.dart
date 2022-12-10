@@ -1,10 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:pad_lampung/presentation/bloc/ticket/price/ticket_price_event.dart';
 import 'package:pad_lampung/presentation/utils/extension/int_ext.dart';
 
 import '../../../../core/theme/app_primary_theme.dart';
+import '../../../bloc/ticket/price/ticket_price_bloc.dart';
+import '../../../bloc/ticket/price/ticket_price_state.dart';
 import '../../../components/appbar/custom_generic_appbar.dart';
 import '../../../components/button/primary_button.dart';
+import '../../../components/generic/loading_widget.dart';
 import '../../../components/input/generic_text_input_no_border.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class TransactionTicketPaymentPage extends StatefulWidget {
   const TransactionTicketPaymentPage({Key? key}) : super(key: key);
@@ -21,7 +26,13 @@ class _TransactionTicketPaymentPageState
   int total = 0;
   int ticketQuantity = 0;
   int ticketDiscount = 0;
-  int ticketPrice = 20000;
+  int ticketPrice = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    context.read<TicketPriceBloc>().add(GetTicketPrice());
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -38,11 +49,10 @@ class _TransactionTicketPaymentPageState
             const SizedBox(
               height: 12,
             ),
-            buildTransactionItems(
-                'Tiket Masuk', 'Rp 20.000 / Orang', () => null),
+            buildTransactionItems('Tiket Masuk'),
             const Spacer(),
             Container(
-              padding: const EdgeInsets.all( 12),
+              padding: const EdgeInsets.all(12),
               decoration: BoxDecoration(
                 color: Colors.white,
                 borderRadius: BorderRadius.circular(8),
@@ -71,7 +81,9 @@ class _TransactionTicketPaymentPageState
                           text: 'Bayar')
                     ],
                   ),
-                  const SizedBox(height: 16,),
+                  const SizedBox(
+                    height: 16,
+                  ),
                 ],
               ),
             )
@@ -81,7 +93,7 @@ class _TransactionTicketPaymentPageState
     );
   }
 
-  Widget buildPromo(){
+  Widget buildPromo() {
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
       padding: const EdgeInsets.symmetric(horizontal: 12),
@@ -159,84 +171,108 @@ class _TransactionTicketPaymentPageState
     );
   }
 
-  Widget buildTransactionItems(
-      String title, String description, Function() onTap) {
-    return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
-      padding: const EdgeInsets.only(left: 8),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(8),
-      ),
-      child: ListTile(
-          onTap: onTap,
-          title: Text(title),
-          subtitle: Text(
-            description,
-            style: AppTheme.subTitle.copyWith(fontSize: 14),
-          ),
-          trailing: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              InkWell(
-                onTap: () {
-                  if (ticketQuantity <= 0) {
-                    return;
-                  }
-                  setState(() {
-                    ticketQuantity--;
-                    calculateTotal();
-                  });
-                },
-                child: Container(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 8, vertical: 10),
-                  decoration: BoxDecoration(
-                    color: AppTheme.primaryColor,
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                  child: const Icon(
-                    Icons.remove,
-                    color: Colors.white,
-                  ),
+  Widget buildTransactionItems(String title) {
+    return BlocBuilder(
+      bloc: context.read<TicketPriceBloc>(),
+      builder: (ctx, state) {
+        if (state is SuccessShowTicketPrice) {
+          ticketPrice = state.price;
+
+          return Container(
+            margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
+            padding: const EdgeInsets.only(left: 8),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(8),
+            ),
+            child: ListTile(
+                title: Text(title),
+                subtitle: Text(
+                  '${state.price.toRupiah()} / Orang',
+                  style: AppTheme.subTitle.copyWith(fontSize: 14),
                 ),
-              ),
-              Container(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
-                margin: const EdgeInsets.symmetric(horizontal: 8),
-                decoration: BoxDecoration(
-                  color: Colors.black12,
-                  borderRadius: BorderRadius.circular(8),
-                ),
-                child: Text(
-                  "$ticketQuantity",
-                  style: AppTheme.smallTitle,
-                ),
-              ),
-              InkWell(
-                onTap: () {
-                  setState(() {
-                    ticketQuantity++;
-                    calculateTotal();
-                  });
-                },
-                child: Container(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 8, vertical: 10),
-                  decoration: BoxDecoration(
-                    color: AppTheme.primaryColor,
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                  child: const Icon(
-                    Icons.add,
-                    color: Colors.white,
-                  ),
-                ),
-              ),
-            ],
-          )),
+                trailing: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    InkWell(
+                      onTap: () {
+                        if (ticketQuantity <= 0) {
+                          return;
+                        }
+                        setState(() {
+                          ticketQuantity--;
+                          calculateTotal();
+                        });
+                      },
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 8, vertical: 10),
+                        decoration: BoxDecoration(
+                          color: AppTheme.primaryColor,
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        child: const Icon(
+                          Icons.remove,
+                          color: Colors.white,
+                        ),
+                      ),
+                    ),
+                    Container(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 24, vertical: 12),
+                      margin: const EdgeInsets.symmetric(horizontal: 8),
+                      decoration: BoxDecoration(
+                        color: Colors.black12,
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      child: Text(
+                        "$ticketQuantity",
+                        style: AppTheme.smallTitle,
+                      ),
+                    ),
+                    InkWell(
+                      onTap: () {
+                        setState(() {
+                          ticketQuantity++;
+                          calculateTotal();
+                        });
+                      },
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 8, vertical: 10),
+                        decoration: BoxDecoration(
+                          color: AppTheme.primaryColor,
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        child: const Icon(
+                          Icons.add,
+                          color: Colors.white,
+                        ),
+                      ),
+                    ),
+                  ],
+                )),
+          );
+        }
+
+        if (state is LoadingTicketPrice) {
+          return const Center(child: LoadingWidget());
+        }
+
+        if (state is FailedShowTicketPrice) {}
+
+        return SizedBox();
+      },
     );
+  }
+
+  void handleBookingTicket(int idTarif, String paymentMethod) {
+    if (ticketQuantity == 0) {
+      return;
+    }
+
+    context.read<TicketPriceBloc>().add(ProcessTicketBooking(
+        paymentMethod: paymentMethod, quantity: ticketQuantity, idTarif: idTarif));
   }
 
   void calculateTotal() {

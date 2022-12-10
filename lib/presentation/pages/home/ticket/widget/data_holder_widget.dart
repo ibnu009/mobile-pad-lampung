@@ -1,15 +1,30 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:pad_lampung/core/theme/app_primary_theme.dart';
+import 'package:pad_lampung/presentation/utils/extension/int_ext.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 
-class DataHolderWidget extends StatelessWidget {
-  DataHolderWidget({Key? key}) : super(key: key);
+class DataHolderWidget extends StatefulWidget {
+  final int quota, currentTotal;
+  final String wisataName;
+  DataHolderWidget({Key? key, required this.quota, required this.currentTotal, required this.wisataName}) : super(key: key);
 
-  final List<ChartData> chartData = [
-    ChartData('Tiket', 300, AppTheme.lightGrey),
-    ChartData('Tiket Terjual', 1200, AppTheme.primaryColor),
-  ];
+  @override
+  State<DataHolderWidget> createState() => _DataHolderWidgetState();
+}
+
+class _DataHolderWidgetState extends State<DataHolderWidget>{
+
+ List<ChartData> chartData = [];
+
+  @override
+  void initState() {
+    super.initState();
+    chartData = [
+      ChartData('Tiket', widget.quota == 0 ? 1 : widget.quota.toDouble(), AppTheme.lightGrey),
+      ChartData('Tiket Terjual', widget.currentTotal.toDouble(), AppTheme.primaryColor),
+    ];
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -25,8 +40,8 @@ class DataHolderWidget extends StatelessWidget {
             ),
             child: Column(
               children: [
-                buildPieChart(1200),
-                buildCounter(1200),
+                buildPieChart(widget.currentTotal, widget.quota),
+                buildCounter(widget.quota),
               ],
             )),
         Container(
@@ -42,7 +57,7 @@ class DataHolderWidget extends StatelessWidget {
     );
   }
 
-  Widget buildPieChart(int total) {
+  Widget buildPieChart(int currentTotal , int total) {
     return Row(
       children: [
         Padding(
@@ -68,17 +83,27 @@ class DataHolderWidget extends StatelessWidget {
         ),
         const Spacer(),
         SizedBox(
-          width: 100,
-          height: 100,
-          child: SfCircularChart(series: <CircularSeries>[
-            // Renders doughnut chart
-
-            DoughnutSeries<ChartData, String>(
-                dataSource: chartData,
-                pointColorMapper: (ChartData data, _) => data.color,
-                xValueMapper: (ChartData data, _) => data.x,
-                yValueMapper: (ChartData data, _) => data.y)
-          ]),
+          width: 135,
+          height: 135,
+          child: Stack(
+            children: [
+              SfCircularChart(series: <CircularSeries>[
+                // Renders doughnut chart
+                DoughnutSeries<ChartData, String>(
+                    dataSource: chartData,
+                    innerRadius: '80%',
+                    pointColorMapper: (ChartData data, _) => data.color,
+                    xValueMapper: (ChartData data, _) => data.x,
+                    yValueMapper: (ChartData data, _) => data.y)
+              ]),
+              Center(
+                child: Text(
+                  currentTotal.toPercentage(total),
+                  style: AppTheme.subTitle
+                ),
+              )
+            ],
+          ),
         )
       ],
     );
@@ -88,10 +113,10 @@ class DataHolderWidget extends StatelessWidget {
     return ListTile(
       leading: SvgPicture.asset("assets/icons/ticket_icon.svg",
           semanticsLabel: 'A red up arrow'),
-      title: Text('Tiket'),
+      title: const Text('Tiket'),
       subtitle: Text(
-        'Masuk pantai Ketapang',
-        style: TextStyle(fontSize: 13),
+        'Masuk ${widget.wisataName}',
+        style: const TextStyle(fontSize: 13),
       ),
       trailing: Text("$currentCounter Orang", style: AppTheme.smallTitle),
     );
@@ -101,8 +126,8 @@ class DataHolderWidget extends StatelessWidget {
     return ListTile(
       leading: SvgPicture.asset("assets/icons/toilet_icon.svg",
           semanticsLabel: 'A red up arrow'),
-      title: Text('Toilet'),
-      subtitle: Text(
+      title: const Text('Toilet'),
+      subtitle: const Text(
         'Fasilitas',
         style: TextStyle(fontSize: 13),
       ),

@@ -1,6 +1,13 @@
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
-const tokenKey = 'token';
+const tokenKey = 'token.key';
+const wisataIdKey = 'wisataId.Key';
+const wisataNameKey = 'wisataName.Key';
+const petugasEmailKey = 'petugasEmail.Key';
+const petugasNoTelpKey = 'petugasNoTelp.Key';
+
+const userTypeKey = 'userType.key';
+
 const isIntroducedKey = 'is.introduced';
 
 class AppPreferences {

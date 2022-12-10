@@ -1,3 +1,5 @@
+import 'package:intl/intl.dart';
+
 extension DateTimeConverter on DateTime {
   String getDueDateFromDateTime() {
     DateTime dateNow = DateTime.now();
@@ -17,4 +19,14 @@ extension DateTimeConverter on DateTime {
 
     return '$day hari lagi';
   }
+
+  String toFormattedDate({String? format}) {
+    String formattedDate = DateFormat(format ?? 'dd MMM yyyy').format(this);
+    return formattedDate;
+  }
+
+  bool isWeekend() {
+    return (weekday == DateTime.sunday || weekday == DateTime.saturday);
+  }
+
 }
