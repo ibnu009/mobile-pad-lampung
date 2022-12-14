@@ -18,17 +18,30 @@ class TicketHomeBloc extends Bloc<TicketHomeEvent, TicketHomeState> {
       String idWisata = await storage.readSecureData(wisataIdKey) ?? "";
       String wisataName = await storage.readSecureData(wisataNameKey) ?? "";
 
-      var data = await repository.fetchTicketQuota(token, idWisata);
+      var data = await repository.fetchTicketHomeContent(token, idWisata);
+      var dataTransaction =
+          await repository.fetchOnlineTicketTransaction(token, idWisata);
 
       data.fold((failure) {
         emit(FailedShowTicketQuota(failure.error ?? ""));
       }, (data) {
-        TicketHomeContentHolder dataHolder = TicketHomeContentHolder(
-            wisataName: wisataName,
-            jumlahTiketTerjual: data.data?.jumlahTiketTerjual ?? 0,
-            quota: data.data?.quota ?? 0);
+        dataTransaction.fold((failure) {
+          emit(FailedShowTicketQuota(failure.error ?? ""));
+        }, (dataTransaction) {
 
-        emit(SuccessShowTicketQuota(dataHolder));
+          TicketHomeContentHolder dataHolder = TicketHomeContentHolder(
+              wisataName: wisataName,
+              jumlahTiketTerjual: data.data?.jumlahTiketTerjual ?? 0,
+              quota: data.data?.quota ?? 0,
+              ticketTransactions: dataTransaction.data);
+
+          if (data.code == 401) {
+            emit(ShowTokenExpired(data.message));
+            return;
+          }
+
+          emit(SuccessShowTicketQuota(dataHolder));
+        });
       });
     });
   }

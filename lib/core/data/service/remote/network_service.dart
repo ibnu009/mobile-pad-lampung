@@ -1,5 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
+import 'dart:math';
+import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart' as http;
 import 'package:http_parser/http_parser.dart';
 import 'package:logger/logger.dart';
@@ -12,8 +14,8 @@ var logger = Logger(
 );
 
 abstract class NetworkService {
-
-  Future<dynamic> getMethod(String endPoint, [Map<String, String>? headers]) async {
+  Future<dynamic> getMethod(String endPoint,
+      [Map<String, String>? headers]) async {
     try {
       final response = await http.get(Uri.parse(endPoint), headers: headers);
       logger.d("URL ${endPoint}");
@@ -23,31 +25,30 @@ abstract class NetworkService {
       logger.d(headers);
       logger.d(endPoint);
       logger.d(res);
+
       return res;
     } on SocketException {
       throw Exception("Connection Failed");
     }
   }
 
-  Future<dynamic> postMethod(String endPoint, {dynamic body, Map<String, String>? headers}) async {
+  Future<dynamic> postMethod(String endPoint,
+      {dynamic body, Map<String, String>? headers}) async {
     try {
       final response = await http.post(Uri.parse(endPoint),
           body: json.encode(body), headers: headers);
 
-      var res = json.decode(response.body);
-
+      logger.d(response.body);
       logger.d(headers);
       logger.d(body);
       logger.d(endPoint);
-      logger.d(res);
-      logger.d(response.body);
-
       print("json encode from server ${json.encode(body)}");
       print("response from server raw ${response.body}");
       print("status from server raw ${response.statusCode}");
 
-
-      if (response.statusCode == 200 || response.statusCode == 201){
+      var res = json.decode(response.body);
+      logger.d(res);
+      if (response.statusCode == 200 || response.statusCode == 201) {
         return res;
       }
 
@@ -57,21 +58,29 @@ abstract class NetworkService {
     }
   }
 
-  Future<dynamic> multipartPost(String endPoint, {Map<String, String>? body,
-    Map<String, String>? header, Map<String, File>? files}) async {
+  Future<dynamic> multipartPost(String endPoint,
+      {Map<String, String>? body,
+      Map<String, String>? header,
+      Map<String, File>? files}) async {
     try {
       var uri = Uri.parse(endPoint);
       var request = http.MultipartRequest("POST", uri);
 
       if (files!.isNotEmpty) {
-        files.forEach((key, value) async{
+        print('file is not empty');
+
+        files.forEach((key, value) async {
+          print('key i $key');
+          print('value is $value');
           request.files.add(await http.MultipartFile.fromPath(key, value.path,
-              contentType: MediaType('image','*')));
+              contentType: MediaType('image', '*')));
         });
       }
 
       if (header != null) request.headers.addAll(header);
       if (body != null) request.fields.addAll(body);
+
+      debugPrint('REQUEST IS ${request.files} with body ${request.fields}');
 
       var response = await request.send().then(http.Response.fromStream);
       var res = jsonDecode(response.body);
@@ -86,16 +95,47 @@ abstract class NetworkService {
     }
   }
 
-  Future<dynamic> multipartUpdate(String endPoint, {Map<String, String>? body,
-    Map<String, String>? header, Map<String, File>? files}) async {
+  Future<dynamic> multipartPostNew(String endPoint,
+      {Map<String, String>? body,
+        Map<String, String>? header,
+        required File file}) async {
+    try {
+      var uri = Uri.parse(endPoint);
+      var request = http.MultipartRequest("POST", uri);
+
+      request.files.add(await http.MultipartFile.fromPath('foto_kendaraan', file.path,
+          contentType: MediaType('image', '*')));
+
+      if (header != null) request.headers.addAll(header);
+      if (body != null) request.fields.addAll(body);
+
+      debugPrint('REQUEST IS ${request.files.single} with body ${request.fields}');
+
+      var response = await request.send().then(http.Response.fromStream);
+      var res = jsonDecode(response.body);
+
+      logger.d(endPoint);
+      logger.d(header);
+      logger.d(body);
+      logger.d(res);
+      return res;
+    } on SocketException {
+      throw Exception("Connection Failed");
+    }
+  }
+
+  Future<dynamic> multipartUpdate(String endPoint,
+      {Map<String, String>? body,
+      Map<String, String>? header,
+      Map<String, File>? files}) async {
     try {
       var uri = Uri.parse(endPoint);
       var request = http.MultipartRequest("PUT", uri);
 
       if (files!.isNotEmpty) {
-        files.forEach((key, value) async{
+        files.forEach((key, value) async {
           request.files.add(await http.MultipartFile.fromPath(key, value.path,
-              contentType: MediaType('image','*')));
+              contentType: MediaType('image', '*')));
         });
       }
 
@@ -112,9 +152,11 @@ abstract class NetworkService {
     }
   }
 
-  Future<dynamic> putMethod(String endPoint, {dynamic body, Map<String, String>? header}) async {
+  Future<dynamic> putMethod(String endPoint,
+      {dynamic body, Map<String, String>? header}) async {
     try {
-      final response = await http.put(Uri.parse(endPoint), body: json.encode(body), headers: header);
+      final response = await http.put(Uri.parse(endPoint),
+          body: json.encode(body), headers: header);
       var res = json.decode(response.body);
       logger.d(endPoint);
       logger.d(res);
@@ -124,7 +166,8 @@ abstract class NetworkService {
     }
   }
 
-  Future<dynamic> deleteMethod(String endPoint, [Map<String, String>? headers]) async {
+  Future<dynamic> deleteMethod(String endPoint,
+      [Map<String, String>? headers]) async {
     try {
       final response = await http.delete(Uri.parse(endPoint), headers: headers);
       var res = json.decode(response.body);

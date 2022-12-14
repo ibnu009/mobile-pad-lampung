@@ -15,3 +15,8 @@ class FailedShowTicketQuota extends TicketHomeState {
   String message;
   FailedShowTicketQuota(this.message);
 }
+
+class ShowTokenExpired extends TicketHomeState {
+  String message;
+  ShowTokenExpired(this.message);
+}

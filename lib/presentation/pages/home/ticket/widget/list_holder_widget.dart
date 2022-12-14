@@ -1,12 +1,16 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:pad_lampung/core/data/sources/table/home_ticket_data_source.dart';
 import 'package:pad_lampung/core/theme/app_primary_theme.dart';
 import 'package:pad_lampung/presentation/components/button/primary_button.dart';
 import 'package:pad_lampung/presentation/components/dropdown/dropdown_value.dart';
 import 'package:pad_lampung/presentation/components/dropdown/generic_dropdown.dart';
 import 'package:pad_lampung/presentation/pages/booking/ticket/online_ticket_booking_page.dart';
+import 'package:pad_lampung/presentation/utils/extension/list_ticket_ext.dart';
 
+import '../../../../../core/data/model/response/ticket_list_response.dart';
 import '../../../../components/modal/bottom_modal.dart';
+import '../../../../components/table/table_header_custom.dart';
 import '../../../transaction/ticket/transaction_ticket_page.dart';
 
 const String prevPage = "prevPage";
@@ -15,7 +19,8 @@ const String nextPage = "nextPage";
 const String lastPage = "lastPage";
 
 class ListHolderWidget extends StatefulWidget {
-  const ListHolderWidget({Key? key}) : super(key: key);
+  final List<Ticket> tickets;
+  const ListHolderWidget({Key? key, required this.tickets}) : super(key: key);
 
   @override
   State<ListHolderWidget> createState() => _ListHolderWidgetState();
@@ -24,6 +29,9 @@ class ListHolderWidget extends StatefulWidget {
 class _ListHolderWidgetState extends State<ListHolderWidget>
     with TickerProviderStateMixin {
   String selectedItem = initialDataShown;
+
+  int page = 0;
+  int perPage = 5;
 
   late AnimationController controller;
 
@@ -41,6 +49,8 @@ class _ListHolderWidgetState extends State<ListHolderWidget>
 
   @override
   Widget build(BuildContext context) {
+    // final dataToShow = widget.tickets.sublist((page * perPage), ((page * perPage) + perPage));
+
     return Column(
       children: [
         Container(
@@ -63,6 +73,8 @@ class _ListHolderWidgetState extends State<ListHolderWidget>
                       onChanged: (String? value) {
                         setState(() {
                           selectedItem = value ?? initialDataShown;
+                          perPage = int.parse(selectedItem);
+
                         });
                       },
                     ),
@@ -78,27 +90,22 @@ class _ListHolderWidgetState extends State<ListHolderWidget>
                   ],
                 ),
               ),
+
+              widget.tickets.isEmpty ?
+                  const Padding(
+                    padding: EdgeInsets.all(16.0),
+                    child: Center(child: Text('Data kosong')),
+                  )
+                  :
+
               Table(
                 defaultVerticalAlignment: TableCellVerticalAlignment.middle,
-                children: [
-                  TableRow(
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        border: Border.all(color: Colors.black12),
-                      ),
-                      children: [
-                        rowTextHeading('JENIS'),
-                        rowTextHeading('ID PESANAN'),
-                        rowTextHeading('MASUK'),
-                      ]),
-                  buildDataRow(),
-                  buildDataRow(),
-                  buildDataRow(),
-                ],
+                children: widget.tickets.toDataRowPegawai(),
               ),
             ],
           ),
         ),
+
         Container(
             margin: const EdgeInsets.fromLTRB(16, 16, 16, 32),
             padding: const EdgeInsets.all(16),
@@ -142,7 +149,10 @@ class _ListHolderWidgetState extends State<ListHolderWidget>
     );
   }
 
+
+
   Widget buildPageController(String? page) {
+
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 4),
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
@@ -152,6 +162,16 @@ class _ListHolderWidgetState extends State<ListHolderWidget>
       ),
       child: Text(
         page ?? "1",
+        style: const TextStyle(fontWeight: FontWeight.w600),
+      ),
+    );
+  }
+
+  Widget rowTextHeading(String text) {
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Text(
+        text,
         style: const TextStyle(fontWeight: FontWeight.w600),
       ),
     );
@@ -178,16 +198,6 @@ class _ListHolderWidgetState extends State<ListHolderWidget>
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: Text(text, textAlign: TextAlign.center),
-    );
-  }
-
-  Widget rowTextHeading(String text) {
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: Text(
-        text,
-        style: const TextStyle(fontWeight: FontWeight.w600),
-      ),
     );
   }
 }

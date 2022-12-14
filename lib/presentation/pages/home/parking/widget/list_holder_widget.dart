@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:pad_lampung/core/theme/app_primary_theme.dart';
 import 'package:pad_lampung/presentation/components/dropdown/dropdown_value.dart';
 import 'package:pad_lampung/presentation/components/dropdown/generic_dropdown.dart';
+import 'package:pad_lampung/presentation/utils/extension/list_parking_ext.dart';
 
+import '../../../../../core/data/model/response/parking_response.dart';
 import '../../../../components/modal/bottom_modal.dart';
 
 const String prevPage = "prevPage";
@@ -11,7 +13,9 @@ const String nextPage = "nextPage";
 const String lastPage = "lastPage";
 
 class ListHolderWidget extends StatefulWidget {
-  const ListHolderWidget({Key? key}) : super(key: key);
+  final List<ParkingData> data;
+
+  const ListHolderWidget({Key? key, required this.data}) : super(key: key);
 
   @override
   State<ListHolderWidget> createState() => _ListHolderWidgetState();
@@ -85,26 +89,16 @@ class _ListHolderWidgetState extends State<ListHolderWidget>
                   ],
                 ),
               ),
-              Table(
-                defaultVerticalAlignment: TableCellVerticalAlignment.middle,
-                children: [
-                  TableRow(
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        border: Border.all(color: Colors.black38),
-                      ),
-                      children: [
-                        rowTextHeading('IMAGE'),
-                        rowTextHeading('ID PARKIR'),
-                        rowTextHeading('JENIS'),
-                        rowTextHeading('MASUK'),
-                        rowTextHeading('KELUAR'),
-                      ]),
-                  buildDataRow(),
-                  buildDataRow(),
-                  buildDataRow(),
-                ],
-              ),
+              widget.data.isEmpty
+                  ? const Padding(
+                      padding: EdgeInsets.all(16.0),
+                      child: Center(child: Text('Data kosong')),
+                    )
+                  : Table(
+                      defaultVerticalAlignment:
+                          TableCellVerticalAlignment.middle,
+                      children: widget.data.toDataRowTable(context),
+                    ),
             ],
           ),
         ),

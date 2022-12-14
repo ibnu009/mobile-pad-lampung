@@ -1,10 +1,25 @@
-import 'package:flutter/material.dart';
+import 'dart:io';
 
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:pad_lampung/core/data/model/response/jenis_kendaraan_response.dart';
+import 'package:pad_lampung/presentation/bloc/park/park_bloc.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:pad_lampung/presentation/bloc/park/park_event.dart';
+import 'package:pad_lampung/presentation/utils/delegate/generic_delegate.dart';
+import 'package:pad_lampung/presentation/utils/extension/list_tipe_kendaraan_ext.dart';
+
+import '../../../core/data/model/response/parking_response.dart';
 import '../../../core/theme/app_primary_theme.dart';
+import '../../bloc/park/park_state.dart';
 import '../../components/appbar/custom_generic_appbar.dart';
 import '../../components/button/primary_button.dart';
+import '../../components/dialog/dialog_component.dart';
 import '../../components/dropdown/dropdown_value.dart';
 import '../../components/dropdown/generic_dropdown.dart';
+import '../../components/generic/loading_widget.dart';
+import 'success_park_page.dart';
 
 class AddVehiclePage extends StatefulWidget {
   const AddVehiclePage({Key? key}) : super(key: key);
@@ -13,8 +28,31 @@ class AddVehiclePage extends StatefulWidget {
   State<AddVehiclePage> createState() => _AddVehiclePageState();
 }
 
-class _AddVehiclePageState extends State<AddVehiclePage> {
-  String selectedItem = initialVehicleDataShown;
+class _AddVehiclePageState extends State<AddVehiclePage> with GenericDelegate {
+  String? selectedItem;
+  String placeHolderItem = '';
+  File? image;
+  final picker = ImagePicker();
+  int idJenisKendaraan = 0;
+  List<VehicleType> dataParking = [];
+
+  @override
+  void initState() {
+    super.initState();
+    context.read<ParkBloc>().add(GetVehicleType());
+  }
+
+  Widget blocListener({required Widget child}) {
+    return BlocListener(
+      bloc: context.read<ParkBloc>(),
+      listener: (ctx, state) {
+        if (state is SuccessGetVehicleType) {
+          return;
+        }
+      },
+      child: child,
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -43,44 +81,52 @@ class _AddVehiclePageState extends State<AddVehiclePage> {
                         style: AppTheme.subTitle,
                       ),
                     ),
-                    SizedBox(
-                      height: MediaQuery.of(context).size.height * 0.40,
-                      child: ClipRRect(
-                        borderRadius: const BorderRadius.only(
-                          bottomRight: Radius.circular(8),
-                          bottomLeft: Radius.circular(8),
-                        ),
-                        child: Image.asset(
-                          'assets/images/default_profile.png',
-                          fit: BoxFit.cover,
-                        ),
-                      ),
-                    ),
+                    image != null ? buildImageHolder() : buildPlaceHolder()
                   ],
                 ),
               ),
-              Padding(
-                padding: const EdgeInsets.symmetric(vertical: 16.0),
-                child: GenericDropdown(
-                  selectedItem: selectedItem,
-                  items: vehicleDataShown,
-                  height: 45,
-                  width: double.infinity,
-                  hint: 'Pilih Jenis Kendaraan',
-                  backgroundColor: Colors.white,
-                  borderColor: Colors.transparent,
-                  onChanged: (String? value) {
-                    setState(() {
-                      selectedItem = value ?? initialDataShown;
-                    });
-                  },
-                ),
+              BlocBuilder(
+                bloc: this.context.read<ParkBloc>(),
+                builder: (ctx, state) {
+                  if (state is SuccessGetVehicleType) {
+                    dataParking = state.data;
+                    placeHolderItem = state.data.toDropdownData().first;
+                    return Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 16.0),
+                      child: GenericDropdown(
+                        selectedItem: selectedItem ?? state.data.toDropdownData().first,
+                        items: state.data.toDropdownData(),
+                        height: 45,
+                        width: double.infinity,
+                        hint: 'Pilih Jenis Kendaraan',
+                        backgroundColor: Colors.white,
+                        borderColor: Colors.transparent,
+                        onChanged: (String? value) {
+                          setState(() {
+                            selectedItem = value ?? initialDataShown;
+                          });
+                        },
+                      ),
+                    );
+                  }
+
+                  if (state is LoadingGetVehicleType) {
+                    return const Center(child: LoadingWidget());
+                  }
+
+                  return SizedBox();
+                },
               ),
               PrimaryButton(
                   context: context,
                   isEnabled: true,
                   onPressed: () {
-                    Navigator.pop(context);
+                    idJenisKendaraan = dataParking.extractIdJenisKendaraan(selectedItem ?? placeHolderItem);
+
+                    context.read<ParkBloc>().add(ParkingCheckInWithOutBooking(
+                        fotoKendaraan: image!,
+                        idJenisKendaraan: idJenisKendaraan,
+                        delegate: this));
                   },
                   horizontalPadding: 52,
                   height: 45,
@@ -90,5 +136,82 @@ class _AddVehiclePageState extends State<AddVehiclePage> {
         ),
       ),
     );
+  }
+
+  Widget buildPlaceHolder() {
+    return InkWell(
+      onTap: () => takeImageFromCamera(),
+      child: ClipRRect(
+        borderRadius: const BorderRadius.only(
+          bottomRight: Radius.circular(8),
+          bottomLeft: Radius.circular(8),
+        ),
+        child: Container(
+            height: MediaQuery.of(context).size.height * 0.40,
+            width: double.infinity,
+            color: AppTheme.lightGrey,
+            child: const Icon(
+              Icons.add_a_photo,
+              color: AppTheme.primaryColor,
+              size: 108,
+            )),
+      ),
+    );
+  }
+
+  Widget buildImageHolder() {
+    return InkWell(
+      onTap: () => takeImageFromCamera(),
+      child: Container(
+          height: MediaQuery.of(context).size.height * 0.40,
+          width: double.infinity,
+          color: AppTheme.lightGrey,
+          child: ClipRRect(
+              borderRadius: const BorderRadius.only(
+                bottomRight: Radius.circular(8),
+                bottomLeft: Radius.circular(8),
+              ),
+              child: Image.file(image!, fit: BoxFit.cover))),
+    );
+  }
+
+  Future takeImageFromCamera() async {
+    print("Called gallery");
+    final pickedFile = await picker.pickImage(source: ImageSource.camera);
+    setState(() {
+      setState(() {
+        if (pickedFile != null) {
+          image = File(pickedFile.path);
+        } else {}
+      });
+    });
+  }
+
+  @override
+  void onFailed(String message) {
+    Navigator.pop(context);
+    showFailedDialog(
+        context: context,
+        title: "Gagal!",
+        message: message,
+        onTap: () {
+          Navigator.pop(context);
+        });
+  }
+
+  @override
+  void onLoading() {
+    showLoadingDialog(context: context);
+  }
+
+  @override
+  void onSuccess(String message) {
+    Navigator.pop(context);
+    Navigator.push(
+        context,
+        CupertinoPageRoute(
+            builder: (c) => const SuccessParkPage(
+                  successMessage: 'Berhasil mencetak tiket..',
+                )));
   }
 }

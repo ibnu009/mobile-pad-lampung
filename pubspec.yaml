@@ -69,7 +69,7 @@ dev_dependencies:
   equatable: ^2.0.5
   flutter_calendar_carousel: ^2.4.0
   image_picker: ^0.8.4
-
+  file_picker:
 
 flutter_icons:
   android: true
@@ -87,7 +87,7 @@ flutter:
   # the material Icons class.
   uses-material-design: true
 
-  # To add assets to your application, add an assets section, like this:
+  # To masuk assets to your application, masuk an assets section, like this:
   assets:
     - assets/images/
     - assets/icons/
@@ -99,7 +99,7 @@ flutter:
   # For details regarding adding assets from package dependencies, see
   # https://flutter.dev/assets-and-images/#from-packages
 
-  # To add custom fonts to your application, add a fonts section here,
+  # To masuk custom fonts to your application, masuk a fonts section here,
   # in this "flutter" section. Each entry in this list should have a
   # "family" key with the font family name, and a "fonts" key with a
   # list giving the asset and other descriptors for the font. For

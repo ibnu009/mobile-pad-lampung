@@ -5,7 +5,9 @@ import 'package:pad_lampung/presentation/components/dropdown/dropdown_value.dart
 import 'package:pad_lampung/presentation/components/dropdown/generic_dropdown.dart';
 import 'package:pad_lampung/presentation/components/input/generic_text_input_no_border.dart';
 import 'package:pad_lampung/presentation/pages/booking/ticket/scan_online_booking_ticket_page.dart';
+import 'package:pad_lampung/presentation/utils/extension/list_ticket_ext.dart';
 
+import '../../../../../core/data/model/response/ticket_list_response.dart';
 import '../../../../components/button/icon_primary_button.dart';
 import '../../../../components/button/primary_button.dart';
 import '../../../../components/modal/bottom_modal.dart';
@@ -16,7 +18,8 @@ const String nextPage = "nextPage";
 const String lastPage = "lastPage";
 
 class ListBookingOnlineHolderWidget extends StatefulWidget {
-  const ListBookingOnlineHolderWidget({Key? key}) : super(key: key);
+  final List<Ticket> tickets;
+  const ListBookingOnlineHolderWidget({Key? key, required this.tickets}) : super(key: key);
 
   @override
   State<ListBookingOnlineHolderWidget> createState() =>
@@ -118,24 +121,37 @@ class _ListHolderWidgetState extends State<ListBookingOnlineHolderWidget>
                   ],
                 ),
               ),
+
+              widget.tickets.isEmpty ?
+              const Padding(
+                padding: EdgeInsets.all(16.0),
+                child: Center(child: Text('Data kosong')),
+              )
+                  :
+
               Table(
                 defaultVerticalAlignment: TableCellVerticalAlignment.middle,
-                children: [
-                  TableRow(
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        border: Border.all(color: Colors.black12),
-                      ),
-                      children: [
-                        rowTextHeading('JENIS'),
-                        rowTextHeading('ID PESANAN'),
-                        rowTextHeading('MASUK'),
-                      ]),
-                  buildDataRow(),
-                  buildDataRow(),
-                  buildDataRow(),
-                ],
+                children: widget.tickets.toDataRowOnline(),
               ),
+
+              // Table(
+              //   defaultVerticalAlignment: TableCellVerticalAlignment.middle,
+              //   children: [
+              //     TableRow(
+              //         decoration: BoxDecoration(
+              //           color: Colors.white,
+              //           border: Border.all(color: Colors.black12),
+              //         ),
+              //         children: [
+              //           rowTextHeading('JENIS'),
+              //           rowTextHeading('ID PESANAN'),
+              //           rowTextHeading('MASUK'),
+              //         ]),
+              //     buildDataRow(),
+              //     buildDataRow(),
+              //     buildDataRow(),
+              //   ],
+              // ),
             ],
           ),
         ),

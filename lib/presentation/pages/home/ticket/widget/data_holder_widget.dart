@@ -21,8 +21,9 @@ class _DataHolderWidgetState extends State<DataHolderWidget>{
   void initState() {
     super.initState();
     chartData = [
-      ChartData('Tiket', widget.quota == 0 ? 1 : widget.quota.toDouble(), AppTheme.lightGrey),
       ChartData('Tiket Terjual', widget.currentTotal.toDouble(), AppTheme.primaryColor),
+      ChartData('Tiket Tersedia', widget.quota - widget.currentTotal.toDouble(), AppTheme.lightGrey),
+
     ];
   }
 
@@ -41,7 +42,7 @@ class _DataHolderWidgetState extends State<DataHolderWidget>{
             child: Column(
               children: [
                 buildPieChart(widget.currentTotal, widget.quota),
-                buildCounter(widget.quota),
+                buildCounter(widget.currentTotal, widget.quota),
               ],
             )),
         Container(
@@ -74,7 +75,7 @@ class _DataHolderWidgetState extends State<DataHolderWidget>{
                 height: 4,
               ),
               Text(
-                '$total',
+                '$currentTotal',
                 style: AppTheme.subTitle.copyWith(fontSize: 26),
               ),
               const Text('Total Pengunjung'),
@@ -109,7 +110,7 @@ class _DataHolderWidgetState extends State<DataHolderWidget>{
     );
   }
 
-  Widget buildCounter(int currentCounter) {
+  Widget buildCounter(int currentCounter, int max) {
     return ListTile(
       leading: SvgPicture.asset("assets/icons/ticket_icon.svg",
           semanticsLabel: 'A red up arrow'),
@@ -118,7 +119,7 @@ class _DataHolderWidgetState extends State<DataHolderWidget>{
         'Masuk ${widget.wisataName}',
         style: const TextStyle(fontSize: 13),
       ),
-      trailing: Text("$currentCounter Orang", style: AppTheme.smallTitle),
+      trailing: Text("$currentCounter / $max Orang", style: AppTheme.smallTitle),
     );
   }
 

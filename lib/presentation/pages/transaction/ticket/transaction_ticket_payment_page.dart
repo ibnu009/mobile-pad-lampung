@@ -1,5 +1,8 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:pad_lampung/presentation/bloc/ticket/price/ticket_price_event.dart';
+import 'package:pad_lampung/presentation/pages/transaction/ticket/post_ticket_transaction_page.dart';
+import 'package:pad_lampung/presentation/utils/delegate/generic_delegate.dart';
 import 'package:pad_lampung/presentation/utils/extension/int_ext.dart';
 
 import '../../../../core/theme/app_primary_theme.dart';
@@ -7,6 +10,7 @@ import '../../../bloc/ticket/price/ticket_price_bloc.dart';
 import '../../../bloc/ticket/price/ticket_price_state.dart';
 import '../../../components/appbar/custom_generic_appbar.dart';
 import '../../../components/button/primary_button.dart';
+import '../../../components/dialog/dialog_component.dart';
 import '../../../components/generic/loading_widget.dart';
 import '../../../components/input/generic_text_input_no_border.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -20,13 +24,14 @@ class TransactionTicketPaymentPage extends StatefulWidget {
 }
 
 class _TransactionTicketPaymentPageState
-    extends State<TransactionTicketPaymentPage> {
+    extends State<TransactionTicketPaymentPage> with GenericDelegate {
   final TextEditingController? codeController = TextEditingController();
 
   int total = 0;
   int ticketQuantity = 0;
   int ticketDiscount = 0;
   int ticketPrice = 0;
+  int idTarif = 0;
 
   @override
   void initState() {
@@ -75,7 +80,7 @@ class _TransactionTicketPaymentPageState
                       PrimaryButton(
                           context: context,
                           isEnabled: ticketQuantity != 0,
-                          onPressed: () {},
+                          onPressed: () => handleBookingTicket('QRIS'),
                           height: 43,
                           horizontalPadding: 32,
                           text: 'Bayar')
@@ -177,7 +182,7 @@ class _TransactionTicketPaymentPageState
       builder: (ctx, state) {
         if (state is SuccessShowTicketPrice) {
           ticketPrice = state.price;
-
+          idTarif = state.idTarif;
           return Container(
             margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
             padding: const EdgeInsets.only(left: 8),
@@ -266,16 +271,43 @@ class _TransactionTicketPaymentPageState
     );
   }
 
-  void handleBookingTicket(int idTarif, String paymentMethod) {
+  void handleBookingTicket(String paymentMethod) {
     if (ticketQuantity == 0) {
       return;
     }
 
     context.read<TicketPriceBloc>().add(ProcessTicketBooking(
-        paymentMethod: paymentMethod, quantity: ticketQuantity, idTarif: idTarif));
+        paymentMethod: paymentMethod,
+        quantity: ticketQuantity,
+        idTarif: idTarif,
+        delegate: this));
   }
 
   void calculateTotal() {
     total = ticketPrice * ticketQuantity;
+  }
+
+  @override
+  void onFailed(String message) {
+    Navigator.pop(context);
+    showFailedDialog(
+        context: context,
+        title: "Gagal",
+        message: message,
+        onTap: () {
+          Navigator.pop(context);
+        });
+  }
+
+  @override
+  void onLoading() {
+    showLoadingDialog(context: context);
+  }
+
+  @override
+  void onSuccess(String message) {
+    Navigator.pop(context);
+    Navigator.push(context,
+        CupertinoPageRoute(builder: (c) => PostTicketTransactionPage(transactionNumber: message,)));
   }
 }

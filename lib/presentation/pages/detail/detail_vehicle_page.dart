@@ -9,7 +9,8 @@ import '../../components/dropdown/dropdown_value.dart';
 import '../../components/dropdown/generic_dropdown.dart';
 
 class DetailVehiclePage extends StatefulWidget {
-  const DetailVehiclePage({Key? key}) : super(key: key);
+  final String noTransaksi;
+  const DetailVehiclePage({Key? key, required this.noTransaksi}) : super(key: key);
 
   @override
   State<DetailVehiclePage> createState() => _DetailVehiclePageState();

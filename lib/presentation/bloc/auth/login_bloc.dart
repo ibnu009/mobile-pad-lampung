@@ -24,8 +24,8 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
         storage.writeSecureData(wisataNameKey, success.user.petugas.tempatWisata.namaTempatWisata);
         storage.writeSecureData(userTypeKey, success.user.tipeUser.toString());
         storage.writeSecureData(petugasEmailKey, success.user.email);
-        storage.writeSecureData(userTypeKey, success.user.petugas.noTelp);
-        emit(SuccessLogin());
+        storage.writeSecureData(petugasNoTelpKey, success.user.petugas.noTelp);
+        emit(SuccessLogin(success.user.tipeUser));
       });
     });
 

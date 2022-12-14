@@ -1,19 +1,17 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pad_lampung/core/theme/app_primary_theme.dart';
-import 'package:pad_lampung/presentation/bloc/park/park_event.dart';
+import 'package:pad_lampung/presentation/bloc/ticket/detail/ticket_detail_bloc.dart';
+import 'package:pad_lampung/presentation/bloc/ticket/detail/ticket_detail_event.dart';
+import 'package:pad_lampung/presentation/bloc/ticket/detail/ticket_detail_state.dart';
 import 'package:pad_lampung/presentation/components/appbar/custom_generic_appbar.dart';
 import 'package:pad_lampung/presentation/components/button/primary_button.dart';
-import 'package:pad_lampung/presentation/pages/transaction/parking/post_transaction_page.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:pad_lampung/presentation/utils/extension/int_ext.dart';
-import 'package:pad_lampung/presentation/utils/extension/string_ext.dart';
+import 'package:pad_lampung/presentation/components/generic/loading_widget.dart';
+import 'package:pad_lampung/presentation/pages/transaction/ticket/post_ticket_transaction_page.dart';
 
-import '../../../bloc/park/park_bloc.dart';
-import '../../../bloc/park/park_state.dart';
 import '../../../components/dialog/dialog_component.dart';
-import '../../../components/dropdown/dropdown_value.dart';
-import '../../../components/dropdown/generic_dropdown.dart';
+import '../success_print_ticket_page.dart';
 
 class TicketCheckOutPage extends StatefulWidget {
   final String ticketId;
@@ -26,6 +24,13 @@ class TicketCheckOutPage extends StatefulWidget {
 }
 
 class _TicketCheckOutPageState extends State<TicketCheckOutPage> {
+
+  @override
+  void initState() {
+    super.initState();
+    context.read<TicketDetailBloc>().add(GetTicketDetail(widget.ticketId));
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -38,32 +43,63 @@ class _TicketCheckOutPageState extends State<TicketCheckOutPage> {
                 padding: EdgeInsets.symmetric(vertical: 16.0),
                 child: GenericAppBar(url: '', title: 'Data Pesanan'),
               ),
-              Container(
-                margin: const EdgeInsets.all(16.0),
-                padding: const EdgeInsets.all(16.0),
-                decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(8)),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    buildRowDetailData('ID Pesanan', widget.ticketId),
-                    buildRowDetailData('Jumlah', '6 Tiket'),
-                    buildRowDetailData('Tanggal ', '15:00 / 01 Des 2022'),
-                  ],
-                ),
-              ),
-              const SizedBox(height: 32,),
-              PrimaryButton(
-                  context: context,
-                  width: MediaQuery.of(context).size.width * 0.55,
-                  isEnabled: true,
-                  onPressed: () {},
-                  text: 'Cetak Gelang')
+              BlocBuilder(
+                  bloc: context.read<TicketDetailBloc>(),
+                  builder: (context, state) {
+                    if (state is SuccessShowTicketDetail) {
+                      return buildContent(state.quantity, state.tanggal);
+                    }
+
+                    if (state is FailedShowTicketDetail) {
+                      showFailedDialog(
+                          context: context,
+                          title: 'Terjadi Kesalahan',
+                          onTap: () => Navigator.pop(context),
+                          message: state.message);
+                      return const LoadingWidget();
+                    }
+
+                    return const LoadingWidget();
+                  })
             ],
           ),
         ),
       ),
+    );
+  }
+
+  Widget buildContent(int ticketSold, String scanDate) {
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Container(
+          margin: const EdgeInsets.all(16.0),
+          padding: const EdgeInsets.all(16.0),
+          decoration: BoxDecoration(
+              color: Colors.white, borderRadius: BorderRadius.circular(8)),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              buildRowDetailData('ID Pesanan', widget.ticketId),
+              buildRowDetailData('Jumlah', '$ticketSold Tiket'),
+              buildRowDetailData('Tanggal ', scanDate),
+            ],
+          ),
+        ),
+        const SizedBox(
+          height: 32,
+        ),
+        PrimaryButton(
+            context: context,
+            width: MediaQuery.of(context).size.width * 0.55,
+            isEnabled: true,
+            onPressed: () async {
+              showLoadingDialog(context: context, loadingText: 'Mencetak Gelang..');
+              await Future.delayed(const Duration(seconds: 2));
+              Navigator.push(context, CupertinoPageRoute(builder: (c) => const PrintTicketSuccessPage()));
+            },
+            text: 'Cetak Gelang')
+      ],
     );
   }
 
