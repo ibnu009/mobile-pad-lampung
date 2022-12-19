@@ -7,23 +7,32 @@ import 'package:syncfusion_flutter_charts/charts.dart';
 class DataHolderWidget extends StatefulWidget {
   final int quota, currentTotal;
   final String wisataName;
-  DataHolderWidget({Key? key, required this.quota, required this.currentTotal, required this.wisataName}) : super(key: key);
+
+  DataHolderWidget(
+      {Key? key,
+      required this.quota,
+      required this.currentTotal,
+      required this.wisataName})
+      : super(key: key);
 
   @override
   State<DataHolderWidget> createState() => _DataHolderWidgetState();
 }
 
-class _DataHolderWidgetState extends State<DataHolderWidget>{
-
- List<ChartData> chartData = [];
+class _DataHolderWidgetState extends State<DataHolderWidget> {
+  List<ChartData> chartData = [];
 
   @override
   void initState() {
     super.initState();
     chartData = [
-      ChartData('Tiket Terjual', widget.currentTotal.toDouble(), AppTheme.primaryColor),
-      ChartData('Tiket Tersedia', widget.quota - widget.currentTotal.toDouble(), AppTheme.lightGrey),
-
+      ChartData('Tiket Terjual', widget.currentTotal.toDouble(),
+          AppTheme.primaryColor),
+      ChartData(
+          'Tiket Tersedia',
+          setDefaultValueIfValueIsZero(widget.currentTotal.toDouble(),
+              widget.quota - widget.currentTotal.toDouble()),
+          AppTheme.lightGrey),
     ];
   }
 
@@ -58,7 +67,7 @@ class _DataHolderWidgetState extends State<DataHolderWidget>{
     );
   }
 
-  Widget buildPieChart(int currentTotal , int total) {
+  Widget buildPieChart(int currentTotal, int total) {
     return Row(
       children: [
         Padding(
@@ -98,10 +107,8 @@ class _DataHolderWidgetState extends State<DataHolderWidget>{
                     yValueMapper: (ChartData data, _) => data.y)
               ]),
               Center(
-                child: Text(
-                  currentTotal.toPercentage(total),
-                  style: AppTheme.subTitle
-                ),
+                child: Text(currentTotal.toPercentage(total),
+                    style: AppTheme.subTitle),
               )
             ],
           ),
@@ -119,7 +126,8 @@ class _DataHolderWidgetState extends State<DataHolderWidget>{
         'Masuk ${widget.wisataName}',
         style: const TextStyle(fontSize: 13),
       ),
-      trailing: Text("$currentCounter / $max Orang", style: AppTheme.smallTitle),
+      trailing:
+          Text("$currentCounter / $max Orang", style: AppTheme.smallTitle),
     );
   }
 
@@ -132,9 +140,20 @@ class _DataHolderWidgetState extends State<DataHolderWidget>{
         'Fasilitas',
         style: TextStyle(fontSize: 13),
       ),
-      trailing: Text("$currentCounter Orang", style: AppTheme.smallTitle,),
+      trailing: Text(
+        "$currentCounter Orang",
+        style: AppTheme.smallTitle,
+      ),
     );
   }
+}
+
+double setDefaultValueIfValueIsZero(double soldTicket, double value) {
+  if (soldTicket != 0) {
+    return value;
+  }
+
+  return value == 0 ? 1.0 : value;
 }
 
 class ChartData {

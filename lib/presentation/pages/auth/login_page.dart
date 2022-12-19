@@ -15,6 +15,9 @@ import '../../bloc/auth/login_state.dart';
 import '../../components/dialog/dialog_component.dart';
 import '../home/ticket/home_page.dart';
 
+const String messageTicket = 'Kamu telah login sebagai petugas bagian tiket';
+const String messageParkir = 'Kamu telah login sebagai petugas bagian parkir';
+
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
 
@@ -49,7 +52,7 @@ class LoginPageState extends State<LoginPage> {
           showSuccessDialog(
               context: context,
               title: "Berhasil!",
-              message: "",
+              message: state.userType == 2 ? messageParkir : messageTicket,
               onTap: () {
                 Navigator.pop(context);
                 if (state.userType == 2){
@@ -155,9 +158,9 @@ class LoginPageState extends State<LoginPage> {
     //     .read<LoginBloc>()
     //     .add(LoginUser(email: 'lorem@gmail.com', password: 'lorem123'));
     //
-    // context
-    //     .read<LoginBloc>()
-    //         .add(LoginUser(email: 'mobile@gmail.com', password: 'mobile123'));
+    context
+        .read<LoginBloc>()
+            .add(LoginUser(email: 'mobile@gmail.com', password: 'mobile123'));
 
     if (_formKey.currentState!.validate()) {
       String? email = _emailInputController?.value.text ?? "";
