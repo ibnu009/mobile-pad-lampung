@@ -82,6 +82,7 @@ class _HomePageState extends State<HomePageTicket> {
         context.read<TicketHomeBloc>().add(GetTicketQuota());
       },
       child: SingleChildScrollView(
+        physics: const AlwaysScrollableScrollPhysics(),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [

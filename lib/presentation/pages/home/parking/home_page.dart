@@ -83,6 +83,7 @@ class _HomePageState extends State<HomePage> {
         context.read<ParkingHomeBloc>().add(GetParkingData());
       },
       child: SingleChildScrollView(
+        physics: const AlwaysScrollableScrollPhysics(),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [

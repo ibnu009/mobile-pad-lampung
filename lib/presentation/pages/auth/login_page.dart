@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:pad_lampung/core/theme/app_primary_theme.dart';
 import 'package:pad_lampung/presentation/components/button/primary_button.dart';
 import 'package:pad_lampung/presentation/components/input/generic_text_input.dart';
@@ -150,9 +151,9 @@ class LoginPageState extends State<LoginPage> {
   }
 
   Future<void> _handleSubmitLogin(BuildContext ctx) async {
-    context
-        .read<LoginBloc>()
-        .add(LoginUser(email: 'lorem@gmail.com', password: 'lorem123'));
+    // context
+    //     .read<LoginBloc>()
+    //     .add(LoginUser(email: 'lorem@gmail.com', password: 'lorem123'));
     //
     // context
     //     .read<LoginBloc>()

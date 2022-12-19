@@ -11,7 +11,7 @@ import '../../../../common/exception.dart';
 import '../../model/response/error_response.dart';
 import '../../service/remote/network_service.dart';
 
-class AuthRemoteDataSourceImpl extends NetworkService {
+class AuthRemoteDataSourceImpl extends NetworkService  {
   AuthRemoteDataSourceImpl();
 
   AuthRemoteDataSourceImpl._privateConstructor();

@@ -34,6 +34,7 @@ class _OnlineTicketBookingPageState extends State<OnlineTicketBookingPage> {
             context.read<TicketOnlineBloc>().add(GetOnlineTicketBooking());
           },
           child: SingleChildScrollView(
+            physics: const AlwaysScrollableScrollPhysics(),
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
