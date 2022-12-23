@@ -10,18 +10,21 @@ class ResponseTicket {
     required this.status,
     required this.message,
     required this.data,
+    required this.length,
   });
 
   int code;
   bool status;
   String message;
   List<Ticket> data;
+  int length;
 
   factory ResponseTicket.fromJson(Map<String, dynamic> json) => ResponseTicket(
     code: json["code"],
     status: json["status"],
     message: json["message"],
     data: json["data"] == null ? [] : List<Ticket>.from(json["data"].map((x) => Ticket.fromJson(x))),
+    length: json["length"] ?? 0
   );
 
   Map<String, dynamic> toJson() => {
@@ -29,6 +32,7 @@ class ResponseTicket {
     "status": status,
     "message": message,
     "data": List<dynamic>.from(data.map((x) => x.toJson())),
+    "length": length
   };
 }
 

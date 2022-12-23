@@ -8,6 +8,30 @@ extension IntegerConverter on int {
     return formattedCurrency.substring(0, formattedCurrency.indexOf(','));
   }
 
+  int getTotalPageByTotalData(int itemPerPage){
+    try {
+      int totalPage = (toNearestItemPerPage(itemPerPage) / itemPerPage).round();
+
+      if (totalPage == 0){
+        return 1;
+      }
+
+      return totalPage;
+    } catch(e) {
+      return 1;
+    }
+  }
+
+  int toNearestItemPerPage(int itemPerPage) {
+    int a = this % itemPerPage;
+
+    if (a > 0) {
+      return (this ~/ itemPerPage) * itemPerPage + itemPerPage;
+    }
+
+    return this;
+  }
+
   String toPercentage(int total) {
     if (total == 0) {
       return '0%';

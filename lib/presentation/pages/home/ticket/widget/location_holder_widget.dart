@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:pad_lampung/presentation/components/button/icon_primary_button.dart';
+import 'package:pad_lampung/presentation/components/button/icon_svg_primary_button.dart';
 import 'package:pad_lampung/presentation/pages/transaction/parking/transaction_page.dart';
 import 'package:pad_lampung/presentation/pages/transaction/ticket/transaction_ticket_page.dart';
 
@@ -22,7 +23,7 @@ class LocationTicketHolder extends StatelessWidget {
       child: ListTile(
         title: Text(location),
         subtitle: Text(date),
-        trailing: IconPrimaryButton(
+        trailing: IconSvgPrimaryButton(
           context: context,
           isEnabled: true,
           onPressed: () {
@@ -31,7 +32,7 @@ class LocationTicketHolder extends StatelessWidget {
           text: 'Transaksi',
           width: 115,
           paddingHorizontal: 4,
-          icon: Icons.compare_arrows_rounded,
+          iconAsset: 'assets/icons/transfer_icon.svg',
         ),
       ),
     );

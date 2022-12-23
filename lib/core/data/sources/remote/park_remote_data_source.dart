@@ -99,11 +99,11 @@ class ParkRemoteDataSourceImpl extends NetworkService {
   Future<Either<ErrorResponse, ResponseParking>> fetchParkingTransactionList(
       String accessToken,
       String idWisata,
-      String todayDate) async {
+      String todayDate, int limit, int offset) async {
     try {
       var header = {contentType: applicationJson, token: "Bearer $accessToken"};
       final response = await getMethod(
-          "$BASE_URL/transaksi-parkir/get-by-tanggal/$idWisata/$todayDate/",
+          "$BASE_URL/transaksi-parkir/get-by-tanggal/$idWisata/$todayDate?limit=$limit&offset=$offset",
           header);
       return Right(ResponseParking.fromJson(response));
     } on ServerException catch (e) {

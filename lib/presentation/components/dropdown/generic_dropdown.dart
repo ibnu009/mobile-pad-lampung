@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class GenericDropdown extends StatelessWidget {
@@ -24,6 +25,7 @@ class GenericDropdown extends StatelessWidget {
       child: DropdownButtonHideUnderline(
         child: DropdownButton(
           value: selectedItem,
+          icon: const Icon(CupertinoIcons.chevron_down, size: 15,),
           hint: Text(hint ?? ''),
           items: items
               .map((String e) =>

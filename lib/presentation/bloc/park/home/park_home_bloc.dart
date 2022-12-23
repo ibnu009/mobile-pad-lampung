@@ -17,7 +17,7 @@ class ParkingHomeBloc extends Bloc<ParkingHomeEvent, ParkingHomeState> {
       String idWisata = await storage.readSecureData(wisataIdKey) ?? "";
       String wisataName = await storage.readSecureData(wisataNameKey) ?? "";
 
-      var data = await repository.fetchParkingData(token, idWisata);
+      var data = await repository.fetchParkingData(token, idWisata, 1, 1);
       data.fold((failure) {
         emit(FailedShowParkingQuota(failure.error ?? ""));
       }, (data) {

@@ -1,4 +1,4 @@
-import '../../../core/data/model/holder/ticket_home_content_holder.dart';
+import '../../../../core/data/model/holder/ticket_home_content_holder.dart';
 
 abstract class TicketHomeState {}
 
@@ -16,7 +16,7 @@ class FailedShowTicketQuota extends TicketHomeState {
   FailedShowTicketQuota(this.message);
 }
 
-class ShowTokenExpired extends TicketHomeState {
+class ShowTokenExpiredHome extends TicketHomeState {
   String message;
-  ShowTokenExpired(this.message);
+  ShowTokenExpiredHome(this.message);
 }

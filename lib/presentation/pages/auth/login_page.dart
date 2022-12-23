@@ -1,22 +1,18 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pad_lampung/core/theme/app_primary_theme.dart';
 import 'package:pad_lampung/presentation/components/button/primary_button.dart';
 import 'package:pad_lampung/presentation/components/input/generic_text_input.dart';
 import 'package:pad_lampung/presentation/components/input/generic_text_input_with_obscure.dart';
-import 'package:pad_lampung/presentation/pages/auth/forgot_password_page.dart';
 import 'package:pad_lampung/presentation/pages/home/parking/home_page.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../bloc/auth/login_bloc.dart';
 import '../../bloc/auth/login_event.dart';
 import '../../bloc/auth/login_state.dart';
 import '../../components/dialog/dialog_component.dart';
 import '../home/ticket/home_page.dart';
-
-const String messageTicket = 'Kamu telah login sebagai petugas bagian tiket';
-const String messageParkir = 'Kamu telah login sebagai petugas bagian parkir';
+import 'forgot_password_page.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
@@ -49,19 +45,12 @@ class LoginPageState extends State<LoginPage> {
 
         if (state is SuccessLogin) {
           Navigator.pop(context);
-          showSuccessDialog(
-              context: context,
-              title: "Berhasil!",
-              message: state.userType == 2 ? messageParkir : messageTicket,
-              onTap: () {
-                Navigator.pop(context);
-                if (state.userType == 2){
-                  Navigator.push(context,
-                      CupertinoPageRoute(builder: (c) => const HomePage()));
-                } else {
-                  Navigator.push(context, CupertinoPageRoute(builder: (c) => const HomePageTicket()));
-                }
-              });
+          if (state.userType == 2){
+            Navigator.push(context,
+                CupertinoPageRoute(builder: (c) => const HomePage()));
+          } else {
+            Navigator.push(context, CupertinoPageRoute(builder: (c) => const HomePageTicket()));
+          }
           return;
         }
 
@@ -134,6 +123,7 @@ class LoginPageState extends State<LoginPage> {
                   ),
                   TextButton(
                     onPressed: () {
+                      // printTEST();
                       Navigator.push(
                           context,
                           CupertinoPageRoute(
@@ -158,6 +148,7 @@ class LoginPageState extends State<LoginPage> {
     //     .read<LoginBloc>()
     //     .add(LoginUser(email: 'lorem@gmail.com', password: 'lorem123'));
     //
+
     context
         .read<LoginBloc>()
             .add(LoginUser(email: 'mobile@gmail.com', password: 'mobile123'));
@@ -167,14 +158,9 @@ class LoginPageState extends State<LoginPage> {
       String password = _passwordInputController?.value.text ?? "";
       // String hashedPassword = password.convertToSha256();
 
-      if (email == 'lorem1@gmail.com') {
-        Navigator.push(context,
-            CupertinoPageRoute(builder: (c) => const HomePageTicket()));
-      } else {
-        context
-            .read<LoginBloc>()
-            .add(LoginUser(email: email, password: password));
-      }
+      context
+          .read<LoginBloc>()
+          .add(LoginUser(email: email, password: password));
     }
   }
 }

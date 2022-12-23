@@ -101,6 +101,7 @@ class _ScanOnlineBookingTicketPageState
                   padding: EdgeInsets.only(top: 16.0),
                   child: GenericAppBar(url: '', title: 'Pindai Tiket'),
                 ),
+                SizedBox(height: 14,),
                 Container(
                   decoration: BoxDecoration(
                     color: Colors.white,

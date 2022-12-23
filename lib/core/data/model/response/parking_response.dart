@@ -15,18 +15,21 @@ class ResponseParking {
     required this.status,
     required this.message,
     required this.data,
+    required this.length,
   });
 
   int code;
   bool status;
   String message;
   List<ParkingData> data;
+  int length;
 
   factory ResponseParking.fromJson(Map<String, dynamic> json) => ResponseParking(
     code: json["code"],
     status: json["status"],
     message: json["message"],
     data:json["data"] == null ? [] : List<ParkingData>.from(json["data"].map((x) => ParkingData.fromJson(x))),
+    length: json["length"]
   );
 
   Map<String, dynamic> toJson() => {
@@ -34,6 +37,7 @@ class ResponseParking {
     "status": status,
     "message": message,
     "data": List<dynamic>.from(data.map((x) => x.toJson())),
+    "length": length,
   };
 }
 

@@ -17,7 +17,7 @@ class TicketOnlineBloc extends Bloc<TicketOnlineEvent, TicketOnlineState> {
       String idWisata = await storage.readSecureData(wisataIdKey) ?? "";
 
       var dataTransaction =
-          await repository.fetchOnlineTicketTransaction(token, idWisata);
+          await repository.fetchOnlineTicketTransaction(token, idWisata, event.offset, event.limit);
 
       dataTransaction.fold((failure) {
         emit(FailedShowOnlineTicket(failure.error ?? ""));
@@ -26,7 +26,7 @@ class TicketOnlineBloc extends Bloc<TicketOnlineEvent, TicketOnlineState> {
           emit(ShowTokenExpired(dataTransaction.message));
           return;
         }
-        emit(SuccessShowOnlineTicket(dataTransaction.data));
+        emit(SuccessShowOnlineTicket(dataTransaction.data, dataTransaction.length));
       });
     });
   }

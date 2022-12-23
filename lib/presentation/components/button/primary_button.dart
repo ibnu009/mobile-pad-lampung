@@ -47,7 +47,7 @@ class PrimaryButton extends StatelessWidget {
           text,
           style: style ?? AppTheme.smallTitle.copyWith(
             color: textColor ?? Colors.white,
-            fontSize: 15,
+            fontSize: 14,
           ),
         ),
       ),

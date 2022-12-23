@@ -1,7 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:pad_lampung/core/data/model/response/parking_response.dart';
-import 'package:pad_lampung/core/data/model/response/ticket_list_response.dart';
 import 'package:pad_lampung/presentation/pages/transaction/parking/vehicle_checkout_page.dart';
 
 extension TicketExtention on List<ParkingData> {
@@ -9,9 +8,12 @@ extension TicketExtention on List<ParkingData> {
     List<TableRow> listTableRow = [];
     listTableRow.add(
       TableRow(
-          decoration: BoxDecoration(
+          decoration: const BoxDecoration(
             color: Colors.white,
-            border: Border.all(color: Colors.black12),
+            border: Border(
+              top: BorderSide(color: Colors.black12),
+              bottom: BorderSide(color: Colors.black12),
+            ),
           ),
           children: [
             rowTextHeading('IMAGE'),
@@ -30,7 +32,6 @@ extension TicketExtention on List<ParkingData> {
           this[i].idJenisKendaraan.toString(),
           this[i].waktuMasuk ?? '-',
           this[i].waktuKeluar ?? '-', this[i].noTransaksiParkir, context));
-
     }
     return listTableRow;
   }

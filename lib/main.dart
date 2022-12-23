@@ -15,9 +15,11 @@ import 'package:pad_lampung/di/application_module.dart' as di;
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'presentation/bloc/auth/login_bloc.dart';
+import 'presentation/bloc/park/paging/parking_paging_bloc.dart';
 import 'presentation/bloc/starter/starter_bloc.dart';
+import 'presentation/bloc/ticket/paging/ticket_paging_bloc.dart';
 import 'presentation/bloc/ticket/price/ticket_price_bloc.dart';
-import 'presentation/bloc/ticket/ticket_home_bloc.dart';
+import 'presentation/bloc/ticket/home/ticket_home_bloc.dart';
 import 'presentation/utils/helper/http_override.dart';
 
 Future<void> main() async {
@@ -66,6 +68,13 @@ class MyApp extends StatelessWidget {
         BlocProvider(
           create: (_) => di.locator<ParkingDetailBloc>(),
         ),
+        BlocProvider(
+          create: (_) => di.locator<TicketPagingBloc>(),
+        ),
+        BlocProvider(
+          create: (_) => di.locator<ParkingPagingBloc>(),
+        ),
+
       ],
 
       child: MaterialApp(

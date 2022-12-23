@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:pad_lampung/presentation/bloc/ticket/price/ticket_price_event.dart';
 import 'package:pad_lampung/presentation/pages/transaction/ticket/post_ticket_transaction_page.dart';
+import 'package:pad_lampung/presentation/pages/transaction/ticket/transaction_ticket_payment_type_page.dart';
 import 'package:pad_lampung/presentation/utils/delegate/generic_delegate.dart';
 import 'package:pad_lampung/presentation/utils/extension/int_ext.dart';
 
@@ -24,7 +25,7 @@ class TransactionTicketPaymentPage extends StatefulWidget {
 }
 
 class _TransactionTicketPaymentPageState
-    extends State<TransactionTicketPaymentPage> with GenericDelegate {
+    extends State<TransactionTicketPaymentPage> {
   final TextEditingController? codeController = TextEditingController();
 
   int total = 0;
@@ -276,38 +277,11 @@ class _TransactionTicketPaymentPageState
       return;
     }
 
-    context.read<TicketPriceBloc>().add(ProcessTicketBooking(
-        paymentMethod: paymentMethod,
-        quantity: ticketQuantity,
-        idTarif: idTarif,
-        delegate: this));
+    Navigator.push(context,
+        CupertinoPageRoute(builder: (c) => TransactionTicketPaymentTypePage(idTarif: idTarif, quantity: ticketQuantity,)));
   }
 
   void calculateTotal() {
     total = ticketPrice * ticketQuantity;
-  }
-
-  @override
-  void onFailed(String message) {
-    Navigator.pop(context);
-    showFailedDialog(
-        context: context,
-        title: "Gagal",
-        message: message,
-        onTap: () {
-          Navigator.pop(context);
-        });
-  }
-
-  @override
-  void onLoading() {
-    showLoadingDialog(context: context);
-  }
-
-  @override
-  void onSuccess(String message) {
-    Navigator.pop(context);
-    Navigator.push(context,
-        CupertinoPageRoute(builder: (c) => PostTicketTransactionPage(transactionNumber: message,)));
   }
 }

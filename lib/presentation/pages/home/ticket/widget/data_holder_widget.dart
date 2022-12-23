@@ -31,7 +31,7 @@ class _DataHolderWidgetState extends State<DataHolderWidget> {
       ChartData(
           'Tiket Tersedia',
           setDefaultValueIfValueIsZero(widget.currentTotal.toDouble(),
-              widget.quota - widget.currentTotal.toDouble()),
+              widget.quota),
           AppTheme.lightGrey),
     ];
   }
@@ -148,7 +148,13 @@ class _DataHolderWidgetState extends State<DataHolderWidget> {
   }
 }
 
-double setDefaultValueIfValueIsZero(double soldTicket, double value) {
+double setDefaultValueIfValueIsZero(double soldTicket, int quota) {
+  double value = quota - soldTicket;
+
+  if (value < 0) {
+    return 0;
+  }
+
   if (soldTicket != 0) {
     return value;
   }

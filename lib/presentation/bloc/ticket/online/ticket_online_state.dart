@@ -9,7 +9,8 @@ class LoadingTicketOnline extends TicketOnlineState {}
 
 class SuccessShowOnlineTicket extends TicketOnlineState {
   final List<Ticket> data;
-  SuccessShowOnlineTicket(this.data);
+  final int totalData;
+  SuccessShowOnlineTicket(this.data, this.totalData);
 }
 
 class FailedShowOnlineTicket extends TicketOnlineState {

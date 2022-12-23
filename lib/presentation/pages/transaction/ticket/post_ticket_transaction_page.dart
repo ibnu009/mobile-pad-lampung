@@ -22,6 +22,10 @@ class PostTicketTransactionPage extends StatefulWidget {
 
 class _PostTicketTransactionPageState extends State<PostTicketTransactionPage> {
 
+  List<String> ticketCodes = [];
+  int currentPrintedTicket = 0;
+  int currentPrintedTicketIndex = 0;
+
   @override
   void initState() {
     super.initState();
@@ -31,6 +35,9 @@ class _PostTicketTransactionPageState extends State<PostTicketTransactionPage> {
 
   @override
   Widget build(BuildContext context) {
+
+    double widthButton = MediaQuery.of(context).size.width * 0.7;
+
     return Scaffold(
       backgroundColor: AppTheme.canvasColor,
       body: SafeArea(
@@ -44,7 +51,9 @@ class _PostTicketTransactionPageState extends State<PostTicketTransactionPage> {
               bloc: context.read<TicketPaymentStatusBloc>(),
               builder: (ctx, state) {
                 if (state is SuccessShowTicketPayment) {
-                  return buildSuccessWidget();
+                  ticketCodes.clear();
+                  ticketCodes.addAll(state.ticketCodes);
+                  return buildSuccessWidget(widthButton, state.ticketCodes.length, context);
                 }
 
                 if (state is LoadingTicketPaymentStatus) {
@@ -58,26 +67,23 @@ class _PostTicketTransactionPageState extends State<PostTicketTransactionPage> {
               },
             ),
             const Spacer(),
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 32.0),
-              child: SizedBox(
-                  width: 100,
-                  child: Image.asset('assets/images/logo_pesat.png')),
-            ),
-
+            SizedBox(
+                width: 100,
+                child: Image.asset('assets/images/logo_pesat.png')),
+            const Spacer(),
           ],
         ),
       ),
     );
   }
 
-  Widget buildSuccessWidget() {
+  Widget buildSuccessWidget(double widthButton, int totalTicket, BuildContext context) {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
         Container(
-          width: 200.0,
-          height: 200.0,
+          width: MediaQuery.of(context).size.width * 0.2,
+          height: MediaQuery.of(context).size.height * 0.2,
           decoration: const BoxDecoration(
             color: Colors.white,
             shape: BoxShape.circle,
@@ -85,17 +91,28 @@ class _PostTicketTransactionPageState extends State<PostTicketTransactionPage> {
           child:  SvgPicture.asset('assets/images/bx-badge-check.svg'),
         ),
         Padding(
-          padding: const EdgeInsets.symmetric(vertical: 32),
+          padding: const EdgeInsets.only(top: 32),
           child: Text(
             'Pembayaran Berhasil...',
             style: AppTheme.subTitle,
           ),
         ),
+        Padding(
+          padding: const EdgeInsets.only(bottom: 32),
+          child: Text(
+            '$currentPrintedTicket / $totalTicket tiket telah dicetak',
+            style: AppTheme.bodyText,
+          ),
+        ),
         PrimaryButton(
             context: context,
             isEnabled: true,
-            onPressed: () {
+            width: widthButton,
+            onPressed: () async {
               showLoadingDialog(context: context, loadingText: 'Struk sedang dicetak..');
+              await Future.delayed(const Duration(seconds: 2));
+              if (!mounted) return;
+              Navigator.pop(context);
             },
             horizontalPadding: 32,
             height: 45,
@@ -106,18 +123,23 @@ class _PostTicketTransactionPageState extends State<PostTicketTransactionPage> {
         PrimaryButton(
             context: context,
             isEnabled: true,
-            onPressed: () {
+            width: widthButton,
+            onPressed: () async {
               showLoadingDialog(context: context, loadingText: 'Gelang sedang dicetak..');
+              await Future.delayed(const Duration(seconds: 2));
+              if (!mounted) return;
+              Navigator.pop(context);
             },
             horizontalPadding: 32,
             height: 45,
-            text: 'Cetak Gelang'),
+            text: 'Cetak Tiket Masuk'),
 
         const SizedBox(height: 16,),
 
         PrimaryButton(
             context: context,
             isEnabled: true,
+            width: widthButton,
             onPressed: () {
               Navigator.pushReplacement(context, CupertinoPageRoute(builder: (c) => const HomePageTicket()));
             },

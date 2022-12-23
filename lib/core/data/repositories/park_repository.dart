@@ -63,9 +63,9 @@ class ParkRepository {
   }
 
   Future<Either<ErrorResponse, ResponseParking>> fetchParkingData(
-      String accessToken, String idWisata) async {
+      String accessToken, String idWisata, int limit, int offset, ) async {
     String today = DateTime.now().toFormattedDate(format: 'yyyy-MM-dd');
-    return dataSource.fetchParkingTransactionList(accessToken, idWisata, today);
+    return dataSource.fetchParkingTransactionList(accessToken, idWisata, today, limit, offset);
   }
 
   Future<Either<ErrorResponse, ResponseDetailParking>> fetchDetailParking(

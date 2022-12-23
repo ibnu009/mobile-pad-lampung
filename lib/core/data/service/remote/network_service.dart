@@ -19,6 +19,8 @@ abstract class NetworkService {
     try {
       final response = await http.get(Uri.parse(endPoint), headers: headers);
       logger.d("URL ${endPoint}");
+      logger.d("http code is ${response.statusCode}");
+
       logger.d("Raw res is ${response.body}");
 
       var res = json.decode(response.body);

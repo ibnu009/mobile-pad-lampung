@@ -11,6 +11,7 @@ import 'package:pad_lampung/presentation/utils/extension/date_time_ext.dart';
 
 import '../../../../common/exception.dart';
 import '../../model/response/error_response.dart';
+import '../../model/response/scan_ticket_response.dart';
 import '../../model/response/ticket_booking_response.dart';
 import '../../model/response/ticket_detail_response.dart';
 import '../../model/response/ticket_list_response.dart';
@@ -102,11 +103,12 @@ class TicketRemoteDataSourceImpl extends NetworkService {
       String accessToken,
       String idWisata,
       String todayDate,
-      bool isOnline) async {
+      bool isOnline, int offset, int limit) async {
+    print('isOnline $isOnline');
     try {
       var header = {contentType: applicationJson, token: "Bearer $accessToken"};
       final response = await getMethod(
-          "$BASE_URL/transaksi-booking-tiket/get-by-tanggal/$idWisata/$todayDate/$isOnline",
+          "$BASE_URL/transaksi-booking-tiket/get-by-tanggal/$idWisata/$todayDate/$isOnline?limit=$limit&offset=$offset",
           header);
       return Right(ResponseTicket.fromJson(response));
     } on ServerException catch (e) {
@@ -118,7 +120,7 @@ class TicketRemoteDataSourceImpl extends NetworkService {
     }
   }
 
-  Future<Either<ErrorResponse, GenericResponse>> scanOnlineTicket(
+  Future<Either<ErrorResponse, ResponseScanTicket>> scanOnlineTicket(
       String accessToken, String noTransaksi) async {
     try {
       Map<String, dynamic> body = {
@@ -131,7 +133,7 @@ class TicketRemoteDataSourceImpl extends NetworkService {
           headers: header,
           body: body);
 
-      return Right(GenericResponse.fromJson(response));
+      return Right(ResponseScanTicket.fromJson(response));
     } on ServerException catch (e) {
       var res = json.decode(e.message);
       return Left(ErrorResponse.fromJson(res));

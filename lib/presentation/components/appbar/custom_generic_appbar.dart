@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:pad_lampung/core/theme/app_primary_theme.dart';
 import 'package:pad_lampung/presentation/components/dialog/dialog_component.dart';
 import 'package:pad_lampung/presentation/components/image/avatar.dart';
@@ -61,13 +62,9 @@ class _HomeAppBarState extends State<HomeAppBar> {
               height: 32,
               child: Image.asset("assets/images/logo_pesat.png")),
           const Spacer(),
-          const Padding(
-            padding: EdgeInsets.only(right: 6.0),
-            child: Icon(
-              Icons.notifications_none_outlined,
-              color: AppTheme.primaryColor,
-              size: 26,
-            ),
+           Padding(
+            padding: const EdgeInsets.only(right: 6.0),
+            child: SvgPicture.asset('assets/icons/bell_icon.svg'),
           ),
 
           PopupMenuButton(
@@ -175,13 +172,9 @@ class _GenericAppBarState extends State<GenericAppBar> {
             ),
           ),
           const Spacer(),
-          const Padding(
-            padding: EdgeInsets.only(right: 6.0),
-            child: Icon(
-              Icons.notifications_none_outlined,
-              color: AppTheme.primaryColor,
-              size: 26,
-            ),
+           Padding(
+            padding: const EdgeInsets.only(right: 6.0),
+            child: SvgPicture.asset('assets/icons/bell_icon.svg')
           ),
 
           PopupMenuButton(

@@ -107,7 +107,7 @@ class AppTheme {
       poppins,
       color: Colors.black,
       fontWeight: FontWeight.w400,
-      fontSize: 14);
+      fontSize: 12);
 
   static TextStyle get smallBodyGrey => GoogleFonts.getFont(
       poppins,
