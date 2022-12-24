@@ -80,61 +80,63 @@ class LoginPageState extends State<LoginPage> {
             padding: const EdgeInsetsDirectional.fromSTEB(16, 0, 16, 0),
             child: Form(
               key: _formKey,
-              child: Column(
-                mainAxisSize: MainAxisSize.max,
-                children: [
-                  const Spacer(),
-                  Image.asset('assets/images/logo_pesat.png'),
-                  const Spacer(),
-                  GenericTextInput(
-                    controller: _emailInputController!,
-                    inputType: TextInputType.emailAddress,
-                    hintText: 'Email',
-                    maxLines: 1,
-                    prefixIcon: const Icon(
-                      Icons.email_outlined,
-                      size: 18,
+              child: AutofillGroup(
+                child: Column(
+                  mainAxisSize: MainAxisSize.max,
+                  children: [
+                    const Spacer(),
+                    Image.asset('assets/images/logo_pesat.png'),
+                    const Spacer(),
+                    GenericTextInput(
+                      controller: _emailInputController!,
+                      inputType: TextInputType.emailAddress,
+                      hintText: 'Email',
+                      maxLines: 1,
+                      prefixIcon: const Icon(
+                        Icons.email_outlined,
+                        size: 18,
+                      ),
                     ),
-                  ),
-                  GenericTextInputWithObscure(
-                    controller: _passwordInputController!,
-                    inputType: TextInputType.text,
-                    hintText: 'Password',
-                    maxLines: 1,
-                    prefixIcon: const Icon(
-                      Icons.key,
-                      size: 18,
+                    GenericTextInputWithObscure(
+                      controller: _passwordInputController!,
+                      inputType: TextInputType.text,
+                      hintText: 'Password',
+                      maxLines: 1,
+                      prefixIcon: const Icon(
+                        Icons.key,
+                        size: 18,
+                      ),
                     ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsetsDirectional.fromSTEB(0, 32, 0, 0),
-                    child: PrimaryButton(
-                        context: context,
-                        isEnabled: true,
-                        width: double.infinity,
-                        onPressed: () {
-                          _handleSubmitLogin(context);
-                        },
-                        text: 'Masuk',
-                        color: AppTheme.primaryColor),
-                  ),
-                  const SizedBox(
-                    height: 32,
-                  ),
-                  TextButton(
-                    onPressed: () {
-                      // printTEST();
-                      Navigator.push(
-                          context,
-                          CupertinoPageRoute(
-                              builder: (c) => const ForgotPasswordPage()));
-                    },
-                    child: const Text("Lupa Password"),
-                  ),
-                  const Spacer(),
-                  const Text('Copyright \u00a9 Pesat 2022'),
-                  const Spacer()
-                ],
+                    Padding(
+                      padding: const EdgeInsetsDirectional.fromSTEB(0, 32, 0, 0),
+                      child: PrimaryButton(
+                          context: context,
+                          isEnabled: true,
+                          width: double.infinity,
+                          onPressed: () {
+                            _handleSubmitLogin(context);
+                          },
+                          text: 'Masuk',
+                          color: AppTheme.primaryColor),
+                    ),
+                    const SizedBox(
+                      height: 32,
+                    ),
+                    TextButton(
+                      onPressed: () {
+                        // printTEST();
+                        Navigator.push(
+                            context,
+                            CupertinoPageRoute(
+                                builder: (c) => const ForgotPasswordPage()));
+                      },
+                      child: const Text("Lupa Password"),
+                    ),
+                    const Spacer(),
+                    const Text('Copyright \u00a9 Pesat 2022'),
+                    const Spacer()
+                  ],
+                ),
               ),
             ),
           ),

@@ -8,11 +8,12 @@ import 'package:pad_lampung/presentation/pages/auth/login_page.dart';
 import 'package:pad_lampung/presentation/pages/laporan/laporan_page.dart';
 import 'package:pad_lampung/presentation/pages/profile/profile_page.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:pad_lampung/presentation/pages/setting/setting_page.dart';
 
 import '../../bloc/auth/login_bloc.dart';
 import '../../bloc/auth/login_event.dart';
 
-enum Options { profile, laporan, keluar }
+enum Options { profile, laporan, pengaturan, keluar }
 
 
 AppBar customGenericAppbar(
@@ -80,6 +81,8 @@ class _HomeAppBarState extends State<HomeAppBar> {
               _buildPopupMenuItem(
                   'Laporan', Icons.list_alt_outlined, Options.laporan.index),
               _buildPopupMenuItem(
+                  'Pengaturan', CupertinoIcons.gear, Options.pengaturan.index),
+              _buildPopupMenuItem(
                   'Keluar', Icons.exit_to_app, Options.keluar.index),
             ],
           ),
@@ -103,6 +106,12 @@ class _HomeAppBarState extends State<HomeAppBar> {
     if (_popupMenuItemIndex == Options.profile.index) {
       Navigator.push(
           context, CupertinoPageRoute(builder: (c) => const ProfilePage()));
+      return;
+    }
+
+    if (_popupMenuItemIndex == Options.pengaturan.index) {
+      Navigator.push(
+          context, CupertinoPageRoute(builder: (c) => const SettingPage()));
       return;
     }
 
@@ -190,6 +199,8 @@ class _GenericAppBarState extends State<GenericAppBar> {
               _buildPopupMenuItem(
                   'Laporan', Icons.list_alt_outlined, Options.laporan.index),
               _buildPopupMenuItem(
+                  'Pengaturan', CupertinoIcons.gear, Options.pengaturan.index),
+              _buildPopupMenuItem(
                   'Keluar', Icons.exit_to_app, Options.keluar.index),
             ],
           ),
@@ -215,6 +226,12 @@ class _GenericAppBarState extends State<GenericAppBar> {
     if (_popupMenuItemIndex == Options.profile.index) {
       Navigator.push(
           context, CupertinoPageRoute(builder: (c) => const ProfilePage()));
+      return;
+    }
+
+    if (_popupMenuItemIndex == Options.pengaturan.index) {
+      Navigator.push(
+          context, CupertinoPageRoute(builder: (c) => const SettingPage()));
       return;
     }
 

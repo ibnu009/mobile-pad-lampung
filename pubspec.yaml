@@ -47,7 +47,8 @@ dependencies:
   number_paginator: ^0.2.3
   flutter_bloc: ^8.0.1
   dartz: ^0.9.2
-  esc_pos_bluetooth: ^0.4.1
+  blue_thermal_printer: ^1.2.3
+
 
 dev_dependencies:
   flutter_test:

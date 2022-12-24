@@ -278,7 +278,7 @@ class _TransactionTicketPaymentPageState
     }
 
     Navigator.push(context,
-        CupertinoPageRoute(builder: (c) => TransactionTicketPaymentTypePage(idTarif: idTarif, quantity: ticketQuantity,)));
+        CupertinoPageRoute(builder: (c) => TransactionTicketPaymentTypePage(idTarif: idTarif, quantity: ticketQuantity, price: ticketPrice,)));
   }
 
   void calculateTotal() {

@@ -1,6 +1,7 @@
 import 'package:dartz/dartz.dart';
 import 'package:pad_lampung/core/data/model/response/generic_response.dart';
 import 'package:pad_lampung/core/data/model/response/ticket_detail_response.dart';
+import 'package:pad_lampung/core/data/model/response/ticket_income_total_response.dart';
 import 'package:pad_lampung/core/data/model/response/ticket_quota_response.dart';
 import 'package:pad_lampung/presentation/utils/extension/date_time_ext.dart';
 
@@ -8,6 +9,7 @@ import '../model/request/proses_transaksi_tiket_request.dart';
 import '../model/response/error_response.dart';
 import '../model/response/scan_ticket_response.dart';
 import '../model/response/ticket_booking_response.dart';
+import '../model/response/ticket_income_response.dart';
 import '../model/response/ticket_list_response.dart';
 import '../model/response/ticket_price_response.dart';
 import '../sources/remote/ticket_remote_data_source.dart';
@@ -22,6 +24,13 @@ class TicketRepository {
     print('getting ticket content');
     return dataSource.fetchTicketQuota(accessToken, idWisata);
   }
+
+  Future<Either<ErrorResponse, ResponseTicketIncomeTotal>> fetchTicketIncomeTotal(
+      String accessToken, String idWisata) async {
+    print('getting ticket content');
+    return dataSource.fetchIncomeTotal(accessToken, idWisata);
+  }
+
 
   Future<Either<ErrorResponse, TicketPriceResponse>> fetchTicketPrice(
       String accessToken, String idWisata) async {
@@ -59,6 +68,20 @@ class TicketRepository {
     String todayDate = DateTime.now().toFormattedDate(format: 'yyyy-MM-dd');
     return dataSource.fetchTicketTransactionList(
         accessToken, idWisata, todayDate, true, offset, limit);
+  }
+
+  Future<Either<ErrorResponse, ResponseIncomeTicket>> fetchOnlineIncomeTicket(
+      String accessToken, String idWisata, int offset, int limit) async {
+    String todayDate = DateTime.now().toFormattedDate(format: 'yyyy-MM-dd');
+    return dataSource.fetchTicketIncomeList(
+        accessToken, idWisata, todayDate, true, offset, limit);
+  }
+
+  Future<Either<ErrorResponse, ResponseIncomeTicket>> fetchOfflineIncomeTicket(
+      String accessToken, String idWisata, int offset, int limit) async {
+    String todayDate = DateTime.now().toFormattedDate(format: 'yyyy-MM-dd');
+    return dataSource.fetchTicketIncomeList(
+        accessToken, idWisata, todayDate, false, offset, limit);
   }
 
   Future<Either<ErrorResponse, ResponseTicket>> fetchEmployeeTicketTransaction(

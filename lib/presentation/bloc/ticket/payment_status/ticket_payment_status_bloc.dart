@@ -18,6 +18,10 @@ class TicketPaymentStatusBloc
       emit(LoadingTicketPaymentStatus());
       String token = await storage.readSecureData(tokenKey) ?? "";
       String wisataName = await storage.readSecureData(wisataNameKey) ?? "";
+      String printerTicket =
+          await storage.readSecureData(printerTicketKey) ?? "-";
+      String printerStruct =
+          await storage.readSecureData(printerStructKey) ?? "-";
 
       var data =
           await repository.checkPaymentStatus(token, event.transactionNumber);
@@ -33,7 +37,9 @@ class TicketPaymentStatusBloc
           if (dataScanResponse.code.isStatusSuccess()) {
             emit(SuccessShowTicketPayment(
                 ticketCodes: dataScanResponse.data.extractTicketCode(),
-                wisataName: wisataName));
+                wisataName: wisataName,
+                printerTicketName: printerTicket,
+                printerStructName: printerStruct));
             return;
           } else {
             emit(FailedShowTicketPayment(data.message));

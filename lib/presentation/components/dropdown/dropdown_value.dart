@@ -19,3 +19,10 @@ List<String> laporanDataShown = [
   'Kerusakan',
   'Lain-lain',
 ];
+
+const String initialDeviceFunctionality = 'Cetak Tiket';
+List<String> deviceFunctionalities = [
+  'Cetak Tiket',
+  'Cetak Struk',
+  'Cetak Gelang'
+];

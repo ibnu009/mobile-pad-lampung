@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:pad_lampung/core/data/model/response/ticket_list_response.dart';
 import 'package:pad_lampung/core/theme/app_primary_theme.dart';
 
+import '../../components/dialog/dialog_show_qr.dart';
+
 extension TicketExtention on List<Ticket> {
-  List<TableRow> toDataRowPegawai() {
+  List<TableRow> toDataRowPegawai(BuildContext context) {
     List<TableRow> listTableRow = [];
     List<TableRow> listTableRowData = [];
 
@@ -23,7 +25,7 @@ extension TicketExtention on List<Ticket> {
 
     for (int i = 0; i < length; i++){
       print('kepanggil dengan urutan ${(i + 1)}');
-      listTableRowData.add(buildDataRow('TP', this[i].noTransaksi, this[i].scanTime));
+      listTableRowData.add(buildDataRow('TP', this[i].noTransaksi, this[i].scanTime, context));
     }
 
     listTableRow.addAll(listTableRowData.reversed);
@@ -66,21 +68,30 @@ Widget rowTextHeading(String text) {
   );
 }
 
-TableRow buildDataRow(String value1, String value2, String value3) {
+TableRow buildDataRow(String value1, String value2, String value3, BuildContext context) {
   return TableRow(
     children: [
-      Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Text(value1, style: AppTheme.text1,),
+      InkWell(
+        onTap: () => showQrCode(context: context, transactionCode: value2, onSendEmail: (){}),
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Text(value1, style: AppTheme.text1,),
+        ),
       ),
-      Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Text(value2, style: AppTheme.text1),
+      InkWell(
+        onTap: () => showQrCode(context: context, transactionCode: value2, onSendEmail: (){}),
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Text(value2, style: AppTheme.text1),
+        ),
       ),
-      Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Text(
-          value3, style: AppTheme.text1
+      InkWell(
+        onTap: () => showQrCode(context: context, transactionCode: value2, onSendEmail: (){}),
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Text(
+            value3, style: AppTheme.text1
+          ),
         ),
       )
     ],

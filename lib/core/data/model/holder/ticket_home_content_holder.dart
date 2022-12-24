@@ -5,10 +5,13 @@ class TicketHomeContentHolder {
     required this.wisataName,
     required this.jumlahTiketTerjual,
     required this.quota,
+    required this.totalTunai,
+    required this.totalNonTunai,
   });
 
   String wisataName;
   int jumlahTiketTerjual;
   int quota;
-
+  int totalTunai;
+  int totalNonTunai;
 }

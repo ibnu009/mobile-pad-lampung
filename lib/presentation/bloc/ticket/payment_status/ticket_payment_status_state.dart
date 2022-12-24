@@ -6,11 +6,17 @@ class LoadingTicketPaymentStatus extends TicketPaymentStatusState {}
 
 class SuccessShowTicketPayment extends TicketPaymentStatusState {
   final List<String> ticketCodes;
-  final String wisataName;
-  SuccessShowTicketPayment({required this.ticketCodes, required this.wisataName});
+  final String wisataName, printerTicketName, printerStructName;
+
+  SuccessShowTicketPayment(
+      {required this.printerTicketName,
+      required this.printerStructName,
+      required this.ticketCodes,
+      required this.wisataName});
 }
 
 class FailedShowTicketPayment extends TicketPaymentStatusState {
   String message;
+
   FailedShowTicketPayment(this.message);
 }

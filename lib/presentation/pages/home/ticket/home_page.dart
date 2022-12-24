@@ -18,6 +18,7 @@ import 'package:pad_lampung/presentation/components/generic/loading_widget.dart'
 import 'package:pad_lampung/presentation/pages/auth/login_page.dart';
 import 'package:pad_lampung/presentation/pages/booking/ticket/online_ticket_booking_page.dart';
 import 'package:pad_lampung/presentation/pages/home/ticket/widget/data_holder_widget.dart';
+import 'package:pad_lampung/presentation/pages/home/ticket/widget/income_report_widget.dart';
 import 'package:pad_lampung/presentation/pages/home/ticket/widget/location_holder_widget.dart';
 import 'package:pad_lampung/presentation/utils/extension/date_time_ext.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -119,6 +120,11 @@ class _HomePageState extends State<HomePageTicket> {
               date: DateTime.now().toFormattedDate(),
               location: data.wisataName,
             ),
+
+            const SizedBox(height: 16,),
+
+            IncomeReportWidget(onlineIncome: data.totalNonTunai, offlineIncome: data.totalTunai),
+
             Padding(
               padding: EdgeInsets.symmetric(vertical: 16.0),
               child: DataHolderWidget(
@@ -153,8 +159,8 @@ class _HomePageState extends State<HomePageTicket> {
                             const Text('Show'),
                             GenericDropdown(
                               selectedItem: selectedItem,
-                              items: dataShownItem,
                               height: 40,
+                              items: dataShownItem,
                               onChanged: (String? value) {
                                 setState(() {
                                   selectedItem = value ?? initialDataShown;
@@ -195,7 +201,7 @@ class _HomePageState extends State<HomePageTicket> {
                                 : Table(
                               defaultVerticalAlignment:
                               TableCellVerticalAlignment.middle,
-                              children: state.data.toDataRowPegawai(),
+                              children: state.data.toDataRowPegawai(context),
                             );
                           }
                           if (state is LoadingTicketPagingState) {

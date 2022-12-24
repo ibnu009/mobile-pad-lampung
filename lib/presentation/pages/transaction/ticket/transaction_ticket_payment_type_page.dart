@@ -14,8 +14,8 @@ import '../../../components/dialog/dialog_component.dart';
 import '../../../components/input/generic_text_input_no_border.dart';
 
 class TransactionTicketPaymentTypePage extends StatefulWidget {
-  final int idTarif, quantity;
-  const TransactionTicketPaymentTypePage({Key? key, required this.idTarif, required this.quantity}) : super(key: key);
+  final int idTarif, quantity, price;
+  const TransactionTicketPaymentTypePage({Key? key, required this.idTarif, required this.quantity, required this.price}) : super(key: key);
 
   @override
   State<TransactionTicketPaymentTypePage> createState() =>
@@ -119,6 +119,6 @@ class _TransactionTicketPaymentTypePageState
   void onSuccess(String message) {
     Navigator.pop(context);
     Navigator.push(context,
-        CupertinoPageRoute(builder: (c) => PostTicketTransactionPage(transactionNumber: message,)));
+        CupertinoPageRoute(builder: (c) => PostTicketTransactionPage(transactionNumber: message, price: widget.price)));
   }
 }

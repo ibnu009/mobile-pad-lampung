@@ -4,7 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:pad_lampung/presentation/bloc/park/detail/parking_detail_bloc.dart';
 import 'package:pad_lampung/presentation/bloc/park/home/park_home_bloc.dart';
 import 'package:pad_lampung/presentation/bloc/park/park_bloc.dart';
+import 'package:pad_lampung/presentation/bloc/setting/setting_bloc.dart';
 import 'package:pad_lampung/presentation/bloc/ticket/detail/ticket_detail_bloc.dart';
+import 'package:pad_lampung/presentation/bloc/ticket/income/offline/ticket_income_offline_bloc.dart';
+import 'package:pad_lampung/presentation/bloc/ticket/income/online/ticket_income_online_bloc.dart';
 import 'package:pad_lampung/presentation/bloc/ticket/online/ticket_online_bloc.dart';
 import 'package:pad_lampung/presentation/bloc/ticket/payment_status/ticket_payment_status_bloc.dart';
 import 'package:pad_lampung/presentation/bloc/ticket/scan/ticket_scan_bloc.dart';
@@ -74,7 +77,15 @@ class MyApp extends StatelessWidget {
         BlocProvider(
           create: (_) => di.locator<ParkingPagingBloc>(),
         ),
-
+        BlocProvider(
+          create: (_) => di.locator<SettingBloc>(),
+        ),
+        BlocProvider(
+          create: (_) => di.locator<TicketIncomeOnlineBloc>(),
+        ),
+        BlocProvider(
+          create: (_) => di.locator<TicketIncomeOfflineBloc>(),
+        ),
       ],
 
       child: MaterialApp(

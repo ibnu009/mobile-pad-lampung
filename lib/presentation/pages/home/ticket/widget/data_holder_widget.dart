@@ -127,7 +127,7 @@ class _DataHolderWidgetState extends State<DataHolderWidget> {
         style: const TextStyle(fontSize: 13),
       ),
       trailing:
-          Text("$currentCounter / $max Orang", style: AppTheme.smallTitle),
+          Text("$currentCounter Orang", style: AppTheme.smallTitle),
     );
   }
 

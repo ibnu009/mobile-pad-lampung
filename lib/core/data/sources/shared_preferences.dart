@@ -4,10 +4,15 @@ const tokenKey = 'token.key';
 const wisataIdKey = 'wisataId.Key';
 const wisataNameKey = 'wisataName.Key';
 const petugasEmailKey = 'petugasEmail.Key';
+const petugasNameKey = 'petugasName.Key';
 const petugasNoTelpKey = 'petugasNoTelp.Key';
 
-const userTypeKey = 'userType.key';
+//Printer key
+const printerTicketKey = 'printerTicket.Key';
+const printerStructKey = 'printerStruct.Key';
+const printerGelangKey = 'printerGelang.Key';
 
+const userTypeKey = 'userType.key';
 const isIntroducedKey = 'is.introduced';
 
 class AppPreferences {
