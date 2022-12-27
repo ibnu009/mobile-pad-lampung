@@ -150,10 +150,11 @@ class LoginPageState extends State<LoginPage> {
     //     .read<LoginBloc>()
     //     .add(LoginUser(email: 'lorem@gmail.com', password: 'lorem123'));
     //
+    //
 
-    context
-        .read<LoginBloc>()
-            .add(LoginUser(email: 'mobile@gmail.com', password: 'mobile123'));
+    // context
+    //     .read<LoginBloc>()
+    //         .add(LoginUser(email: 'mobile@gmail.com', password: 'mobile123'));
 
     if (_formKey.currentState!.validate()) {
       String? email = _emailInputController?.value.text ?? "";

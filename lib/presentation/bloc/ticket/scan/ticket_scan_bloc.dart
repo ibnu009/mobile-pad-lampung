@@ -15,7 +15,7 @@ class TicketScanBloc extends Bloc<TicketScanEvent, TicketScanState> {
       emit(LoadingTicketScan());
       String token = await storage.readSecureData(tokenKey) ?? "";
 
-      var data = await repository.scanTicket(token, event.transactionCode);
+      var data = await repository.scanTicketCode(token, event.transactionCode);
 
       data.fold((failure) {
         emit(FailedScanTicket(failure.error ?? ""));
@@ -24,7 +24,7 @@ class TicketScanBloc extends Bloc<TicketScanEvent, TicketScanState> {
           emit(ShowTokenExpired(data.message));
           return;
         }
-        emit(SuccessScanTicket());
+        emit(SuccessScanTicket(data.message));
       });
     });
   }

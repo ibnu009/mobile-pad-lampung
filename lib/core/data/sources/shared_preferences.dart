@@ -11,6 +11,7 @@ const petugasNoTelpKey = 'petugasNoTelp.Key';
 const printerTicketKey = 'printerTicket.Key';
 const printerStructKey = 'printerStruct.Key';
 const printerGelangKey = 'printerGelang.Key';
+const printerReportKey = 'printerReport.Key';
 
 const userTypeKey = 'userType.key';
 const isIntroducedKey = 'is.introduced';

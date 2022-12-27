@@ -18,7 +18,7 @@ class _GenericPageControllerState extends State<GenericPageController> {
   @override
   void initState() {
     super.initState();
-    totalPage = (widget.totalData.toNearestItemPerPage(widget.itemPerPage) / widget.itemPerPage).round();
+    totalPage = (widget.totalData.toNearestItemPerPage(widget.itemPerPage)! / widget.itemPerPage).round();
 
     print('total page is $totalPage');
   }
@@ -39,7 +39,7 @@ class _GenericPageControllerState extends State<GenericPageController> {
               child: InkWell(
                   onTap: (){
                     setState(() {
-                      totalPage = (widget.totalData.toNearestItemPerPage(widget.itemPerPage) / widget.itemPerPage).round();
+                      totalPage = (widget.totalData.toNearestItemPerPage(widget.itemPerPage)! / widget.itemPerPage).round();
                     });
 
                     print('total page is $totalPage');

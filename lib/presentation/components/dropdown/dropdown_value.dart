@@ -24,5 +24,6 @@ const String initialDeviceFunctionality = 'Cetak Tiket';
 List<String> deviceFunctionalities = [
   'Cetak Tiket',
   'Cetak Struk',
-  'Cetak Gelang'
+  'Cetak Gelang',
+  'Cetak Laporan'
 ];

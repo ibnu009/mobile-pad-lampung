@@ -185,6 +185,29 @@ class TicketRemoteDataSourceImpl extends NetworkService {
     }
   }
 
+  Future<Either<ErrorResponse, GenericResponse>> scanTicket(
+      String accessToken, String noTransaksi) async {
+    try {
+      Map<String, dynamic> body = {
+        "no_transaksi": noTransaksi,
+      };
+
+      var header = {contentType: applicationJson, token: "Bearer $accessToken"};
+      final response = await postMethod(
+          "$BASE_URL/transaksi-booking-tiket/scan",
+          headers: header,
+          body: body);
+
+      return Right(GenericResponse.fromJson(response));
+    } on ServerException catch (e) {
+      var res = json.decode(e.message);
+      return Left(ErrorResponse.fromJson(res));
+    } on Exception catch (ex, stackTrace) {
+      log('Error is $ex', stackTrace: stackTrace);
+      return Left(ErrorResponse(error: 'Terjadi kesalahan'));
+    }
+  }
+
   Future<Either<ErrorResponse, ResponseDetailTicket>> fetchTicketTransactionDetail(
       String accessToken, String transactionNumber) async {
     try {

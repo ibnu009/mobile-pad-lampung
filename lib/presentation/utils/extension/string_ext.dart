@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:crypto/crypto.dart';
+import 'package:intl/intl.dart';
 
 import '../../../common/app_const.dart';
 
@@ -17,6 +18,14 @@ extension StringConverter on String {
     } else {
       return false;
     }
+  }
+
+  String formatToOtherDate({String? format}){
+    if (this == null || this == '-') return '-';
+    DateTime dateTime = DateTime.parse(this);
+
+    String formattedDate = DateFormat(format ?? 'HH:mm').format(dateTime);
+    return formattedDate;
   }
 
   int toVehicleId() {

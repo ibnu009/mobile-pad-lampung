@@ -12,6 +12,8 @@ import 'package:pad_lampung/presentation/components/button/primary_button.dart';
 import 'package:pad_lampung/presentation/components/dialog/dialog_component.dart';
 import 'package:pad_lampung/presentation/components/input/generic_text_input_no_border.dart';
 import 'package:pad_lampung/presentation/pages/booking/ticket/ticket_checkout_page.dart';
+import 'package:pad_lampung/presentation/pages/detail/success_park_page.dart';
+import 'package:pad_lampung/presentation/pages/transaction/ticket/success_scan_ticket_page.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -58,6 +60,15 @@ class _ScanOnlineBookingTicketPageState
 
         if (state is SuccessScanTicket) {
           Navigator.pop(context);
+
+          if (state.message == "Transaksi Booking Tiket berhasil di scan"){
+            Navigator.push(
+                context,
+                CupertinoPageRoute(
+                    builder: (c) => const SuccessScanTicketPage()));
+            return;
+          }
+
           Navigator.push(
               context,
               CupertinoPageRoute(

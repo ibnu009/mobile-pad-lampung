@@ -30,12 +30,17 @@ class SplashScreenState extends State<SplashScreen> {
     return BlocListener(
       bloc: context.read<StarterBloc>(),
       listener: (ctx, state) {
+
+        print('state is $state');
+
         if (state is NavigateToHomeTicket) {
           Navigator.pushReplacement(context, CupertinoPageRoute(builder: (c) => const HomePageTicket()));
+          return;
         }
 
         if (state is NavigateToHomeParking) {
           Navigator.pushReplacement(context, CupertinoPageRoute(builder: (c) => const HomePage()));
+          return;
         }
 
         Navigator.pushReplacement(context, CupertinoPageRoute(builder: (c) => const LoginPage()));

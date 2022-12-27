@@ -96,6 +96,11 @@ class TicketRepository {
     return dataSource.scanOnlineTicket(accessToken, noTransaksi);
   }
 
+  Future<Either<ErrorResponse, GenericResponse>> scanTicketCode(
+      String accessToken, String noTransaksi) async {
+    return dataSource.scanTicket(accessToken, noTransaksi);
+  }
+
   Future<Either<ErrorResponse, ResponseDetailTicket>> fetchTicketTransactionDetail(
       String accessToken, String noTransaksi) async {
     return dataSource.fetchTicketTransactionDetail(accessToken, noTransaksi);
