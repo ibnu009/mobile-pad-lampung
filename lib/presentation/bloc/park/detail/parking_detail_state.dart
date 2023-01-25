@@ -16,3 +16,8 @@ class FailedShowParkingDetail extends ParkingDetailState {
   String message;
   FailedShowParkingDetail(this.message);
 }
+
+class ShowTokenExpiredParkirDetail extends ParkingDetailState {
+  String message;
+  ShowTokenExpiredParkirDetail(this.message);
+}

@@ -17,7 +17,8 @@ class TicketIncomeOfflineBloc
       String token = await storage.readSecureData(tokenKey) ?? "";
       String idWisata = await storage.readSecureData(wisataIdKey) ?? "";
       String wisataName = await storage.readSecureData(wisataNameKey) ?? "";
-      String reportDevice = await storage.readSecureData(printerReportKey) ?? "";
+      String reportDevice =
+          await storage.readSecureData(printerReportKey) ?? "";
       String petugasName = await storage.readSecureData(petugasNameKey) ?? "";
 
       var data = await repository.fetchOfflineIncomeTicket(
@@ -31,13 +32,13 @@ class TicketIncomeOfflineBloc
           return;
         }
         emit(SuccessShowOfflineTicketIncome(
-          data: data.data,
-          totalData: data.length,
-          grandTotal: data.total,
-          wisataName: wisataName,
-          operatorName: petugasName,
-          deviceName: reportDevice
-        ));
+            data: data.data,
+            totalData: data.length,
+            grandTotal: data.grandTotal,
+            wisataName: wisataName,
+            operatorName: data.namaPegawai,
+            deviceName: reportDevice,
+            total: data.total));
       });
     });
   }

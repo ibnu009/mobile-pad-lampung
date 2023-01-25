@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pad_lampung/core/data/model/holder/ticket_home_content_holder.dart';
 import 'package:pad_lampung/core/data/sources/shared_preferences.dart';
@@ -18,30 +20,38 @@ class TicketHomeBloc extends Bloc<TicketHomeEvent, TicketHomeState> {
       String idWisata = await storage.readSecureData(wisataIdKey) ?? "";
       String wisataName = await storage.readSecureData(wisataNameKey) ?? "";
 
-      var data = await repository.fetchTicketHomeContent(token, idWisata);
-      var dataTotal = await repository.fetchTicketIncomeTotal(token, idWisata);
+      try {
+        var data = await repository.fetchTicketHomeContent(token, idWisata);
+        var dataTotal = await repository.fetchTicketIncomeTotal(token, idWisata);
 
-      data.fold((failure) {
-        emit(FailedShowTicketQuota(failure.error ?? ""));
-      }, (data) {
-        dataTotal.fold((failure) {
+        data.fold((failure) {
+          print('failure data is ${failure.error}');
           emit(FailedShowTicketQuota(failure.error ?? ""));
-        }, (dataTotalResponse) {
-          if (data.code == 401) {
-            emit(ShowTokenExpiredHome(data.message));
-            return;
-          }
+        }, (data) {
+          dataTotal.fold((failure) {
+            print('failure dataTotal is $failure');
+            emit(FailedShowTicketQuota(failure.error ?? ""));
+          }, (dataTotalResponse) {
+            if (data.code == 401 || dataTotalResponse.code == 401) {
+              emit(ShowTokenExpiredHome(data.message));
+              return;
+            }
 
-          TicketHomeContentHolder dataHolder = TicketHomeContentHolder(
-              wisataName: wisataName,
-              jumlahTiketTerjual: data.data?.jumlahTiketTerjual ?? 0,
-              quota: data.data?.quota ?? 0,
-              totalTunai: dataTotalResponse.totalOffline,
-              totalNonTunai: dataTotalResponse.totalOnline);
+            TicketHomeContentHolder dataHolder = TicketHomeContentHolder(
+                wisataName: wisataName,
+                jumlahTiketTerjual: data.data[1].jumlahTiketTerjual,
+                jumlahTransaksi: data.transactionTotal,
+                quota: data.data[0].quota,
+                totalTunai: dataTotalResponse.totalOffline,
+                totalNonTunai: dataTotalResponse.totalOnline);
 
-          emit(SuccessShowTicketQuota(dataHolder));
+            emit(SuccessShowTicketQuota(dataHolder));
+          });
         });
-      });
+      } catch (e) {
+        log(e.toString());
+        emit(FailedShowTicketQuota("Terjadi kesalahan"));
+      }
     });
   }
 }

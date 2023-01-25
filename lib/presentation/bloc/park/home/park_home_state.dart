@@ -1,4 +1,6 @@
 
+import 'package:pad_lampung/core/data/model/holder/parking_home_content_holder.dart';
+
 import '../../../../core/data/model/response/parking_response.dart';
 
 abstract class ParkingHomeState {}
@@ -8,7 +10,7 @@ class InitiateParkingHomeState extends ParkingHomeState {}
 class LoadingParkingHome extends ParkingHomeState {}
 
 class SuccessShowParkingingData extends ParkingHomeState {
-  final List<ParkingData> data;
+  final ParkingHomeContentHolder data;
   SuccessShowParkingingData(this.data);
 }
 

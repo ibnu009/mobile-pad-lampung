@@ -114,12 +114,16 @@ abstract class NetworkService {
       debugPrint('REQUEST IS ${request.files.single} with body ${request.fields}');
 
       var response = await request.send().then(http.Response.fromStream);
+      logger.d('Status code is ${response.statusCode}');
+
+      logger.d(response);
+      logger.d('Response raw ${response.body}');
       var res = jsonDecode(response.body);
 
       logger.d(endPoint);
       logger.d(header);
       logger.d(body);
-      logger.d(res);
+      logger.d('Res is $res');
       return res;
     } on SocketException {
       throw Exception("Connection Failed");
@@ -172,8 +176,10 @@ abstract class NetworkService {
       [Map<String, String>? headers]) async {
     try {
       final response = await http.delete(Uri.parse(endPoint), headers: headers);
-      var res = json.decode(response.body);
       logger.d(endPoint);
+      logger.d('Response raw ${response.body}');
+
+      var res = json.decode(response.body);
       logger.d(res);
       return res;
     } on SocketException {

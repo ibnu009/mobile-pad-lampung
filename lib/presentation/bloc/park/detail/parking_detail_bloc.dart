@@ -22,6 +22,12 @@ class ParkingDetailBloc extends Bloc<ParkingDetailEvent, ParkingDetailState> {
       data.fold((failure) {
         emit(FailedShowParkingDetail(failure.error ?? ""));
       }, (response) {
+
+        if (response.code == 401) {
+          emit(ShowTokenExpiredParkirDetail(response.message));
+          return;
+        }
+
         emit(SuccessShowParkingDetail(response.data));
       });
     });

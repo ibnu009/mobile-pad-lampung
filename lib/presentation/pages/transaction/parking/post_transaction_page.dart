@@ -1,7 +1,10 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:pad_lampung/core/theme/app_primary_theme.dart';
 import 'package:pad_lampung/presentation/components/button/primary_button.dart';
 import 'package:pad_lampung/presentation/components/generic/loading_widget.dart';
+
+import '../../home/parking/home_page.dart';
 
 class PostTransactionPage extends StatefulWidget {
   const PostTransactionPage({Key? key}) : super(key: key);
@@ -34,7 +37,7 @@ class _PostTransactionPageState extends State<PostTransactionPage> {
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 32),
               child: Text(
-                'Menunggu Pembayaran...',
+                'Terimakasih..',
                 style: AppTheme.subTitle,
               ),
             ),
@@ -42,12 +45,12 @@ class _PostTransactionPageState extends State<PostTransactionPage> {
                 context: context,
                 isEnabled: true,
                 onPressed: () {
-                  Navigator.pop(context);
+                  Navigator.pushReplacement(context, CupertinoPageRoute(builder: (c) => const HomePage()));
                 },
-                color: Colors.red,
+                width: MediaQuery.of(context).size.width * 0.7,
                 horizontalPadding: 32,
                 height: 45,
-                text: 'Batal'),
+                text: 'Kembali Ke Beranda'),
             const Spacer(),
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 32.0),

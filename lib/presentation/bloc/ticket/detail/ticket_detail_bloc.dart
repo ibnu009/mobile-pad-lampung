@@ -13,19 +13,23 @@ class TicketDetailBloc extends Bloc<TicketDetailEvent, TicketDetailState> {
 
   TicketDetailBloc({required this.repository, required this.storage})
       : super(InitiateTicketDetailState()) {
-
     on<GetTicketDetail>((event, emit) async {
       emit(LoadingTicketDetail());
       String token = await storage.readSecureData(tokenKey) ?? "";
+      String ticketName = await storage.readSecureData(printerTicketKey) ?? "";
+      String wisataName = await storage.readSecureData(wisataNameKey) ?? "";
 
-      var data = await repository.fetchTicketTransactionDetail(token, event.transactionNumber);
+      var data = await repository.fetchTicketTransactionDetail(
+          token, event.transactionNumber);
       data.fold((failure) {
         emit(FailedShowTicketDetail(failure.error ?? ""));
       }, (response) {
         emit(SuccessShowTicketDetail(
-            response.data.transaksiBookingTiket.scanTime, response.data.transaksiBookingTiket.jumlah));
+            response.data.transaksiBookingTiket.scanTime,
+            response.data.transaksiBookingTiket.jumlah,
+            ticketName,
+            wisataName));
       });
     });
-
   }
 }

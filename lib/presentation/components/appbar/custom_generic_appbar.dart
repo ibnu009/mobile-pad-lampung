@@ -73,7 +73,7 @@ class _HomeAppBarState extends State<HomeAppBar> {
               _onMenuItemSelected(value as int);
             },
             child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 12.0),
+                padding: const EdgeInsets.only(left: 8),
                 child: Avatar(url: widget.url)),
             itemBuilder: (ctx) => [
               _buildPopupMenuItem('Profile', Icons.person_outline_outlined,
@@ -191,7 +191,7 @@ class _GenericAppBarState extends State<GenericAppBar> {
               _onMenuItemSelected(value as int);
             },
             child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 12.0),
+                padding: const EdgeInsets.only(left: 8),
                 child: Avatar(url: widget.url)),
             itemBuilder: (ctx) => [
               _buildPopupMenuItem('Profile', Icons.person_outline_outlined,

@@ -16,6 +16,8 @@ class ParkingPagingBloc extends Bloc<ParkingPagingEvent, ParkingPagingState> {
       String token = await storage.readSecureData(tokenKey) ?? "";
       String idWisata = await storage.readSecureData(wisataIdKey) ?? "";
 
+      print('Value limit is ${event.limit} and offset is ${event.offset}');
+
       var dataTransaction = await repository.fetchParkingData(
         token,
         idWisata,

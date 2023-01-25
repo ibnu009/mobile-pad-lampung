@@ -5,9 +5,6 @@ import 'package:number_paginator/number_paginator.dart';
 import 'package:pad_lampung/core/theme/app_primary_theme.dart';
 import 'package:pad_lampung/presentation/bloc/ticket/income/online/ticket_income_online_bloc.dart';
 import 'package:pad_lampung/presentation/bloc/ticket/income/online/ticket_income_online_event.dart';
-import 'package:pad_lampung/presentation/bloc/ticket/online/ticket_online_bloc.dart';
-import 'package:pad_lampung/presentation/components/button/icon_primary_button.dart';
-import 'package:pad_lampung/presentation/components/button/primary_button.dart';
 import 'package:pad_lampung/presentation/components/dropdown/dropdown_value.dart';
 import 'package:pad_lampung/presentation/components/dropdown/generic_dropdown.dart';
 import 'package:pad_lampung/presentation/components/generic/loading_widget.dart';
@@ -58,12 +55,13 @@ class _OnlineIncomeTabState extends State<OnlineIncomeTab> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Row(
+                        mainAxisSize: MainAxisSize.min,
                         children: [
                           Padding(
-                            padding: const EdgeInsets.fromLTRB(16, 16, 0, 4),
+                            padding: const EdgeInsets.fromLTRB(16, 16, 0, 0),
                             child: Text(
                               DateTime.now().toFormattedDate(),
-                              style: AppTheme.bodyText,
+                              style: AppTheme.subTitle,
                             ),
                           ),
                           const Spacer(),
@@ -71,6 +69,28 @@ class _OnlineIncomeTabState extends State<OnlineIncomeTab> {
                             padding: const EdgeInsets.fromLTRB(0, 16, 16, 4),
                             child: Text(
                               state.grandTotal.toRupiah(),
+                              style: AppTheme.subTitle,
+                            ),
+                          ),
+                        ],
+                      ),
+                      Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.fromLTRB(16, 0, 0, 4),
+                            child: Text(
+                              state.operatorName,
+                              style: AppTheme.bodyText.copyWith(
+                                  fontSize: 13
+                              ),
+                            ),
+                          ),
+                          const Spacer(),
+                          Padding(
+                            padding: const EdgeInsets.fromLTRB(0, 0, 16, 4),
+                            child: Text(
+                              state.total.toRupiah(),
                               style: AppTheme.smallTitle,
                             ),
                           ),
@@ -106,7 +126,7 @@ class _OnlineIncomeTabState extends State<OnlineIncomeTab> {
                           : Table(
                               defaultVerticalAlignment:
                                   TableCellVerticalAlignment.middle,
-                              children: state.data.toDataRow(),
+                              children: state.data.toDataRow(offset),
                             ),
                     ],
                   ),

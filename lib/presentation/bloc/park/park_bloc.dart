@@ -34,16 +34,17 @@ class ParkBloc extends Bloc<ParkEvent, ParkState> {
       delegate?.onLoading();
       String token = await storage.readSecureData(tokenKey) ?? "";
       String idWisata = await storage.readSecureData(wisataIdKey) ?? "1";
+      String wisataName = await storage.readSecureData(wisataNameKey) ?? "";
+      String ticketPrinter = await storage.readSecureData(printerTicketKey) ?? "";
+
       print('token adalah $token dan id is ${event.idJenisKendaraan}');
-
-
 
       var data = await repository.checkInTanpaBooking(
           event.fotoKendaraan, int.parse(idWisata), event.idJenisKendaraan, token);
       data.fold((failure) {
         delegate?.onFailed(failure.error ?? "");
       }, (success) {
-        delegate?.onSuccess('');
+        delegate?.onSuccess('$wisataName, ${success.data}, $ticketPrinter');
       });
     });
 

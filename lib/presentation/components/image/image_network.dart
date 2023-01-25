@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../generic/loading_widget.dart';
 
-const String defaultImage = "https://blue.kumparan.com/image/upload/fl_progressive,fl_lossy,c_fill,q_auto:best,w_640/v1578620671/wwa6sd5wyp1wxjrder5i.png";
+const String defaultImage = "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3f/Placeholder_view_vector.svg/681px-Placeholder_view_vector.svg.png";
 class GenericImageNetwork extends StatelessWidget {
   final String? imageUrl;
   final double? width, height;
@@ -13,7 +13,7 @@ class GenericImageNetwork extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Image.network(
-      imageUrl ?? defaultImage,
+      imageUrl != null ? 'https://backend-pad.abera.id/storage/$imageUrl' : defaultImage,
       width: width,
       height: height,
       fit: BoxFit.cover,

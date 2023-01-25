@@ -96,13 +96,9 @@ class _IncomePageState extends State<IncomePage>
     Color colTab;
     Color colText;
     if (index == currTab) {
-      // colTab = Colors.white;
-      // colText = AppTheme.primaryColor;
       colTab = AppTheme.primaryColor;
       colText = Colors.white;
     } else {
-      // colTab = AppTheme.primaryColor;
-      // colText = Colors.white;
       colTab = Colors.white;
       colText = AppTheme.primaryColor;
     }

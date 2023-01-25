@@ -18,7 +18,7 @@ Map<int, Color> color =
   900:const Color.fromRGBO(104,108,255, 1),
 };
 
-MaterialColor primaryThemeColor = MaterialColor(0xFF1EC28B, color);
+MaterialColor primaryThemeColor = MaterialColor(0xFF686CFF, color);
 
 class AppTheme {
   static const Color primaryColor = Color(0xFF686CFF);

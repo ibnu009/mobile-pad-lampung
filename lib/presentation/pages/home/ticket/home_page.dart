@@ -33,13 +33,11 @@ class HomePageTicket extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePageTicket> {
-
   String selectedItem = initialDataShown;
 
   int currentPage = 0;
   int itemPerPage = 5;
   int offset = 0;
-
 
   @override
   void initState() {
@@ -64,6 +62,19 @@ class _HomePageState extends State<HomePageTicket> {
               });
           return;
         }
+
+        if (state is FailedShowTicketQuota) {
+          showFailedDialog(
+              context: context,
+              title: "Oops!",
+              message: state.message,
+              onTap: () {
+                Navigator.pop(context);
+                Navigator.pushReplacement(context,
+                    CupertinoPageRoute(builder: (c) => const LoginPage()));
+              });
+          return;
+        }
       },
       child: child,
     );
@@ -78,6 +89,8 @@ class _HomePageState extends State<HomePageTicket> {
           child: BlocBuilder(
             bloc: this.context.read<TicketHomeBloc>(),
             builder: (ctx, state) {
+              print('state is $state');
+
               if (state is SuccessShowTicketQuota) {
                 return buildContent(state.data);
               }
@@ -97,13 +110,14 @@ class _HomePageState extends State<HomePageTicket> {
   Widget buildContent(TicketHomeContentHolder data) {
     return RefreshIndicator(
       onRefresh: () async {
-        context.read<TicketHomeBloc>().add(GetTicketQuota());
-        context.read<TicketPagingBloc>().add(GetTicket(offset, itemPerPage));
         setState(() {
           currentPage = 0;
           itemPerPage = 5;
           selectedItem = initialDataShown;
         });
+
+        context.read<TicketHomeBloc>().add(GetTicketQuota());
+        context.read<TicketPagingBloc>().add(GetTicket(offset, itemPerPage));
       },
       child: SingleChildScrollView(
         physics: const AlwaysScrollableScrollPhysics(),
@@ -120,19 +134,21 @@ class _HomePageState extends State<HomePageTicket> {
               date: DateTime.now().toFormattedDate(),
               location: data.wisataName,
             ),
-
-            const SizedBox(height: 16,),
-
-            IncomeReportWidget(onlineIncome: data.totalNonTunai, offlineIncome: data.totalTunai),
-
+            const SizedBox(
+              height: 16,
+            ),
+            IncomeReportWidget(
+                onlineIncome: data.totalNonTunai,
+                offlineIncome: data.totalTunai),
             Padding(
               padding: EdgeInsets.symmetric(vertical: 16.0),
               child: DataHolderWidget(
-                  currentTotal: data.jumlahTiketTerjual,
-                  quota: data.quota,
-                  wisataName: data.wisataName),
+                currentTotal: data.jumlahTiketTerjual,
+                quota: data.quota,
+                wisataName: data.wisataName,
+                transactionTotal: data.jumlahTransaksi,
+              ),
             ),
-
             Column(
               children: [
                 Container(
@@ -148,8 +164,8 @@ class _HomePageState extends State<HomePageTicket> {
                         padding: const EdgeInsets.fromLTRB(16, 16, 16, 4),
                         child: Text(
                           'Data Ticketing',
-                          style:
-                          AppTheme.smallTitle.copyWith(fontWeight: FontWeight.w700),
+                          style: AppTheme.smallTitle
+                              .copyWith(fontWeight: FontWeight.w700),
                         ),
                       ),
                       Padding(
@@ -170,22 +186,6 @@ class _HomePageState extends State<HomePageTicket> {
                                 print('onchanged dropdown');
                               },
                             ),
-                            const Spacer(),
-                            FittedBox(
-                              child: PrimaryButton(
-                                  context: context,
-                                  isEnabled: true,
-                                  horizontalPadding: 8,
-                                  onPressed: () {
-                                    Navigator.push(
-                                        context,
-                                        CupertinoPageRoute(
-                                            builder: (c) =>
-                                            const OnlineTicketBookingPage()));
-                                  },
-                                  height: 40,
-                                  text: 'Pesanan Online'),
-                            )
                           ],
                         ),
                       ),
@@ -195,14 +195,15 @@ class _HomePageState extends State<HomePageTicket> {
                           if (state is SuccessShowTicketData) {
                             return state.data.isEmpty
                                 ? const Padding(
-                              padding: EdgeInsets.all(16.0),
-                              child: Center(child: Text('Data kosong')),
-                            )
+                                    padding: EdgeInsets.all(16.0),
+                                    child: Center(child: Text('Data kosong')),
+                                  )
                                 : Table(
-                              defaultVerticalAlignment:
-                              TableCellVerticalAlignment.middle,
-                              children: state.data.toDataRowPegawai(context),
-                            );
+                                    defaultVerticalAlignment:
+                                        TableCellVerticalAlignment.middle,
+                                    children:
+                                        state.data.toDataRowPegawai(context, offset),
+                                  );
                           }
                           if (state is LoadingTicketPagingState) {
                             return const Center(child: LoadingWidget());
@@ -226,8 +227,8 @@ class _HomePageState extends State<HomePageTicket> {
                         margin: const EdgeInsets.all(16),
                         padding: const EdgeInsets.all(16),
                         child: NumberPaginator(
-                          numberPages:
-                          state.totalData.getTotalPageByTotalData(itemPerPage),
+                          numberPages: state.totalData
+                              .getTotalPageByTotalData(itemPerPage),
                           config: NumberPaginatorUIConfig(
                             // default height is 48
                             height: 46,
@@ -236,8 +237,10 @@ class _HomePageState extends State<HomePageTicket> {
                             ),
                             buttonSelectedForegroundColor: Colors.white,
                             buttonUnselectedForegroundColor: Colors.black,
-                            buttonUnselectedBackgroundColor: AppTheme.neutralColor,
-                            buttonSelectedBackgroundColor: AppTheme.primaryColor,
+                            buttonUnselectedBackgroundColor:
+                                AppTheme.neutralColor,
+                            buttonSelectedBackgroundColor:
+                                AppTheme.primaryColor,
                           ),
                           initialPage: currentPage,
                           onPageChange: (int index) {
@@ -246,7 +249,9 @@ class _HomePageState extends State<HomePageTicket> {
                               offset = (index * itemPerPage);
                               currentPage = index;
                             });
-                            context.read<TicketPagingBloc>().add(GetTicket(offset, itemPerPage));
+                            context
+                                .read<TicketPagingBloc>()
+                                .add(GetTicket(offset, itemPerPage));
                           },
                         ),
                       );

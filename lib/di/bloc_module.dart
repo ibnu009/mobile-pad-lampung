@@ -6,6 +6,8 @@ import 'package:pad_lampung/presentation/bloc/setting/setting_bloc.dart';
 import 'package:pad_lampung/presentation/bloc/ticket/income/online/ticket_income_online_bloc.dart';
 import 'package:pad_lampung/presentation/bloc/ticket/online/ticket_online_bloc.dart';
 
+import '../presentation/bloc/forgot_password/forgot_password_bloc.dart';
+import '../presentation/bloc/park/checkin_no_booking/checkin_no_booking_bloc.dart';
 import '../presentation/bloc/park/detail/parking_detail_bloc.dart';
 import '../presentation/bloc/park/park_bloc.dart';
 import '../presentation/bloc/starter/starter_bloc.dart';
@@ -16,6 +18,8 @@ import '../presentation/bloc/ticket/payment_status/ticket_payment_status_bloc.da
 import '../presentation/bloc/ticket/price/ticket_price_bloc.dart';
 import '../presentation/bloc/ticket/scan/ticket_scan_bloc.dart';
 import '../presentation/bloc/ticket/home/ticket_home_bloc.dart';
+import '../presentation/bloc/xendit/method/method_xendit_bloc.dart';
+import '../presentation/bloc/xendit/payment_xendit_bloc.dart';
 
 void initBlocModule(GetIt locator) {
   //Auth
@@ -25,6 +29,8 @@ void initBlocModule(GetIt locator) {
       () => LoginBloc(repository: locator(), storage: locator()));
   locator.registerFactory(
           () => SettingBloc(storage: locator()));
+  locator.registerFactory(
+          () => ForgotPasswordBloc(repository: locator(), storage: locator()));
 
 
   locator.registerFactory(
@@ -33,6 +39,10 @@ void initBlocModule(GetIt locator) {
           () => ParkingHomeBloc(repository: locator(), storage: locator()));
   locator.registerFactory(
           () => ParkingDetailBloc(repository: locator(), storage: locator()));
+  locator.registerFactory(
+          () => CheckInNoBookingBloc(repository: locator(), storage: locator()));
+  locator.registerFactory(
+          () => ParkingPagingBloc(repository: locator(), storage: locator()));
 
   locator.registerFactory(
           () => TicketHomeBloc(repository: locator(), storage: locator()));
@@ -48,13 +58,17 @@ void initBlocModule(GetIt locator) {
           () => TicketDetailBloc(repository: locator(), storage: locator()));
   locator.registerFactory(
           () => TicketPagingBloc(repository: locator(), storage: locator()));
-  locator.registerFactory(
-          () => ParkingPagingBloc(repository: locator(), storage: locator()));
 
   locator.registerFactory(
           () => TicketIncomeOnlineBloc(repository: locator(), storage: locator()));
   locator.registerFactory(
           () => TicketIncomeOfflineBloc(repository: locator(), storage: locator()));
+
+  locator.registerFactory(
+          () => PaymentXenditBloc(repository: locator(), storage: locator()));
+
+  locator.registerFactory(
+          () => MethodXenditBloc(repository: locator(), storage: locator()));
 
 
 

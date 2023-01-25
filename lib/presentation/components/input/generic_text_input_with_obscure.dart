@@ -7,6 +7,7 @@ class GenericTextInputWithObscure extends StatefulWidget {
   final int? maxLines, maxLength;
   final String? hintText, previousPassword;
   final Function(String)? onSubmitted;
+  final Iterable<String>? autoFill;
   final Icon? prefixIcon;
 
   const GenericTextInputWithObscure(
@@ -17,7 +18,9 @@ class GenericTextInputWithObscure extends StatefulWidget {
       required this.inputType,
       this.onSubmitted,
       this.maxLength,
-      this.prefixIcon, this.previousPassword})
+      this.prefixIcon,
+      this.previousPassword,
+      this.autoFill})
       : super(key: key);
 
   @override
@@ -37,6 +40,7 @@ class _GenericTextInputWithObscureState
         showCursor: true,
         obscureText: !isPasswordVisible,
         controller: widget.controller,
+        autofillHints: widget.autoFill,
         keyboardType: widget.inputType,
         maxLines: widget.maxLines,
         maxLength: widget.maxLength,
@@ -51,8 +55,8 @@ class _GenericTextInputWithObscureState
             return "Password harus 6 karakter atau lebih";
           }
 
-          if (widget.previousPassword != null ){
-            if (widget.previousPassword != value){
+          if (widget.previousPassword != null) {
+            if (widget.previousPassword != value) {
               return "Kata sandi tidak sama dengan Kata sandi sebelumnya";
             }
           }

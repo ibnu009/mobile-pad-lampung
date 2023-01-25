@@ -1,9 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:pad_lampung/presentation/bloc/ticket/price/ticket_price_event.dart';
-import 'package:pad_lampung/presentation/pages/transaction/ticket/post_ticket_transaction_page.dart';
 import 'package:pad_lampung/presentation/pages/transaction/ticket/transaction_ticket_payment_type_page.dart';
-import 'package:pad_lampung/presentation/utils/delegate/generic_delegate.dart';
 import 'package:pad_lampung/presentation/utils/extension/int_ext.dart';
 
 import '../../../../core/theme/app_primary_theme.dart';
@@ -11,13 +9,17 @@ import '../../../bloc/ticket/price/ticket_price_bloc.dart';
 import '../../../bloc/ticket/price/ticket_price_state.dart';
 import '../../../components/appbar/custom_generic_appbar.dart';
 import '../../../components/button/primary_button.dart';
-import '../../../components/dialog/dialog_component.dart';
 import '../../../components/generic/loading_widget.dart';
 import '../../../components/input/generic_text_input_no_border.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../home/ticket/home_page.dart';
+
 class TransactionTicketPaymentPage extends StatefulWidget {
-  const TransactionTicketPaymentPage({Key? key}) : super(key: key);
+  final bool? isFromXendit;
+
+  const TransactionTicketPaymentPage({Key? key, this.isFromXendit})
+      : super(key: key);
 
   @override
   State<TransactionTicketPaymentPage> createState() =>
@@ -42,58 +44,71 @@ class _TransactionTicketPaymentPageState
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: AppTheme.canvasColor,
-      body: SafeArea(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            const Padding(
-              padding: EdgeInsets.only(top: 16.0),
-              child: GenericAppBar(url: '', title: 'Tiket'),
-            ),
-            const SizedBox(
-              height: 12,
-            ),
-            buildTransactionItems('Tiket Masuk'),
-            const Spacer(),
-            Container(
-              padding: const EdgeInsets.all(12),
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(8),
+    return WillPopScope(
+      onWillPop: () async {
+        print('called');
+        if (widget.isFromXendit ?? false) {
+          Navigator.pushReplacement(context,
+              CupertinoPageRoute(builder: (ctx) => const HomePageTicket()));
+        } else {
+          print('called pop');
+          Navigator.pop(context);
+        }
+        return false;
+      },
+      child: Scaffold(
+        backgroundColor: AppTheme.canvasColor,
+        body: SafeArea(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              const Padding(
+                padding: EdgeInsets.only(top: 16.0),
+                child: GenericAppBar(url: '', title: 'Tiket'),
               ),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    'Total Pembayaran',
-                    style: AppTheme.subTitle,
-                  ),
-                  Row(
-                    children: [
-                      Text(
-                        total.toRupiah(),
-                        style: AppTheme.title1,
-                      ),
-                      const Spacer(),
-                      PrimaryButton(
-                          context: context,
-                          isEnabled: ticketQuantity != 0,
-                          onPressed: () => handleBookingTicket('QRIS'),
-                          height: 43,
-                          horizontalPadding: 32,
-                          text: 'Bayar')
-                    ],
-                  ),
-                  const SizedBox(
-                    height: 16,
-                  ),
-                ],
+              const SizedBox(
+                height: 12,
               ),
-            )
-          ],
+              buildTransactionItems('Tiket Masuk'),
+              const Spacer(),
+              Container(
+                padding: const EdgeInsets.all(12),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'Total Pembayaran',
+                      style: AppTheme.subTitle,
+                    ),
+                    Row(
+                      children: [
+                        Text(
+                          total.toRupiah(),
+                          style: AppTheme.title1,
+                        ),
+                        const Spacer(),
+                        PrimaryButton(
+                            context: context,
+                            isEnabled: ticketQuantity != 0,
+                            onPressed: () => handleBookingTicket('QRIS'),
+                            height: 43,
+                            horizontalPadding: 32,
+                            text: 'Bayar')
+                      ],
+                    ),
+                    const SizedBox(
+                      height: 16,
+                    ),
+                  ],
+                ),
+              )
+            ],
+          ),
         ),
       ),
     );
@@ -277,8 +292,14 @@ class _TransactionTicketPaymentPageState
       return;
     }
 
-    Navigator.push(context,
-        CupertinoPageRoute(builder: (c) => TransactionTicketPaymentTypePage(idTarif: idTarif, quantity: ticketQuantity, price: ticketPrice,)));
+    Navigator.push(
+        context,
+        CupertinoPageRoute(
+            builder: (c) => TransactionTicketPaymentTypePage(
+                  idTarif: idTarif,
+                  quantity: ticketQuantity,
+                  price: ticketPrice,
+                )));
   }
 
   void calculateTotal() {

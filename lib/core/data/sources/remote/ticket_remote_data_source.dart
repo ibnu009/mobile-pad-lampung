@@ -6,8 +6,11 @@ import 'package:flutter/foundation.dart';
 import 'package:pad_lampung/common/api_path.dart';
 import 'package:pad_lampung/common/app_const.dart';
 import 'package:pad_lampung/core/data/model/request/proses_transaksi_tiket_request.dart';
+import 'package:pad_lampung/core/data/model/request/xendit_create_payment_request.dart';
 import 'package:pad_lampung/core/data/model/response/generic_response.dart';
 import 'package:pad_lampung/core/data/model/response/ticket_income_total_response.dart';
+import 'package:pad_lampung/core/data/model/response/xendit_create_payment_response.dart';
+import 'package:pad_lampung/core/data/model/response/xendit_payment_method_response.dart';
 import 'package:pad_lampung/presentation/utils/extension/date_time_ext.dart';
 
 import '../../../../common/exception.dart';
@@ -19,6 +22,7 @@ import '../../model/response/ticket_income_response.dart';
 import '../../model/response/ticket_list_response.dart';
 import '../../model/response/ticket_price_response.dart';
 import '../../model/response/ticket_quota_response.dart';
+import '../../model/response/xendit_check_payment_response.dart';
 import '../../service/remote/network_service.dart';
 
 class TicketRemoteDataSourceImpl extends NetworkService {
@@ -43,10 +47,12 @@ class TicketRemoteDataSourceImpl extends NetworkService {
 
       return Right(TicketQuotaResponse.fromJson(response));
     } on ServerException catch (e) {
+      print('here');
       var res = json.decode(e.message);
       return Left(ErrorResponse.fromJson(res));
-    } catch (ex) {
-      return Left(ErrorResponse(error: 'Terjadi kesalahan'));
+    } on Exception catch (ex, stackTrace) {
+      debugPrint('Error is $ex. ${stackTrace}');
+      return Left(ErrorResponse(error: 'Terjadi kesalahan pada server..'));
     }
   }
 
@@ -57,8 +63,7 @@ class TicketRemoteDataSourceImpl extends NetworkService {
       String dateNow = DateTime.now().toFormattedDate(format: 'yyyy-MM-dd');
 
       final response = await getMethod(
-          "$BASE_URL/transaksi-booking/report_custom/$dateNow",
-          header);
+          "$BASE_URL/transaksi-booking/report_custom/$dateNow", header);
 
       return Right(ResponseTicketIncomeTotal.fromJson(response));
     } on ServerException catch (e) {
@@ -98,7 +103,7 @@ class TicketRemoteDataSourceImpl extends NetworkService {
       var res = json.decode(e.message);
       return Left(ErrorResponse.fromJson(res));
     } catch (ex) {
-      log('Error is $ex');
+      log('Error processTicketBooking is $ex');
       return Left(ErrorResponse(error: 'Terjadi kesalahan'));
     }
   }
@@ -115,7 +120,7 @@ class TicketRemoteDataSourceImpl extends NetworkService {
       var res = json.decode(e.message);
       return Left(ErrorResponse.fromJson(res));
     } catch (ex) {
-      log('Error is $ex');
+      log('Error checkPaymentStatus is $ex');
       return Left(ErrorResponse(error: 'Terjadi kesalahan'));
     }
   }
@@ -124,7 +129,9 @@ class TicketRemoteDataSourceImpl extends NetworkService {
       String accessToken,
       String idWisata,
       String todayDate,
-      bool isOnline, int offset, int limit) async {
+      bool isOnline,
+      int offset,
+      int limit) async {
     print('isOnline $isOnline');
     try {
       var header = {contentType: applicationJson, token: "Bearer $accessToken"};
@@ -145,7 +152,9 @@ class TicketRemoteDataSourceImpl extends NetworkService {
       String accessToken,
       String idWisata,
       String todayDate,
-      bool isOnline, int offset, int limit) async {
+      bool isOnline,
+      int offset,
+      int limit) async {
     print('isOnline $isOnline');
     try {
       var header = {contentType: applicationJson, token: "Bearer $accessToken"};
@@ -208,14 +217,81 @@ class TicketRemoteDataSourceImpl extends NetworkService {
     }
   }
 
-  Future<Either<ErrorResponse, ResponseDetailTicket>> fetchTicketTransactionDetail(
-      String accessToken, String transactionNumber) async {
+  Future<Either<ErrorResponse, ResponseDetailTicket>>
+      fetchTicketTransactionDetail(
+          String accessToken, String transactionNumber) async {
     try {
       var header = {contentType: applicationJson, token: "Bearer $accessToken"};
       final response = await getMethod(
           "$BASE_URL/transaksi-booking/get-by-no-transaksi/$transactionNumber",
           header);
       return Right(ResponseDetailTicket.fromJson(response));
+    } on ServerException catch (e) {
+      var res = json.decode(e.message);
+      return Left(ErrorResponse.fromJson(res));
+    } on Exception catch (ex, stackTrace) {
+      log('Error is $ex', stackTrace: stackTrace);
+      return Left(ErrorResponse(error: 'Terjadi kesalahan'));
+    }
+  }
+
+  Future<Either<ErrorResponse, XenditCreatePaymentResponse>>
+      createPaymentXendit(
+          String accessToken, XenditCreatePaymentRequest request) async {
+    try {
+      var header = {contentType: applicationJson, token: "Bearer $accessToken"};
+      final response = await postMethod("$BASE_URL/payment/create",
+          headers: header, body: request.toJson());
+      return Right(XenditCreatePaymentResponse.fromJson(response));
+    } on ServerException catch (e) {
+      var res = json.decode(e.message);
+      return Left(ErrorResponse.fromJson(res));
+    } on Exception catch (ex, stackTrace) {
+      log('Error is $ex', stackTrace: stackTrace);
+      return Left(ErrorResponse(error: 'Terjadi kesalahan'));
+    }
+  }
+
+  Future<Either<ErrorResponse, XenditCheckPaymentResponse>> checkPaymentXendit(
+      String accessToken, String transactionNumber, String idInvoice) async {
+    try {
+      var header = {contentType: applicationJson, token: "Bearer $accessToken"};
+      final response = await getMethod(
+          "$BASE_URL/payment/$idInvoice/$transactionNumber", header);
+      return Right(XenditCheckPaymentResponse.fromJson(response));
+    } on ServerException catch (e) {
+      var res = json.decode(e.message);
+      return Left(ErrorResponse.fromJson(res));
+    } on Exception catch (ex, stackTrace) {
+      log('Error is $ex', stackTrace: stackTrace);
+      return Left(ErrorResponse(error: 'Terjadi kesalahan'));
+    }
+  }
+
+  Future<Either<ErrorResponse, GenericResponse>> deletePaymentXendit(
+      String accessToken, String idInvoice) async {
+    try {
+      var header = {contentType: applicationJson, token: "Bearer $accessToken"};
+      final response =
+          await deleteMethod("$BASE_URL/payment/$idInvoice", header);
+      return Right(GenericResponse.fromJson(response));
+    } on ServerException catch (e) {
+      var res = json.decode(e.message);
+      return Left(ErrorResponse.fromJson(res));
+    } on Exception catch (ex, stackTrace) {
+      log('Error is $ex', stackTrace: stackTrace);
+      return Left(ErrorResponse(error: 'Terjadi kesalahan'));
+    }
+  }
+
+  Future<Either<ErrorResponse, XenditPaymentMethodResponse>> fetchXenditPaymentMethod(
+      String accessToken) async {
+    try {
+      var header = {contentType: applicationJson, token: "Bearer $accessToken"};
+      final response = await getMethod(
+          "$BASE_URL/payment-method",
+          header);
+      return Right(XenditPaymentMethodResponse.fromJson(response));
     } on ServerException catch (e) {
       var res = json.decode(e.message);
       return Left(ErrorResponse.fromJson(res));

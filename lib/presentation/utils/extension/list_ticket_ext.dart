@@ -5,7 +5,7 @@ import 'package:pad_lampung/core/theme/app_primary_theme.dart';
 import '../../components/dialog/dialog_show_qr.dart';
 
 extension TicketExtention on List<Ticket> {
-  List<TableRow> toDataRowPegawai(BuildContext context) {
+  List<TableRow> toDataRowPegawai(BuildContext context, int offset) {
     List<TableRow> listTableRow = [];
     List<TableRow> listTableRowData = [];
 
@@ -18,17 +18,18 @@ extension TicketExtention on List<Ticket> {
           ),
         ),
         children: [
-          rowTextHeading('JENIS'),
+          rowTextHeading('NO'),
           rowTextHeading('ID PESANAN'),
           rowTextHeading('MASUK'),
+          rowTextHeading('TIKET'),
         ]),);
 
     for (int i = 0; i < length; i++){
-      print('kepanggil dengan urutan ${(i + 1)}');
-      listTableRowData.add(buildDataRow('TP', this[i].noTransaksi, this[i].scanTime, context));
+      print('kepanggil dengan urutan ${((i + 1) + offset)}');
+      listTableRowData.add(buildDataRow('${(i + 1) + offset}',this[i].noTransaksi, this[i].scanTime, this[i].quantity.toString(), context));
     }
 
-    listTableRow.addAll(listTableRowData.reversed);
+    listTableRow.addAll(listTableRowData);
     return listTableRow;
   }
 
@@ -53,7 +54,7 @@ extension TicketExtention on List<Ticket> {
       listTableRowData.add(buildDataRowOnline(this[i].noTransaksi, this[i].noTelp , this[i].scanTime));
     }
 
-    listTableRow.addAll(listTableRowData.reversed);
+    listTableRow.addAll(listTableRowData);
     return listTableRow;
   }
 }
@@ -64,25 +65,26 @@ Widget rowTextHeading(String text) {
     child: Text(
       text,
       style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 12),
+        textAlign: TextAlign.center
     ),
   );
 }
 
-TableRow buildDataRow(String value1, String value2, String value3, BuildContext context) {
+TableRow buildDataRow(String value1, String value2, String value3, String value4, BuildContext context) {
   return TableRow(
     children: [
       InkWell(
         onTap: () => showQrCode(context: context, transactionCode: value2, onSendEmail: (){}),
         child: Padding(
           padding: const EdgeInsets.all(8.0),
-          child: Text(value1, style: AppTheme.text1,),
+          child: Text(value1, style: AppTheme.text1, textAlign: TextAlign.center),
         ),
       ),
       InkWell(
         onTap: () => showQrCode(context: context, transactionCode: value2, onSendEmail: (){}),
         child: Padding(
           padding: const EdgeInsets.all(8.0),
-          child: Text(value2, style: AppTheme.text1),
+          child: Text(value2, style: AppTheme.text1, textAlign: TextAlign.center),
         ),
       ),
       InkWell(
@@ -90,10 +92,17 @@ TableRow buildDataRow(String value1, String value2, String value3, BuildContext 
         child: Padding(
           padding: const EdgeInsets.all(8.0),
           child: Text(
-            value3, style: AppTheme.text1
+            value3, style: AppTheme.text1, textAlign: TextAlign.center
           ),
         ),
-      )
+      ),
+      InkWell(
+        onTap: () => showQrCode(context: context, transactionCode: value2, onSendEmail: (){}),
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Text(value4, style: AppTheme.text1, textAlign: TextAlign.center),
+        ),
+      ),
     ],
   );
 }

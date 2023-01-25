@@ -57,6 +57,32 @@ class PrinterHelper {
     });
   }
 
+  printTicketParkir({
+    required String code,
+    required String location,
+    required String vehicleType,
+  }) {
+    String today = DateTime.now().toFormattedDate(format: 'dd MMM yyyy HH:mm');
+    bluetooth.isConnected.then((isConnected) {
+      if (isConnected == true) {
+        bluetooth.printCustom("Tiket Masuk Parkir", Size.bold.val, Align.center.val);
+        bluetooth.printNewLine();
+        bluetooth.printQRcode(code, 200, 200, Align.center.val);
+        bluetooth.printCustom("scan untuk akses masuk", Size.medium.val, Align.center.val);
+        bluetooth.printCustom("Id Parkir", Size.bold.val, Align.left.val);
+        bluetooth.printCustom(code, Size.medium.val, Align.left.val);
+        bluetooth.printCustom("Jenis Kendaraan", Size.bold.val, Align.left.val);
+        bluetooth.printCustom(vehicleType, Size.medium.val, Align.left.val);
+        bluetooth.printCustom("Lokasi", Size.bold.val, Align.left.val);
+        bluetooth.printCustom(location, Size.medium.val, Align.left.val);
+        bluetooth.printCustom("Waktu masuk", Size.bold.val, Align.left.val);
+        bluetooth.printCustom(today, Size.medium.val, Align.left.val);
+        bluetooth.paperCut();
+        bluetooth.printNewLine();
+      }
+    });
+  }
+
   printIncome(
       {required String operatorName,
         required String location,

@@ -57,7 +57,7 @@ class _PrintTicketSuccessPageState extends State<PrintTicketSuccessPage> {
         Padding(
           padding: const EdgeInsets.symmetric(vertical: 32),
           child: Text(
-            'Berhasil Mencetak Gelang...',
+            'Berhasil Mencetak Tiket...',
             style: AppTheme.subTitle,
           ),
         ),

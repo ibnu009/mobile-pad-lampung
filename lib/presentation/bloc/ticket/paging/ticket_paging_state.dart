@@ -13,9 +13,9 @@ class SuccessShowTicketData extends TicketPagingState {
   SuccessShowTicketData(this.data, this.totalData);
 }
 
-class FailedShowTicketQuota extends TicketPagingState {
+class FailedShowTicketData extends TicketPagingState {
   String message;
-  FailedShowTicketQuota(this.message);
+  FailedShowTicketData(this.message);
 }
 
 class ShowTokenExpired extends TicketPagingState {

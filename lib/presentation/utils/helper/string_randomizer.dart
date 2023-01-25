@@ -1,6 +1,6 @@
 import 'dart:math';
 
-const _chars = 'AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz';
+const _chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ123456789';
 Random _rnd = Random();
 
 String getRandomString(int length) => String.fromCharCodes(Iterable.generate(

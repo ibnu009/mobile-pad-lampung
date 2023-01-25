@@ -8,9 +8,10 @@ class LoadingTicketIncomeOnline extends TicketIncomeOnlineState {}
 
 class SuccessShowOnlineTicketIncome extends TicketIncomeOnlineState {
   final List<IncomeTicket> data;
-  final int totalData, grandTotal;
+  final int totalData, grandTotal, total;
+  final String operatorName;
 
-  SuccessShowOnlineTicketIncome(this.data, this.totalData, this.grandTotal);
+  SuccessShowOnlineTicketIncome(this.data, this.totalData, this.grandTotal, this.operatorName, this.total);
 }
 
 class FailedShowOnlineTicket extends TicketIncomeOnlineState {

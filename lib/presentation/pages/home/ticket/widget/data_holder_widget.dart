@@ -5,14 +5,14 @@ import 'package:pad_lampung/presentation/utils/extension/int_ext.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 
 class DataHolderWidget extends StatefulWidget {
-  final int quota, currentTotal;
+  final int quota, currentTotal, transactionTotal;
   final String wisataName;
 
   DataHolderWidget(
       {Key? key,
       required this.quota,
       required this.currentTotal,
-      required this.wisataName})
+      required this.wisataName, required this.transactionTotal})
       : super(key: key);
 
   @override
@@ -51,18 +51,18 @@ class _DataHolderWidgetState extends State<DataHolderWidget> {
             child: Column(
               children: [
                 buildPieChart(widget.currentTotal, widget.quota),
-                buildCounter(widget.currentTotal, widget.quota),
+                buildCounter(widget.transactionTotal),
               ],
             )),
-        Container(
-          margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
-          padding: const EdgeInsets.only(left: 8),
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(8),
-          ),
-          child: buildCounterToilet(1200),
-        ),
+        // Container(
+        //   margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
+        //   padding: const EdgeInsets.only(left: 8),
+        //   decoration: BoxDecoration(
+        //     color: Colors.white,
+        //     borderRadius: BorderRadius.circular(8),
+        //   ),
+        //   child: buildCounterToilet(1200),
+        // ),
       ],
     );
   }
@@ -117,7 +117,7 @@ class _DataHolderWidgetState extends State<DataHolderWidget> {
     );
   }
 
-  Widget buildCounter(int currentCounter, int max) {
+  Widget buildCounter(int currentCounter) {
     return ListTile(
       leading: SvgPicture.asset("assets/icons/ticket_icon.svg",
           semanticsLabel: 'A red up arrow'),
@@ -127,7 +127,7 @@ class _DataHolderWidgetState extends State<DataHolderWidget> {
         style: const TextStyle(fontSize: 13),
       ),
       trailing:
-          Text("$currentCounter Orang", style: AppTheme.smallTitle),
+          Text("$currentCounter Transaksi", style: AppTheme.smallTitle),
     );
   }
 

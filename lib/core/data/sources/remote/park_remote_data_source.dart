@@ -12,10 +12,12 @@ import 'package:pad_lampung/core/data/model/response/detail_parking_response.dar
 import 'package:pad_lampung/core/data/model/response/generic_response.dart';
 import 'package:pad_lampung/core/data/model/response/login_response.dart';
 import 'package:pad_lampung/core/data/model/response/parking_response.dart';
+import 'package:pad_lampung/presentation/utils/extension/date_time_ext.dart';
 
 import '../../../../common/exception.dart';
 import '../../model/response/error_response.dart';
 import '../../model/response/jenis_kendaraan_response.dart';
+import '../../model/response/parking_quota_response.dart';
 import '../../service/remote/network_service.dart';
 
 class ParkRemoteDataSourceImpl extends NetworkService {
@@ -65,7 +67,8 @@ class ParkRemoteDataSourceImpl extends NetworkService {
       var header = {contentType: applicationJson, token: "Bearer $accessToken"};
 
       var body = {
-        "id_tempat_wisata" : "${request.idTempatWisata}",
+        // "id_tempat_wisata" : "${request.idTempatWisata}",
+        "id_tempat_wisata" : "1",
         "id_jenis_kendaraan" : "${request.idJenisKendaraan}",
       };
 
@@ -102,6 +105,8 @@ class ParkRemoteDataSourceImpl extends NetworkService {
       String todayDate, int limit, int offset) async {
     try {
       var header = {contentType: applicationJson, token: "Bearer $accessToken"};
+      print('Value2 limit is $limit and offset is $offset');
+
       final response = await getMethod(
           "$BASE_URL/transaksi-parkir/get-by-tanggal/$idWisata/$todayDate?limit=$limit&offset=$offset",
           header);
@@ -151,6 +156,26 @@ class ParkRemoteDataSourceImpl extends NetworkService {
     } on Exception catch (ex, stackTrace) {
       log('Error is $ex', stackTrace: stackTrace);
       return Left(ErrorResponse(error: 'Terjadi kesalahan'));
+    }
+  }
+
+  Future<Either<ErrorResponse, ParkingQuotaResponse>> fetchParkingQuota(
+      String accessToken, String idWisata) async {
+    try {
+      var header = {contentType: applicationJson, token: "Bearer $accessToken"};
+      String dateNow = DateTime.now().toFormattedDate(format: 'yyyy-MM-dd');
+
+      final response = await getMethod(
+          "$BASE_URL/tempat-wisata/status-quota-parkir/$idWisata/$dateNow",
+          header);
+
+      return Right(ParkingQuotaResponse.fromJson(response));
+    } on ServerException catch (e) {
+      var res = json.decode(e.message);
+      return Left(ErrorResponse.fromJson(res));
+    } on Exception catch (ex, stackTrace) {
+      debugPrint('Error is $ex. $stackTrace');
+      return Left(ErrorResponse(error: 'Terjadi kesalahan pada server..'));
     }
   }
 

@@ -78,6 +78,7 @@ class _OnlineTicketBookingPageState extends State<OnlineTicketBookingPage> {
                     borderRadius: BorderRadius.circular(8),
                   ),
                   child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       const SizedBox(
                         height: 16,
@@ -85,32 +86,10 @@ class _OnlineTicketBookingPageState extends State<OnlineTicketBookingPage> {
                       Padding(
                         padding: const EdgeInsets.symmetric(
                             horizontal: 16.0, vertical: 6),
-                        child: Row(
-                          children: [
-                            Expanded(
-                                flex: 1,
-                                child: Text(
-                                  'Data Ticketing',
-                                  style: AppTheme.smallTitle
-                                      .copyWith(fontWeight: FontWeight.w700),
-                                )),
-                            Expanded(
-                                flex: 1,
-                                child: IconSvgPrimaryButton(
-                                  context: context,
-                                  isEnabled: true,
-                                  onPressed: () {
-                                    Navigator.push(
-                                        context,
-                                        CupertinoPageRoute(
-                                            builder: (context) =>
-                                                const ScanOnlineBookingTicketPage()));
-                                  },
-                                  height: 43,
-                                  text: 'Pindai Tiket',
-                                  iconAsset: 'assets/icons/barcode_icon.svg',
-                                )),
-                          ],
+                        child: Text(
+                          'Data Ticketing',
+                          style: AppTheme.smallTitle
+                              .copyWith(fontWeight: FontWeight.w700),
                         ),
                       ),
                       Padding(

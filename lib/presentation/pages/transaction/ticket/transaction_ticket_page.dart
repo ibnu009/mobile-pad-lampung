@@ -5,7 +5,7 @@ import 'package:pad_lampung/presentation/pages/transaction/ticket/transaction_ti
 
 import '../../../../core/theme/app_primary_theme.dart';
 import '../../../components/appbar/custom_generic_appbar.dart';
-import 'transaction_toilet_payment_page.dart';
+import '../../booking/ticket/scan_online_booking_ticket_page.dart';
 
 class TransactionTicketPage extends StatelessWidget {
   const TransactionTicketPage({Key? key}) : super(key: key);
@@ -22,20 +22,51 @@ class TransactionTicketPage extends StatelessWidget {
               padding: EdgeInsets.only(top: 16.0),
               child: GenericAppBar(url: '', title: 'Transaksi'),
             ),
-            const SizedBox(height: 12,),
-            buildTransactionItems('Tiket', 'Masuk Pantai Ketapang', () {
-              Navigator.push(context, CupertinoPageRoute(builder: (context) => TransactionTicketPaymentPage(),));
+            const SizedBox(
+              height: 12,
+            ),
+            buildTransactionItems('Scan Akses Gate', 'Masuk Pantai Ketapang',
+                "assets/icons/scan_online_icon.svg", () {
+              Navigator.push(
+                  context,
+                  CupertinoPageRoute(
+                      builder: (context) => const ScanOnlineBookingTicketPage(
+                            isNeedToShowDetail: false,
+                            appBarTitle: 'Pindai Akses Gate',
+                            description: 'Pindai Akses Gate',
+                          )));
             }),
-            buildTransactionItems('Toilet', 'Fasilitas', () {
-              Navigator.push(context, CupertinoPageRoute(builder: (context) => TransactionToiletPaymentPage(),));
-            })
+
+            buildTransactionItems('Pesanan Online', 'Masuk Pantai Ketapang',
+                "assets/icons/online_transaction_icon.svg", () {
+              Navigator.push(
+                  context,
+                  CupertinoPageRoute(
+                      builder: (c) => const ScanOnlineBookingTicketPage(
+                            isNeedToShowDetail: true,
+                            appBarTitle: 'Pindai Tiket Online',
+                          )));
+            }),
+
+            buildTransactionItems('Tiket', 'Masuk Pantai Ketapang',
+                "assets/icons/ticket_icon.svg", () {
+              Navigator.push(
+                  context,
+                  CupertinoPageRoute(
+                    builder: (context) => const TransactionTicketPaymentPage(),
+                  ));
+            }),
+            // buildTransactionItems('Toilet', 'Fasilitas', () {
+            //   Navigator.push(context, CupertinoPageRoute(builder: (context) => TransactionToiletPaymentPage(),));
+            // })
           ],
         ),
       ),
     );
   }
 
-  Widget buildTransactionItems(String title,String description, Function() onTap) {
+  Widget buildTransactionItems(
+      String title, String description, String asset, Function() onTap) {
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
       padding: const EdgeInsets.only(left: 8),
@@ -44,16 +75,18 @@ class TransactionTicketPage extends StatelessWidget {
         borderRadius: BorderRadius.circular(8),
       ),
       child: ListTile(
-        onTap: onTap,
-        leading: SvgPicture.asset(title == 'Tiket' ? "assets/icons/ticket_icon.svg"  : "assets/icons/toilet_icon.svg",
-            semanticsLabel: 'A red up arrow'),
-        title: Text(title),
-        subtitle: Text(
-          description,
-          style: const TextStyle(fontSize: 13),
-        ),
-        trailing: const Icon(Icons.arrow_forward_ios, size: 15, color: AppTheme.primaryColorDarker,)
-      ),
+          onTap: onTap,
+          leading: SvgPicture.asset(asset, semanticsLabel: 'A red up arrow'),
+          title: Text(title),
+          subtitle: Text(
+            description,
+            style: const TextStyle(fontSize: 13),
+          ),
+          trailing: const Icon(
+            Icons.arrow_forward_ios,
+            size: 15,
+            color: AppTheme.primaryColorDarker,
+          )),
     );
   }
 }

@@ -40,8 +40,6 @@ class TicketPriceBloc extends Bloc<TicketPriceEvent, TicketPriceState> {
       delegate?.onLoading();
       String token = await storage.readSecureData(tokenKey) ?? "";
       String idWisata = await storage.readSecureData(wisataIdKey) ?? "0";
-      // String userEmail = await storage.readSecureData(petugasEmailKey) ?? "";
-      // String phoneNumber = await storage.readSecureData(petugasNoTelpKey) ?? "";
 
       var data = await repository.processTicketBooking(
           accessToken: token,

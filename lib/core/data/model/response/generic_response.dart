@@ -14,16 +14,20 @@ class GenericResponse {
     required this.code,
     required this.status,
     required this.message,
+    required this.data,
   });
 
   int code;
   bool status;
   String message;
+  dynamic data;
+
 
   factory GenericResponse.fromJson(Map<String, dynamic> json) => GenericResponse(
     code: json["code"],
     status: json["status"],
     message: json["message"],
+    data: json["data"],
   );
 
   Map<String, dynamic> toJson() => {

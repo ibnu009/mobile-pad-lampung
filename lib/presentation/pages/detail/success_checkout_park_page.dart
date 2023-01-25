@@ -20,6 +20,7 @@ class _SuccessCheckoutParkPageState extends State<SuccessCheckoutParkPage> {
 
   @override
   Widget build(BuildContext context) {
+    double buttonWidth = MediaQuery.of(context).size.width * 0.7;
     return Scaffold(
       backgroundColor: AppTheme.canvasColor,
       body: SafeArea(
@@ -29,7 +30,7 @@ class _SuccessCheckoutParkPageState extends State<SuccessCheckoutParkPage> {
           children: [
             const Spacer(),
             const SizedBox(width: double.infinity,),
-            buildSuccessWidget(),
+            buildSuccessWidget(buttonWidth),
             const Spacer(),
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 32.0),
@@ -44,7 +45,7 @@ class _SuccessCheckoutParkPageState extends State<SuccessCheckoutParkPage> {
     );
   }
 
-  Widget buildSuccessWidget() {
+  Widget buildSuccessWidget(double buttonWidth) {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
@@ -69,6 +70,7 @@ class _SuccessCheckoutParkPageState extends State<SuccessCheckoutParkPage> {
 
         PrimaryButton(
             context: context,
+            width: buttonWidth,
             isEnabled: true,
             onPressed: () async {
               showLoadingDialog(context: context, loadingText: 'Mencetak tiket..');
@@ -79,12 +81,13 @@ class _SuccessCheckoutParkPageState extends State<SuccessCheckoutParkPage> {
             },
             horizontalPadding: 32,
             height: 45,
-            text: 'Cetak Tiket'),
+            text: 'Cetak Struk'),
 
         const SizedBox(height: 24,),
 
         PrimaryButton(
             context: context,
+            width: buttonWidth,
             isEnabled: true,
             onPressed: () {
               Navigator.pushReplacement(context, CupertinoPageRoute(builder: (c) => const HomePage()));

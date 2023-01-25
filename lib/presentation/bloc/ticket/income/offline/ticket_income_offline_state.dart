@@ -8,13 +8,14 @@ class LoadingTicketIncomeOffline extends TicketIncomeOfflineState {}
 
 class SuccessShowOfflineTicketIncome extends TicketIncomeOfflineState {
   final List<IncomeTicket> data;
-  final int totalData, grandTotal;
+  final int totalData, grandTotal, total;
   final String deviceName, operatorName, wisataName;
 
   SuccessShowOfflineTicketIncome(
       {required this.data,
       required this.totalData,
       required this.grandTotal,
+      required this.total,
       required this.deviceName,
       required this.operatorName,
       required this.wisataName});

@@ -10,10 +10,12 @@ class LoginResponse {
     required this.tokenType,
     required this.expiresIn,
     required this.user,
+    required this.error
   });
 
   String accessToken;
   String tokenType;
+  String error;
   int expiresIn;
   User user;
 
@@ -22,6 +24,7 @@ class LoginResponse {
     tokenType: json["token_type"],
     expiresIn: json["expires_in"],
     user: User.fromJson(json["user"]),
+    error: json["error"]
   );
 
   Map<String, dynamic> toJson() => {

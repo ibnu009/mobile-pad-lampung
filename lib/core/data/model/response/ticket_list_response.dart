@@ -42,18 +42,21 @@ class Ticket {
     required this.noTransaksi,
     required this.noTelp,
     required this.scanTime,
+    required this.quantity,
   });
 
   int id;
   String noTransaksi;
   String noTelp;
   String scanTime;
+  int quantity;
 
   factory Ticket.fromJson(Map<String, dynamic> json) => Ticket(
     id: json["id"],
     noTransaksi: json["no_transaksi"],
     noTelp: json["no_telp"],
     scanTime: json["scan_time"] ?? '-',
+    quantity: json["jumlah"] ?? 0,
   );
 
   Map<String, dynamic> toJson() => {

@@ -15,6 +15,7 @@ import '../model/request/park_checkout_request.dart';
 import '../model/response/error_response.dart';
 import '../model/response/generic_response.dart';
 import '../model/response/jenis_kendaraan_response.dart';
+import '../model/response/parking_quota_response.dart';
 import '../sources/remote/auth_remote_data_source.dart';
 import '../sources/remote/park_remote_data_source.dart';
 
@@ -24,6 +25,11 @@ class ParkRepository {
   ParkRepository(this.dataSource);
 
   final String applicationJson = "application/json; charset=UTF-8";
+
+  Future<Either<ErrorResponse, ParkingQuotaResponse>> fetchParkingQuota(
+      String accessToken, String idWisata) async {
+    return dataSource.fetchParkingQuota(accessToken, idWisata);
+  }
 
   Future<Either<ErrorResponse, LoginResponse>> submitParkCheckIn(
       String noTransaksiPark, int locationId, String accessToken) async {
@@ -65,6 +71,7 @@ class ParkRepository {
   Future<Either<ErrorResponse, ResponseParking>> fetchParkingData(
       String accessToken, String idWisata, int limit, int offset, ) async {
     String today = DateTime.now().toFormattedDate(format: 'yyyy-MM-dd');
+
     return dataSource.fetchParkingTransactionList(accessToken, idWisata, today, limit, offset);
   }
 

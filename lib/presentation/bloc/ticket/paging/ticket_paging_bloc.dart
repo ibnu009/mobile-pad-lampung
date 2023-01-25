@@ -21,7 +21,7 @@ class TicketPagingBloc extends Bloc<TicketPagingEvent, TicketPagingState> {
           await repository.fetchEmployeeTicketTransaction(token, idWisata , event.offset, event.limit);
 
       dataTransaction.fold((failure) {
-        emit(FailedShowTicketQuota(failure.error ?? ""));
+        emit(FailedShowTicketData(failure.error ?? ""));
       }, (data) {
 
         if (data.code == 401) {

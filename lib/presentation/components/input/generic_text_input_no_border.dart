@@ -9,6 +9,8 @@ class GenericTextInputNoBorder extends StatelessWidget {
   final int? maxLines, maxLength;
   final String? hintText;
   final Function(String)? onSubmitted;
+  final Function(String)? onChanged;
+  final TextAlign? textAlign;
   final Icon? prefixIcon;
   final Icon? suffixIcon;
   final bool? isOptional;
@@ -23,7 +25,7 @@ class GenericTextInputNoBorder extends StatelessWidget {
       required this.inputType,
       this.onSubmitted,
       this.maxLength,
-      this.prefixIcon, this.isOptional, this.suffixIcon, this.radius, this.verticalMargin, this.horizontalMargin, this.fillColor})
+      this.prefixIcon, this.isOptional, this.suffixIcon, this.radius, this.verticalMargin, this.horizontalMargin, this.fillColor, this.onChanged, this.textAlign})
       : super(key: key);
 
   @override
@@ -33,6 +35,7 @@ class GenericTextInputNoBorder extends StatelessWidget {
       margin: EdgeInsets.symmetric(vertical: verticalMargin ?? 16, horizontal: horizontalMargin ?? 16),
       padding: EdgeInsets.symmetric(vertical: verticalMargin ?? 8),
       child: TextFormField(
+        onChanged: onChanged,
         showCursor: true,
         controller: controller,
         keyboardType: inputType,
@@ -40,6 +43,7 @@ class GenericTextInputNoBorder extends StatelessWidget {
         maxLength: maxLength,
         onFieldSubmitted: onSubmitted,
         cursorColor: Colors.black45,
+        textAlign: textAlign ?? TextAlign.start,
         validator: (value) {
           if (isOptional ?? false){
             return null;

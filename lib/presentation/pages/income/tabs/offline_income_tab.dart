@@ -121,10 +121,10 @@ class _OfflineIncomeTabState extends State<OfflineIncomeTab> {
                         mainAxisSize: MainAxisSize.min,
                         children: [
                           Padding(
-                            padding: const EdgeInsets.fromLTRB(16, 16, 0, 4),
+                            padding: const EdgeInsets.fromLTRB(16, 16, 0, 0),
                             child: Text(
                               DateTime.now().toFormattedDate(),
-                              style: AppTheme.bodyText,
+                              style: AppTheme.subTitle,
                             ),
                           ),
                           const Spacer(),
@@ -132,6 +132,28 @@ class _OfflineIncomeTabState extends State<OfflineIncomeTab> {
                             padding: const EdgeInsets.fromLTRB(0, 16, 16, 4),
                             child: Text(
                               state.grandTotal.toRupiah(),
+                              style: AppTheme.subTitle,
+                            ),
+                          ),
+                        ],
+                      ),
+                      Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.fromLTRB(16, 0, 0, 4),
+                            child: Text(
+                              state.operatorName,
+                              style: AppTheme.bodyText.copyWith(
+                                fontSize: 13
+                              ),
+                            ),
+                          ),
+                          const Spacer(),
+                          Padding(
+                            padding: const EdgeInsets.fromLTRB(0, 0, 16, 4),
+                            child: Text(
+                              state.total.toRupiah(),
                               style: AppTheme.smallTitle,
                             ),
                           ),
@@ -165,7 +187,7 @@ class _OfflineIncomeTabState extends State<OfflineIncomeTab> {
                                       state.deviceName,
                                       state.wisataName,
                                       state.operatorName,
-                                      state.grandTotal);
+                                      state.total);
 
                                   showLoadingDialog(
                                       context: context,
@@ -196,7 +218,7 @@ class _OfflineIncomeTabState extends State<OfflineIncomeTab> {
                           : Table(
                               defaultVerticalAlignment:
                                   TableCellVerticalAlignment.middle,
-                              children: state.data.toDataRow(),
+                              children: state.data.toDataRow(offset),
                             ),
                     ],
                   ),

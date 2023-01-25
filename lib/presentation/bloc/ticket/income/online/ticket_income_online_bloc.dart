@@ -16,6 +16,7 @@ class TicketIncomeOnlineBloc
       emit(LoadingTicketIncomeOnline());
       String token = await storage.readSecureData(tokenKey) ?? "";
       String idWisata = await storage.readSecureData(wisataIdKey) ?? "";
+      String petugasName = await storage.readSecureData(petugasNameKey) ?? "";
 
       var data = await repository.fetchOnlineIncomeTicket(
           token, idWisata, event.offset, event.limit);
@@ -27,7 +28,7 @@ class TicketIncomeOnlineBloc
           emit(ShowTokenExpiredIncomeOnline(data.message));
           return;
         }
-        emit(SuccessShowOnlineTicketIncome(data.data, data.length, data.total));
+        emit(SuccessShowOnlineTicketIncome(data.data, data.length, data.grandTotal, data.namaPegawai, data.total));
       });
     });
   }

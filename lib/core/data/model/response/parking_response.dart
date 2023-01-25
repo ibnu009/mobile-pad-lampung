@@ -70,13 +70,13 @@ class ParkingData {
   int statusBayar;
   int idTempatWisata;
   dynamic idTransaksiBookingParkir;
-  int idJenisKendaraan;
+  String idJenisKendaraan;
   DateTime createdAt;
   DateTime updatedAt;
 
   factory ParkingData.fromJson(Map<String, dynamic> json) => ParkingData(
     id: json["id"],
-    noTransaksiParkir: json["no_transaksi_parkir"],
+    noTransaksiParkir: json["no_transaksi"],
     nopol: json["nopol"],
     waktuMasuk: json["waktu_masuk"],
     waktuKeluar: json["waktu_keluar"],

@@ -2,24 +2,24 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:number_paginator/number_paginator.dart';
+import 'package:pad_lampung/core/data/model/holder/parking_home_content_holder.dart';
 import 'package:pad_lampung/core/theme/app_primary_theme.dart';
 import 'package:pad_lampung/presentation/bloc/park/home/park_home_bloc.dart';
-import 'package:pad_lampung/presentation/bloc/park/home/park_home_event.dart';
 import 'package:pad_lampung/presentation/bloc/park/home/park_home_state.dart';
 import 'package:pad_lampung/presentation/bloc/park/paging/parking_paging_bloc.dart';
 import 'package:pad_lampung/presentation/bloc/park/paging/parking_paging_event.dart';
 import 'package:pad_lampung/presentation/bloc/park/paging/parking_paging_state.dart';
-import 'package:pad_lampung/presentation/bloc/ticket/paging/ticket_paging_bloc.dart';
-import 'package:pad_lampung/presentation/bloc/ticket/paging/ticket_paging_event.dart';
 import 'package:pad_lampung/presentation/components/appbar/custom_generic_appbar.dart';
 import 'package:pad_lampung/presentation/components/dropdown/dropdown_value.dart';
 import 'package:pad_lampung/presentation/components/dropdown/generic_dropdown.dart';
 import 'package:pad_lampung/presentation/components/modal/bottom_modal.dart';
 import 'package:pad_lampung/presentation/pages/home/parking/widget/data_holder_widget.dart';
+import 'package:pad_lampung/presentation/utils/extension/date_time_ext.dart';
 import 'package:pad_lampung/presentation/utils/extension/int_ext.dart';
 import 'package:pad_lampung/presentation/utils/extension/list_parking_ext.dart';
 
 import '../../../../core/data/model/response/parking_response.dart';
+import '../../../bloc/park/home/park_home_event.dart';
 import '../../../components/dialog/dialog_component.dart';
 import '../../../components/generic/loading_widget.dart';
 import '../../auth/login_page.dart';
@@ -32,11 +32,11 @@ class HomePage extends StatefulWidget {
   State<HomePage> createState() => _HomePageState();
 }
 
-class _HomePageState extends State<HomePage> with TickerProviderStateMixin  {
-
+class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
   String selectedItem = initialDataShown;
 
   late AnimationController controller;
+
   void initController() {
     controller = BottomSheet.createAnimationController(this);
     controller.duration = const Duration(milliseconds: 500);
@@ -52,14 +52,16 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin  {
     super.initState();
     initController();
     context.read<ParkingHomeBloc>().add(GetParkingData());
-    context.read<ParkingPagingBloc>().add(GetParking(limit: itemPerPage, offset: offset));
+    context
+        .read<ParkingPagingBloc>()
+        .add(GetParking(limit: itemPerPage, offset: offset));
   }
 
   Widget blocListener({required Widget child}) {
     return BlocListener(
-      bloc: context.read<ParkingHomeBloc>(),
+      bloc: context.read<ParkingPagingBloc>(),
       listener: (ctx, state) {
-        if (state is ShowTokenExpired) {
+        if (state is ShowTokenPagingExpired) {
           showWarningDialog(
               context: context,
               title: "Perhatian!",
@@ -85,7 +87,6 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin  {
           child: BlocBuilder(
             bloc: this.context.read<ParkingHomeBloc>(),
             builder: (ctx, state) {
-
               if (state is SuccessShowParkingingData) {
                 return buildContent(state.data);
               }
@@ -102,11 +103,12 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin  {
     );
   }
 
-  Widget buildContent(List<ParkingData> data){
+  Widget buildContent(ParkingHomeContentHolder data) {
     return RefreshIndicator(
       onRefresh: () async {
-        context.read<ParkingHomeBloc>().add(GetParkingData());
-        context.read<ParkingPagingBloc>().add(GetParking(limit: itemPerPage, offset: offset));
+        context
+            .read<ParkingPagingBloc>()
+            .add(GetParking(limit: itemPerPage, offset: offset));
       },
       child: SingleChildScrollView(
         physics: const AlwaysScrollableScrollPhysics(),
@@ -119,13 +121,18 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin  {
                 url: '',
               ),
             ),
-            const LocationHolder(
-              date: '01 Des 2022',
-              location: 'Dermaga Ketapang',
+            LocationHolder(
+              date: DateTime.now().toFormattedDate(),
+              location: data.wisataName,
             ),
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 16.0),
-              child: DataHolderWidget(),
+              child: DataHolderWidget(
+                motorQuota: data.motorQuota,
+                carQuota: data.carQuota,
+                busQuota: data.busQuota,
+                totalVehicle: data.vehicleTotal,
+              ),
             ),
 
             Container(
@@ -151,14 +158,14 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin  {
                               itemPerPage = int.parse(selectedItem);
                               currentPage = 0;
                             });
-                            context.read<ParkingPagingBloc>().add(GetParking(offset: offset, limit: itemPerPage));
+                            context.read<ParkingPagingBloc>().add(
+                                GetParking(offset: offset, limit: itemPerPage));
                           },
                         ),
                         const Spacer(),
                         const Text('Filter'),
                         InkWell(
                           onTap: () {
-                            print("pressed");
                             showModalBottomSheet(
                                 transitionAnimationController: controller,
                                 isScrollControlled: true,
@@ -177,21 +184,22 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin  {
                       ],
                     ),
                   ),
-
                   BlocBuilder(
-                    bloc: context.read<TicketPagingBloc>(),
+                    bloc: context.read<ParkingPagingBloc>(),
                     builder: (ctx, state) {
+                      print('state ril is $state');
                       if (state is SuccessShowParkingPagingData) {
+                        print('data ril is ${state.data.length}');
                         return state.data.isEmpty
                             ? const Padding(
-                          padding: EdgeInsets.all(16.0),
-                          child: Center(child: Text('Data kosong')),
-                        )
+                                padding: EdgeInsets.all(16.0),
+                                child: Center(child: Text('Data kosong')),
+                              )
                             : Table(
-                          defaultVerticalAlignment:
-                          TableCellVerticalAlignment.middle,
-                          children: state.data.toDataRowTable(context),
-                        );
+                                defaultVerticalAlignment:
+                                    TableCellVerticalAlignment.middle,
+                                children: state.data.toDataRowTable(context),
+                              );
                       }
 
                       if (state is LoadingParkingPagingState) {
@@ -201,12 +209,9 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin  {
                       return const SizedBox();
                     },
                   ),
-
-
                 ],
               ),
             ),
-
 
             //Page Controller
             BlocBuilder(
@@ -223,7 +228,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin  {
                     padding: const EdgeInsets.all(16),
                     child: NumberPaginator(
                       numberPages:
-                      state.totalData.getTotalPageByTotalData(itemPerPage),
+                          state.totalData.getTotalPageByTotalData(itemPerPage),
                       config: NumberPaginatorUIConfig(
                         // default height is 48
                         height: 46,
@@ -241,8 +246,12 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin  {
                           print('offset is ${index * itemPerPage}');
                           offset = (index * itemPerPage);
                           currentPage = index;
+
+                          print('currentPage ${currentPage}');
+
                         });
-                        context.read<ParkingPagingBloc>().add(GetParking(offset: offset, limit: itemPerPage));
+                        context.read<ParkingPagingBloc>().add(
+                            GetParking(offset: offset, limit: itemPerPage));
                       },
                     ),
                   );

@@ -16,6 +16,9 @@ const printerReportKey = 'printerReport.Key';
 const userTypeKey = 'userType.key';
 const isIntroducedKey = 'is.introduced';
 
+const temporaryPasswordKey = 'temporaryPassword.Key';
+const lastTransactionUrlKey = 'lastTransactionUrl.Key';
+
 class AppPreferences {
   final FlutterSecureStorage storage;
 

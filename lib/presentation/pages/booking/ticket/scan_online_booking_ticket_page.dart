@@ -14,13 +14,16 @@ import 'package:pad_lampung/presentation/components/input/generic_text_input_no_
 import 'package:pad_lampung/presentation/pages/booking/ticket/ticket_checkout_page.dart';
 import 'package:pad_lampung/presentation/pages/detail/success_park_page.dart';
 import 'package:pad_lampung/presentation/pages/transaction/ticket/success_scan_ticket_page.dart';
+import 'package:pad_lampung/presentation/utils/extension/list_data_ticket_masuk_ext.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../components/appbar/custom_generic_appbar.dart';
 
 class ScanOnlineBookingTicketPage extends StatefulWidget {
-  const ScanOnlineBookingTicketPage({Key? key}) : super(key: key);
+  final bool isNeedToShowDetail;
+  final String? appBarTitle, description;
+  const ScanOnlineBookingTicketPage({Key? key, required this.isNeedToShowDetail, this.appBarTitle, this.description}) : super(key: key);
 
   @override
   State<ScanOnlineBookingTicketPage> createState() =>
@@ -61,18 +64,18 @@ class _ScanOnlineBookingTicketPageState
         if (state is SuccessScanTicket) {
           Navigator.pop(context);
 
-          if (state.message == "Transaksi Booking Tiket berhasil di scan"){
+          if (widget.isNeedToShowDetail){
             Navigator.push(
                 context,
                 CupertinoPageRoute(
-                    builder: (c) => const SuccessScanTicketPage()));
+                    builder: (c) => TicketCheckOutPage(ticketId: code, ticketCodes: state.data.extractTicketCode(),)));
             return;
           }
 
           Navigator.push(
               context,
               CupertinoPageRoute(
-                  builder: (c) => TicketCheckOutPage(ticketId: code)));
+                  builder: (c) => const SuccessScanTicketPage()));
           return;
         }
 
@@ -108,9 +111,9 @@ class _ScanOnlineBookingTicketPageState
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Padding(
-                  padding: EdgeInsets.only(top: 16.0),
-                  child: GenericAppBar(url: '', title: 'Pindai Tiket'),
+                 Padding(
+                  padding: const EdgeInsets.only(top: 16.0),
+                  child: GenericAppBar(url: '', title: widget.appBarTitle ?? 'Pindai Tiket'),
                 ),
                 SizedBox(height: 14,),
                 Container(
@@ -126,7 +129,7 @@ class _ScanOnlineBookingTicketPageState
                         height: 12,
                       ),
                       Text(
-                        'Pindai Tiket Wisata',
+                        widget.description ?? 'Pindai Tiket Wisata',
                         style: AppTheme.subTitle,
                       ),
                       Padding(
@@ -271,6 +274,7 @@ class _ScanOnlineBookingTicketPageState
     }
 
     code = transactionCode ?? "";
+
     context.read<TicketScanBloc>().add(ScanTicket(transactionCode ?? ""));
   }
 

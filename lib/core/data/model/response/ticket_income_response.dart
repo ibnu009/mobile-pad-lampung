@@ -13,6 +13,7 @@ class ResponseIncomeTicket {
     required this.total,
     required this.grandTotal,
     required this.length,
+    required this.namaPegawai
   });
 
   int code;
@@ -22,15 +23,17 @@ class ResponseIncomeTicket {
   int total;
   int grandTotal;
   int length;
+  String namaPegawai;
 
   factory ResponseIncomeTicket.fromJson(Map<String, dynamic> json) => ResponseIncomeTicket(
     code: json["code"],
     status: json["status"],
     message: json["message"],
     data: json["data"] == null ? [] : List<IncomeTicket>.from(json["data"].map((x) => IncomeTicket.fromJson(x))),
-    total: json["total"],
-    grandTotal: json["grand_total"],
+    total: json["pendapatan_pegawai"],
+    grandTotal: json["pendapatan_semua_pegawai"],
     length: json["length"],
+    namaPegawai: json["nama_pegawai"]
   );
 
   Map<String, dynamic> toJson() => {

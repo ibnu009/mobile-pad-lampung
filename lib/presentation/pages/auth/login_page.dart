@@ -12,6 +12,7 @@ import '../../bloc/auth/login_event.dart';
 import '../../bloc/auth/login_state.dart';
 import '../../components/dialog/dialog_component.dart';
 import '../home/ticket/home_page.dart';
+import 'change_password_page.dart';
 import 'forgot_password_page.dart';
 
 class LoginPage extends StatefulWidget {
@@ -90,6 +91,7 @@ class LoginPageState extends State<LoginPage> {
                     GenericTextInput(
                       controller: _emailInputController!,
                       inputType: TextInputType.emailAddress,
+                      autoFill: const [AutofillHints.email],
                       hintText: 'Email',
                       maxLines: 1,
                       prefixIcon: const Icon(
@@ -100,6 +102,7 @@ class LoginPageState extends State<LoginPage> {
                     GenericTextInputWithObscure(
                       controller: _passwordInputController!,
                       inputType: TextInputType.text,
+                      autoFill: const [AutofillHints.password],
                       hintText: 'Password',
                       maxLines: 1,
                       prefixIcon: const Icon(
@@ -148,18 +151,11 @@ class LoginPageState extends State<LoginPage> {
   Future<void> _handleSubmitLogin(BuildContext ctx) async {
     // context
     //     .read<LoginBloc>()
-    //     .add(LoginUser(email: 'lorem@gmail.com', password: 'lorem123'));
-    //
-    //
-
-    // context
-    //     .read<LoginBloc>()
-    //         .add(LoginUser(email: 'mobile@gmail.com', password: 'mobile123'));
+    //         .add(LoginUser(email: 'tiketbetung@gmail.com', password: 'K0Zpqe'));
 
     if (_formKey.currentState!.validate()) {
       String? email = _emailInputController?.value.text ?? "";
       String password = _passwordInputController?.value.text ?? "";
-      // String hashedPassword = password.convertToSha256();
 
       context
           .read<LoginBloc>()

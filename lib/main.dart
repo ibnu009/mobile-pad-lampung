@@ -1,6 +1,8 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:pad_lampung/presentation/bloc/forgot_password/forgot_password_bloc.dart';
+import 'package:pad_lampung/presentation/bloc/park/checkin_no_booking/checkin_no_booking_bloc.dart';
 import 'package:pad_lampung/presentation/bloc/park/detail/parking_detail_bloc.dart';
 import 'package:pad_lampung/presentation/bloc/park/home/park_home_bloc.dart';
 import 'package:pad_lampung/presentation/bloc/park/park_bloc.dart';
@@ -11,12 +13,17 @@ import 'package:pad_lampung/presentation/bloc/ticket/income/online/ticket_income
 import 'package:pad_lampung/presentation/bloc/ticket/online/ticket_online_bloc.dart';
 import 'package:pad_lampung/presentation/bloc/ticket/payment_status/ticket_payment_status_bloc.dart';
 import 'package:pad_lampung/presentation/bloc/ticket/scan/ticket_scan_bloc.dart';
+import 'package:pad_lampung/presentation/bloc/xendit/method/method_xendit_bloc.dart';
+import 'package:pad_lampung/presentation/bloc/xendit/payment_xendit_bloc.dart';
 import 'package:pad_lampung/presentation/pages/auth/login_page.dart';
 import 'package:pad_lampung/presentation/pages/starter/splash_page.dart';
+import 'package:pad_lampung/presentation/pages/transaction/ticket/transaction_ticket_payment_page.dart';
 import 'package:provider/provider.dart';
 import 'package:pad_lampung/di/application_module.dart' as di;
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import 'core/theme/app_primary_theme.dart';
+import 'core/theme/app_primary_theme.dart';
 import 'presentation/bloc/auth/login_bloc.dart';
 import 'presentation/bloc/park/paging/parking_paging_bloc.dart';
 import 'presentation/bloc/starter/starter_bloc.dart';
@@ -86,13 +93,26 @@ class MyApp extends StatelessWidget {
         BlocProvider(
           create: (_) => di.locator<TicketIncomeOfflineBloc>(),
         ),
+        BlocProvider(
+          create: (_) => di.locator<ForgotPasswordBloc>(),
+        ),
+        BlocProvider(
+          create: (_) => di.locator<PaymentXenditBloc>(),
+        ),
+        BlocProvider(
+          create: (_) => di.locator<MethodXenditBloc>(),
+        ),
+        BlocProvider(
+          create: (_) => di.locator<CheckInNoBookingBloc>(),
+        ),
+
       ],
 
       child: MaterialApp(
         title: 'Flutter Demo',
         debugShowCheckedModeBanner: false,
         theme: ThemeData(
-          primarySwatch: Colors.blue,
+          primarySwatch: primaryThemeColor,
         ),
         home: const SplashScreen()
       ),

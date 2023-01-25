@@ -6,11 +6,19 @@ class BorderIconButton extends StatelessWidget {
   final bool isEnabled;
   final Function() onPressed;
   final Function()? onNotActivePressed;
+  final MainAxisAlignment? maxAxisAlignment;
   final IconData icon;
 
   final String text;
   final Color? color, iconFillColor;
-  final double? width, height, leftPadding, rightPadding, radius, horizontalMargin, iconSize;
+  final double? width,
+      height,
+      contentPadding,
+      leftPadding,
+      rightPadding,
+      radius,
+      horizontalMargin,
+      iconSize;
 
   const BorderIconButton(
       {Key? key,
@@ -22,13 +30,21 @@ class BorderIconButton extends StatelessWidget {
       this.width,
       this.height,
       this.leftPadding,
-      this.rightPadding, this.radius, this.horizontalMargin, this.onNotActivePressed, required this.icon, this.iconFillColor, this.iconSize})
+      this.rightPadding,
+      this.radius,
+      this.horizontalMargin,
+      this.onNotActivePressed,
+      required this.icon,
+      this.iconFillColor,
+      this.iconSize,
+      this.maxAxisAlignment,
+      this.contentPadding})
       : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: isEnabled ? onPressed : onNotActivePressed ?? (){},
+      onTap: isEnabled ? onPressed : onNotActivePressed ?? () {},
       child: Container(
         height: height ?? 50,
         width: width ?? double.infinity,
@@ -36,21 +52,34 @@ class BorderIconButton extends StatelessWidget {
         decoration: BoxDecoration(
             color: Colors.transparent,
             borderRadius: BorderRadiusDirectional.circular(radius ?? 8),
-            border: Border.all(color: isEnabled ? color ?? AppTheme.primaryColor : Colors.black38)),
+            border: Border.all(
+                color: isEnabled
+                    ? color ?? AppTheme.primaryColor
+                    : Colors.black38)),
         padding:
             EdgeInsets.fromLTRB(leftPadding ?? 32, 0, rightPadding ?? 32, 0),
         child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          mainAxisAlignment: maxAxisAlignment ?? MainAxisAlignment.spaceEvenly,
           children: [
+            SizedBox(
+              width: contentPadding,
+            ),
             Icon(
               icon,
-              color: isEnabled ? color ?? AppTheme.primaryColor : Colors.black38,
+              color:
+                  isEnabled ? color ?? AppTheme.primaryColor : Colors.black38,
               size: iconSize ?? 22,
+            ),
+            SizedBox(
+              width: contentPadding,
             ),
             Text(
               text,
               style: TextStyle(
-                  fontSize: 15, color: isEnabled ? color ?? AppTheme.primaryColor : Colors.black38),
+                  fontSize: 15,
+                  color: isEnabled
+                      ? color ?? AppTheme.primaryColor
+                      : Colors.black38),
             ),
           ],
         ),

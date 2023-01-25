@@ -2,13 +2,19 @@ import 'package:intl/intl.dart';
 
 extension IntegerConverter on int? {
   String toRupiah() {
-
     if (this == null) return "Rp 0";
 
     final formatCurrency = NumberFormat.currency(locale: "id-ID");
-    String formattedCurrency = "Rp " + formatCurrency.format(this).substring(3);
+    String formattedCurrency = formatCurrency.format(this).substring(3);
 
-    return formattedCurrency.substring(0, formattedCurrency.indexOf(','));
+    print('result is ${formattedCurrency.substring(0, formattedCurrency.indexOf(','))}');
+    String result = formattedCurrency.substring(0, formattedCurrency.indexOf(','));
+
+    if (result.contains("R")) {
+      return "Rp ${result.replaceAll(RegExp('R'), '-')}";
+    }
+
+    return "Rp ${formattedCurrency.substring(0, formattedCurrency.indexOf(','))}";
   }
 
   int getTotalPageByTotalData(int itemPerPage){

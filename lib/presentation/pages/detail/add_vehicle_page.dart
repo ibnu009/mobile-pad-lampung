@@ -4,15 +4,14 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:pad_lampung/core/data/model/response/jenis_kendaraan_response.dart';
-import 'package:pad_lampung/presentation/bloc/park/park_bloc.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:pad_lampung/presentation/bloc/park/park_event.dart';
 import 'package:pad_lampung/presentation/utils/delegate/generic_delegate.dart';
 import 'package:pad_lampung/presentation/utils/extension/list_tipe_kendaraan_ext.dart';
 
-import '../../../core/data/model/response/parking_response.dart';
 import '../../../core/theme/app_primary_theme.dart';
-import '../../bloc/park/park_state.dart';
+import '../../bloc/park/checkin_no_booking/checkin_no_booking_bloc.dart';
+import '../../bloc/park/checkin_no_booking/checkin_no_booking_event.dart';
+import '../../bloc/park/checkin_no_booking/checkin_no_booking_state.dart';
 import '../../components/appbar/custom_generic_appbar.dart';
 import '../../components/button/primary_button.dart';
 import '../../components/dialog/dialog_component.dart';
@@ -34,17 +33,18 @@ class _AddVehiclePageState extends State<AddVehiclePage> with GenericDelegate {
   File? image;
   final picker = ImagePicker();
   int idJenisKendaraan = 0;
+  String jenisKendaraan = '';
   List<VehicleType> dataParking = [];
 
   @override
   void initState() {
     super.initState();
-    context.read<ParkBloc>().add(GetVehicleType());
+    context.read<CheckInNoBookingBloc>().add(GetVehicleType());
   }
 
   Widget blocListener({required Widget child}) {
     return BlocListener(
-      bloc: context.read<ParkBloc>(),
+      bloc: context.read<CheckInNoBookingBloc>(),
       listener: (ctx, state) {
         if (state is SuccessGetVehicleType) {
           return;
@@ -86,15 +86,19 @@ class _AddVehiclePageState extends State<AddVehiclePage> with GenericDelegate {
                 ),
               ),
               BlocBuilder(
-                bloc: this.context.read<ParkBloc>(),
+                bloc: this.context.read<CheckInNoBookingBloc>(),
                 builder: (ctx, state) {
+                  print('state is $state');
+
                   if (state is SuccessGetVehicleType) {
+
                     dataParking = state.data;
                     placeHolderItem = state.data.toDropdownData().first;
                     return Padding(
                       padding: const EdgeInsets.symmetric(vertical: 16.0),
                       child: GenericDropdown(
-                        selectedItem: selectedItem ?? state.data.toDropdownData().first,
+                        selectedItem:
+                            selectedItem ?? state.data.toDropdownData().first,
                         items: state.data.toDropdownData(),
                         height: 45,
                         width: double.infinity,
@@ -114,16 +118,17 @@ class _AddVehiclePageState extends State<AddVehiclePage> with GenericDelegate {
                     return const Center(child: LoadingWidget());
                   }
 
-                  return SizedBox();
+                  return const SizedBox();
                 },
               ),
               PrimaryButton(
                   context: context,
                   isEnabled: true,
                   onPressed: () {
-                    idJenisKendaraan = dataParking.extractIdJenisKendaraan(selectedItem ?? placeHolderItem);
+                    idJenisKendaraan = dataParking.extractIdJenisKendaraan(
+                        selectedItem ?? placeHolderItem);
 
-                    context.read<ParkBloc>().add(ParkingCheckInWithOutBooking(
+                    context.read<CheckInNoBookingBloc>().add(ParkingCheckInWithOutBooking(
                         fotoKendaraan: image!,
                         idJenisKendaraan: idJenisKendaraan,
                         delegate: this));
@@ -176,8 +181,8 @@ class _AddVehiclePageState extends State<AddVehiclePage> with GenericDelegate {
   }
 
   Future takeImageFromCamera() async {
-    print("Called gallery");
-    final pickedFile = await picker.pickImage(source: ImageSource.camera);
+    final pickedFile =
+        await picker.pickImage(source: ImageSource.camera, imageQuality: 50);
     setState(() {
       setState(() {
         if (pickedFile != null) {
@@ -207,11 +212,20 @@ class _AddVehiclePageState extends State<AddVehiclePage> with GenericDelegate {
   @override
   void onSuccess(String message) {
     Navigator.pop(context);
+
+    List<String> vals = message.split(',');
+
     Navigator.push(
-        context,
-        CupertinoPageRoute(
-            builder: (c) => const SuccessParkPage(
-                  successMessage: 'Berhasil mencetak tiket..',
-                )));
+      context,
+      CupertinoPageRoute(
+        builder: (c) => SuccessParkPage(
+          successMessage: 'Transaksi masuk parkir berhasil..',
+          vehicleType: selectedItem,
+          location: vals[0],
+          parkingCode: vals[1],
+          requiredPrinter: vals[2],
+        ),
+      ),
+    );
   }
 }

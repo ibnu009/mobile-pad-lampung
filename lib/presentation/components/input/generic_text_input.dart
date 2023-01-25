@@ -9,6 +9,8 @@ class GenericTextInput extends StatelessWidget {
   final int? maxLines, maxLength;
   final String? hintText;
   final Function(String)? onSubmitted;
+  final Function(String)? onChanged;
+  final Iterable<String>? autoFill;
   final Icon? prefixIcon;
   final Icon? suffixIcon;
   final bool? isOptional;
@@ -21,7 +23,11 @@ class GenericTextInput extends StatelessWidget {
       required this.inputType,
       this.onSubmitted,
       this.maxLength,
-      this.prefixIcon, this.isOptional, this.suffixIcon})
+      this.prefixIcon,
+      this.isOptional,
+      this.suffixIcon,
+      this.onChanged,
+      this.autoFill})
       : super(key: key);
 
   @override
@@ -32,17 +38,19 @@ class GenericTextInput extends StatelessWidget {
         showCursor: true,
         controller: controller,
         keyboardType: inputType,
+        onChanged: onChanged,
         maxLines: maxLines,
         maxLength: maxLength,
         onFieldSubmitted: onSubmitted,
         cursorColor: Colors.black45,
+        autofillHints: autoFill,
         validator: (value) {
-          if (isOptional ?? false){
+          if (isOptional ?? false) {
             return null;
           }
 
-          if (value == null || value.isEmpty){
-            if (inputType == TextInputType.emailAddress){
+          if (value == null || value.isEmpty) {
+            if (inputType == TextInputType.emailAddress) {
               return "Email wajib diisi";
             }
             return "Field ini wajib diisi";

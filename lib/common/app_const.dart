@@ -6,9 +6,9 @@ const genericHeader = <String, String>{contentType: applicationJson};
 
 
 
-const ID_MOTOR = 0;
-const ID_MOBIL = 1;
-const ID_BUS = 2;
+const ID_MOTOR = 1;
+const ID_MOBIL = 2;
+const ID_BUS = 3;
 
 const motorType = 'motor';
 const carType = 'car';

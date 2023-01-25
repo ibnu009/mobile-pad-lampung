@@ -11,19 +11,23 @@ class StarterBloc extends Bloc<StarterEvent, StarterState> {
 
   StarterBloc({required this.storage}) : super(InitiateStarterState()) {
     on<StartSplashScreen>((event, emit) async {
-      String token = await storage.readSecureData(tokenKey) ?? "";
-      String employeeType = await storage.readSecureData(userTypeKey) ?? "";
+      try {
+        String token = await storage.readSecureData(tokenKey) ?? "";
+        String employeeType = await storage.readSecureData(userTypeKey) ?? "";
+        String? lastTransactionUrl = await storage.readSecureData(lastTransactionUrlKey);
 
-      await Future.delayed(const Duration(seconds: 2));
+        await Future.delayed(const Duration(seconds: 2));
 
-      print('token adalah $token');
-      if (token.isNotEmpty) {
-        if (employeeType == "2") {
-          emit(NavigateToHomeParking());
+        if (token.isNotEmpty) {
+          if (employeeType == "2") {
+            emit(NavigateToHomeParking(lastTransactionUrl));
+          } else {
+            emit(NavigateToHomeTicket(lastTransactionUrl));
+          }
         } else {
-          emit(NavigateToHomeTicket());
+          emit(NavigateToLogin());
         }
-      } else {
+      } catch (e) {
         emit(NavigateToLogin());
       }
     });

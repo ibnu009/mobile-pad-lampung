@@ -77,7 +77,7 @@ class _ListHolderWidgetState extends State<ListBookingOnlineHolderWidget>
                                 context,
                                 CupertinoPageRoute(
                                     builder: (context) =>
-                                        ScanOnlineBookingTicketPage()));
+                                        ScanOnlineBookingTicketPage( isNeedToShowDetail: false,)));
                           },
                           height: 43,
                           text: 'Pindai Tiket',

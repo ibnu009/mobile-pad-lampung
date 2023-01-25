@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:pad_lampung/core/data/model/response/parking_response.dart';
 import 'package:pad_lampung/presentation/pages/transaction/parking/vehicle_checkout_page.dart';
 
+import '../../components/image/image_network.dart';
+
 extension TicketExtention on List<ParkingData> {
   List<TableRow> toDataRowTable(BuildContext context) {
     List<TableRow> listTableRow = [];
@@ -27,7 +29,7 @@ extension TicketExtention on List<ParkingData> {
     for (int i = 0; i < length; i++) {
       print('kepanggil dengan urutan ${(i + 1)}');
       listTableRow.add(buildDataRow(
-          'TP',
+          this[i].pathFotoKendaraan,
           this[i].noTransaksiParkir,
           this[i].idJenisKendaraan.toString(),
           this[i].waktuMasuk ?? '-',
@@ -60,7 +62,7 @@ TableRow buildDataRow(String value1, String value2, String value3,
                 builder: (c) => VehicleCheckOutPage(parkingId: uniqueKey))),
         child: Padding(
           padding: const EdgeInsets.all(8),
-          child: Image.asset('assets/images/default_profile.png'),
+          child: GenericImageNetwork(imageUrl: value1,),
         ),
       ),
       Padding(

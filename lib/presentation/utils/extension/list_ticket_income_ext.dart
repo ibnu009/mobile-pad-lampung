@@ -8,7 +8,7 @@ import 'package:pad_lampung/presentation/utils/extension/string_ext.dart';
 import '../../components/dialog/dialog_show_qr.dart';
 
 extension TicketIncomeExtention on List<IncomeTicket> {
-  List<TableRow> toDataRow() {
+  List<TableRow> toDataRow(int offset) {
     List<TableRow> listTableRow = [];
     List<TableRow> listTableRowData = [];
 
@@ -31,9 +31,13 @@ extension TicketIncomeExtention on List<IncomeTicket> {
     );
 
     for (int i = 0; i < length; i++) {
-      print('kepanggil dengan urutan ${(i + 1)}');
-      listTableRowData.add(buildDataRow('${(i + 1)}', this[i].noTransaksi,
-          this[i].tanggal.formatToOtherDate(), '${this[i].jumlah}', this[i].subTotal.toRupiah()));
+      print('kepanggil dengan urutan ${(i + 1) + offset}');
+      listTableRowData.add(buildDataRow(
+          '${(i + 1) + offset}',
+          this[i].noTransaksi,
+          this[i].tanggal.formatToOtherDate(),
+          '${this[i].jumlah}',
+          this[i].subTotal.toRupiah()));
     }
 
     listTableRow.addAll(listTableRowData);
@@ -47,6 +51,8 @@ Widget rowTextHeading(String text) {
     child: Text(
       text,
       style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 12),
+        textAlign: TextAlign.center
+
     ),
   );
 }
@@ -58,26 +64,24 @@ TableRow buildDataRow(
     children: [
       Padding(
         padding: const EdgeInsets.all(8.0),
-        child: Text(
-          value1,
-          style: AppTheme.text1,
-        ),
+        child: Text(value1, style: AppTheme.text1, textAlign: TextAlign.center),
       ),
       Padding(
         padding: const EdgeInsets.all(8.0),
-        child: Text(value2, style: AppTheme.text1),
+        child: Text(value2, style: AppTheme.text1, textAlign: TextAlign.center),
       ),
       Padding(
         padding: const EdgeInsets.all(8.0),
-        child: Text(value3 == null ? '-' : value3, style: AppTheme.text1),
+        child: Text(value3 == null ? '-' : value3,
+            style: AppTheme.text1, textAlign: TextAlign.center),
       ),
       Padding(
         padding: const EdgeInsets.all(8.0),
-        child: Text(value4, style: AppTheme.text1),
+        child: Text(value4, style: AppTheme.text1, textAlign: TextAlign.center),
       ),
       Padding(
         padding: const EdgeInsets.all(8.0),
-        child: Text(value5, style: AppTheme.text1),
+        child: Text(value5, style: AppTheme.text1, textAlign: TextAlign.center),
       ),
     ],
   );
