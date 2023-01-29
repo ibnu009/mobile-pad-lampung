@@ -1,6 +1,7 @@
 # PAD Pesat
 
-Sebelum build project perhatikan hal-hal berikut ini :
+| PERHATIAN: Sebelum build project perhatikan hal-hal berikut ini! |
+| --- |
 1. Project ini menggunakan library yang tidak support null safety jadi wajib untuk menonaktifkan null-sound pada project ini baik ketika build ataupun release.
 2. Setiap kali membuat BLoC, Repository, ataupun Datasource wajib didaftarkan terlebih dahulu di folder di
 3. Pastikan minimum SDK nya tidak kurang dari 21
